@@ -1,0 +1,64 @@
+:root {
+  --ca-brand-blue-1: #273f52;
+  --ca-brand-blue-2: #80a8c2;
+
+  --ca-brand-grey-1: #383d3d;
+  --ca-brand-grey-2: #5e6565;
+  --ca-brand-grey-3: #979b9e;
+
+  --ca-text-light-1: #050414;
+  --ca-text-light-2: #414141;
+  --ca-text-dark-1: #efefef;
+  --ca-text-dark-2: #d0d0d0;
+  --ca-text-blue-light: #273f52;
+  --ca-text-blue-dark: #80a8c2;
+
+  --ca-bg-light-1: #fbfbfe;
+  --ca-bg-light-2: #ededed;
+  --ca-bg-dark-1: #1c1b22;
+  --ca-bg-dark-2: #2b2a33;
+  --ca-bg-blue-1: #80a8c2;
+  --ca-bg-blue-2: #273f52;
+
+  --ca-tag-buslaw: #7e2057;
+  --ca-tag-health: #cc7a9e;
+  --ca-tag-humani: #d7425b;
+  --ca-tag-scieng: #3d5a94;
+  --ca-tag-specin: #26a699;
+  --ca-tag-politi: #70ad71;
+  --ca-tag-faithb: #b6bb26;
+  --ca-tag-intern: #bf831c;
+  --ca-tag-academ: #ffa3a3;
+  --ca-tag-party-: #baa1d3;
+  --ca-tag-sport-: #a1c8ed;
+  --ca-tag-relaxi: #baf0ee;
+  --ca-tag-trivia: #a8e67f;
+  --ca-tag-networ: #e8e48e;
+  --ca-tag-profes: #f2bb8e;
+  --ca-tag-18plus: #c94646;
+  --ca-tag-genmet: #615e5e;
+}
+
+:root {
+  --color-background-1: var(--ca-bg-light-1);
+  --color-background-2: var(--ca-bg-light-2);
+
+  --color-heading: var(--ca-text-light-1);
+  --color-brandText: var(var(--ca-text-blue-light));
+  --color-text: var(--ca-text-light-1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--ca-bg-dark-1);
+    --color-background-soft: var(--ca-bg-dark-2);
+
+    --color-heading: var(--ca-text-dark-1);
+    --color-text: var(--ca-text-dark-1);
+    --color-brandText: var(var(--ca-text-blue-dark));
+  }
+}
+
+body {
+  font-family: Inter;
+}
