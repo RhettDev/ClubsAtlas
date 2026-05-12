@@ -37,6 +37,8 @@
   --ca-tag-profes: #f2bb8e;
   --ca-tag-18plus: #c94646;
   --ca-tag-genmet: #615e5e;
+
+  text-decoration: none;
 }
 
 :root {
@@ -44,21 +46,67 @@
   --color-background-2: var(--ca-bg-light-2);
 
   --color-heading: var(--ca-text-light-1);
-  --color-brandText: var(var(--ca-text-blue-light));
+  --color-brandText: var(--ca-text-blue-light);
   --color-text: var(--ca-text-light-1);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: var(--ca-bg-dark-1);
-    --color-background-soft: var(--ca-bg-dark-2);
+    --color-background-1: var(--ca-bg-dark-1);
+    --color-background-2: var(--ca-bg-dark-2);
 
     --color-heading: var(--ca-text-dark-1);
     --color-text: var(--ca-text-dark-1);
-    --color-brandText: var(var(--ca-text-blue-dark));
+    --color-brandText: var(--ca-text-blue-dark);
   }
+}
+
+* {
+  box-sizing: border-box;
+  text-decoration: none;
 }
 
 body {
   font-family: Inter;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  margin: 0px;
+  min-height: 100vh;
+  background-color: var(--color-background-1);
+}
+
+.header {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 2px 2px 1px var(--color-background-2);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  color: var(--color-text);
+}
+
+.logo {
+  width: 64px;
+  margin: 0px 8px;
+}
+
+.footer {
+  display: flex;
+  background-color: var(--ca-bg-blue-2);
+  color: var(--ca-text-dark-2);
+  width: 100%;
+  font-size: small;
+  justify-content: center;
+  align-items: center;
+}
+
+.footer p {
+  margin: 4px;
 }
