@@ -97,6 +97,10 @@ main {
   margin: 0px 8px;
 }
 
+.icon {
+  width: 32px;
+}
+
 .footer {
   display: flex;
   background-color: var(--ca-bg-blue-2);
