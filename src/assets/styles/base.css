@@ -1,3 +1,9 @@
+
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  text-decoration: none;
+}
+
 :root {
   --ca-brand-blue-1: #273f52;
   --ca-brand-blue-2: #80a8c2;
@@ -37,6 +43,8 @@
   --ca-tag-profes: #f2bb8e;
   --ca-tag-18plus: #c94646;
   --ca-tag-genmet: #615e5e;
+
+  --font-base: 'AtkinsonHyperLegible', sans-serif;
 }
 
 :root {
@@ -48,17 +56,64 @@
   --color-text: var(--ca-text-light-1);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: var(--ca-bg-dark-1);
-    --color-background-soft: var(--ca-bg-dark-2);
+    --color-background-1: var(--ca-bg-dark-1);
+    --color-background-2: var(--ca-bg-dark-2);
 
     --color-heading: var(--ca-text-dark-1);
     --color-text: var(--ca-text-dark-1);
     --color-brandText: var(var(--ca-text-blue-dark));
   }
+} */
+
+@font-face {
+    font-family: AtkinsonsHyperlegible;
+    src: url(..\fonts\AtkinsonHyperlegible\AtkinsonHyperlegible-Regular.ttf);
 }
 
 body {
-  font-family: Inter;
+  margin: 0;
+  background-color: var(--color-background-1);
+
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+  gap: 48px;
+  background-color: var(--color-background-1);
+  font-family: var(--font-base);
+}
+
+header{
+  width: 100%;
+  align-items: center;
+  background-color: var(--color-background-1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  box-shadow: 2px 2px 1px var(--BG-Secondary);
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+}
+
+logo {
+  width: 32px;
+  height: 32px;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+footer{
+  display: block;
+  width: 100%;
+  flex: 1;
+  text-align: left;
 }
