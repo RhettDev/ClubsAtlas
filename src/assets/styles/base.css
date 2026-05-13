@@ -2,6 +2,7 @@
 *, *::before, *::after { 
   box-sizing: border-box; 
   text-decoration: none;
+  font-family: AtkinsonHyperLegible;
 }
 
 :root {
@@ -69,6 +70,11 @@
   }
 }
 
+@font-face {
+    font-family: AtkinsonHyperLegible;
+    src: url(../fonts/AtkinsonHyperlegible/AtkinsonHyperlegible-Regular.ttf);
+}
+
 body {
   font-family: Inter;
   margin: 0;
@@ -83,6 +89,15 @@ main {
   background-color: var(--color-background-1);
 }
 
+hr {
+  color: var(--color-brandText);
+  margin: 0px;
+}
+
+p {
+  color: var(--color-text);
+}
+
 .header {
   display: flex;
   width: 100%;
@@ -95,6 +110,10 @@ main {
   color: var(--color-text);
 }
 
+.header h1{
+ font-weight: 300;
+}
+
 .logo {
   width: 64px;
   margin: 0px 8px;
@@ -102,12 +121,13 @@ main {
 
 .icon {
   width: 32px;
+  height: 32px;
 }
 
 .footer {
   display: flex;
   background-color: var(--ca-bg-blue-2);
-  color: var(--ca-text-dark-2);
+  color: var(--color-text);
   width: 100%;
   font-size: small;
   justify-content: center;
@@ -116,4 +136,25 @@ main {
 
 .footer p {
   margin: 4px;
+}
+
+.title {
+  font-size: 2.5em;
+  margin-top: 0.67em;
+  margin-bottom: 0.67em;
+  margin-left: 0;
+  margin-right: 0;
+  font-weight: bold;
+  color: var(--color-text);
+  font-weight: 300;
+}
+
+.formField {
+  font-weight: 300;
+  background-color: var(--color-background-1);
+  color: var(--color-text);
+  border-color: var(--ca-bg-blue-2);
+  border-radius: 16px;
+  padding: 8px;
+  width: 100%;
 }

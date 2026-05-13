@@ -12,7 +12,7 @@ import BaseButton from '@/components/BaseButton.vue'
     <section class="hero">
       <div class="subhero">
         <p class="subtitle">MAP THE EVENTSCAPE OF UNI</p>
-        <h1>Make the most of every year</h1>
+        <h1 class="title">Make the most of <span class="brandText">every</span> year</h1>
         <p>
           University is more than lectures. ClubsAtlas helps you discover the clubs that match what
           you're into, stay on top of the events worth showing up for, and build a social life
@@ -65,4 +65,9 @@ import BaseButton from '@/components/BaseButton.vue'
   font-size: medium;
   color: var(--color-brandText);
 }
+
+.brandText{
+  color: var(--color-brandText);
+}
+
 </style>

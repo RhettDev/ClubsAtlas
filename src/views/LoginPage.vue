@@ -5,29 +5,38 @@
       <h1>ClubsAtlas</h1>
     </section>
     <div class="hero">
-      <div class="formTitle">
-        <h2>Welcome Back</h2>
-        <p>Log in to see your clubs and upcoming events</p>
-      </div>
+      <div class="form">
+        <div class="formTitle">
+          <h2>Welcome <span class="brandText">Back</span></h2>
+          <p>Log in to see your clubs and upcoming events</p>
+        </div>
+        <hr>
 
-      <div class="field">
-        <v-icon name="PrLock" />
-        <label>Email</label>
-        <input v-model="email" type="email" placeholder="Email Address" />
-      </div>
+        <div class="fieldContainer">
+          <v-icon class="icon" name="PrLock" />
+          <input v-model="email" type="email" class="formField" placeholder="Email Address" />
+        </div>
 
-      <div class="field">
-        <label>Password</label>
-        <input v-model="password" type="password" placeholder="Password" />
-      </div>
+        <div class="fieldContainer">
+          <v-icon class="icon" name="PrLock" />
+          <input v-model="password" type="password" class="formField" placeholder="Password" />
+        </div>
 
-      <BaseButton @click="handleLogin">Log In</BaseButton>
+        <div class="fieldContainer">
+          <!-- <ToggleButton variant="primary" @click="onClick()"></ToggleButton> -->
+          <p>Remember Me <a class="brandText">Forgot Password?</a></p>
+        </div>
 
-      <div class="formTitle">
-        <p>
-          Don't have an account?
-          <RouterLink class="textLink" to="/signup">Sign up here!</RouterLink>
-        </p>
+        <BaseButton @click="handleLogin">Log In</BaseButton>
+
+        <hr>
+
+        <div class="formTitle">
+          <p>
+            Don't have an account?
+            <RouterLink variant="primary" class="brandText" to="/signup">Sign up here!</RouterLink>
+          </p>
+        </div>
       </div>
     </div>
     <section class="footer">
@@ -43,6 +52,7 @@
 
 <script setup>
 import BaseButton from '@/components/BaseButton.vue'
+// import ToggleButton from '@/components/ToggleButton.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -68,12 +78,26 @@ function handleLogin() {
   flex: 1;
 }
 
+.form {
+  display: inline-flex;
+  flex-direction: column;
+  width: max-content;
+  height: auto;
+  gap: 16px;
+}
+
 .formTitle {
   text-align: left;
   color: var(--color-text);
 }
 
-.textLink {
+.brandText{
   color: var(--color-brandText);
+}
+
+.fieldContainer{
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
 }
 </style>

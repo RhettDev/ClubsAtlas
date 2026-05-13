@@ -53,7 +53,7 @@ defineEmits(['click'])
   border-radius: 24px;
   padding: 8px;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 300;
   cursor: pointer;
   transition:
     background 0.2s,
@@ -94,10 +94,12 @@ defineEmits(['click'])
 .btn--primary:hover:not(:disabled) {
   background-color: var(--ca-bg-blue-1);
   color: var(--ca-bg-dark-1);
+  font-weight: 500;
 }
 .btn--secondary:hover:not(:disabled) {
   background-color: var(--ca-brand-grey-3);
   color: var(--ca-bg-dark-1);
+  font-weight: 500;
 }
 .btn--danger:hover:not(:disabled) {
   background: #dc2626;
