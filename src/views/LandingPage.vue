@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue'
+import FooterBar from '@/components/FooterBar.vue'
 </script>
 
 <template>
@@ -15,8 +16,8 @@ import BaseButton from '@/components/BaseButton.vue'
         <h1 class="title">Make the most of <span class="brandText">every</span> year</h1>
         <p>
           University is more than lectures. ClubsAtlas helps you discover the clubs that match what
-          you're into, stay on top of the events worth showing up for, and build a social life
-          you'll actually remember.
+          <br />you're into, stay on top of the events worth showing up for, and build a social life
+          <br />you'll actually remember.
         </p>
       </div>
 
@@ -31,14 +32,7 @@ import BaseButton from '@/components/BaseButton.vue'
       </div>
     </section>
 
-    <section class="footer">
-      <p>Terms - Privacy - Contact</p>
-      <!-- <RouterLink to="/login">Terms</RouterLink>
-      <p>-</p>
-      <RouterLink to="/login">Privacy</RouterLink>
-      <p>-</p>
-      <RouterLink to="/login">Contact</RouterLink> -->
-    </section>
+    <FooterBar></FooterBar>
   </main>
 </template>
 
@@ -54,10 +48,9 @@ import BaseButton from '@/components/BaseButton.vue'
 }
 
 .subhero {
-  display: inline-flex;
-  flex-direction: column;
-  width: 40%;
-  gap: 16px;
+  display: grid;
+  grid-template-rows: repeat(auto-fit, minmax(10px, 1fr));
+  gap: 1rem;
   color: var(--color-text);
 }
 
@@ -66,8 +59,7 @@ import BaseButton from '@/components/BaseButton.vue'
   color: var(--color-brandText);
 }
 
-.brandText{
+.brandText {
   color: var(--color-brandText);
 }
-
 </style>

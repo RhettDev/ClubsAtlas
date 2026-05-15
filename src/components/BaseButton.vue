@@ -75,7 +75,7 @@ defineEmits(['click'])
 
 /* Variants */
 .btn--primary {
-  background-color: var(--ca-bg-blue-2);
+  background-color: var(--ca-bg-blue-1);
   color: var(--ca-text-dark-1);
 }
 .btn--secondary {
@@ -92,7 +92,7 @@ defineEmits(['click'])
 }
 
 .btn--primary:hover:not(:disabled) {
-  background-color: var(--ca-bg-blue-1);
+  background-color: var(--ca-bg-blue-2);
   color: var(--ca-bg-dark-1);
   font-weight: 500;
 }

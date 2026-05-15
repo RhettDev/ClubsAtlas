@@ -8,64 +8,67 @@
       <div class="form">
         <div class="formTitle">
           <h2>Welcome to <span class="brandText">ClubsAtlas</span></h2>
-          <p>Create your account and discover the world of University<br>clubs and events!</p>
+          <p>Create your account and discover the world of University<br />clubs and events!</p>
         </div>
 
-        <hr>
+        <hr />
 
         <div class="fieldContainer">
-          <v-icon class="icon" name="PrLock" />
+          <v-icon name="pr-user" inverse scale="1.5"/>
           <input v-model="name" type="text" class="formField" placeholder="Full Name" />
         </div>
         <div class="fieldContainer">
-          <v-icon class="icon" name="PrLock" />
+          <v-icon name="pr-envelope" inverse scale="1.5"/>
           <input v-model="email" type="email" class="formField" placeholder="Email Address" />
         </div>
         <div class="fieldContainer">
-          <v-icon class="icon" name="PrLock" />
+          <v-icon name="pr-lock" inverse scale="1.5"/>
           <input v-model="password" type="password" class="formField" placeholder="Password" />
         </div>
         <div class="fieldContainer">
-          <v-icon class="icon" name="PrLock" />
-          <input v-model="confirmPassword" type="password" class="formField" placeholder="Confirm Password" />
+          <v-icon name="pr-lock" inverse scale="1.5"/>
+          <input v-model="passwordConfirm" type="password" class="formField" placeholder="Confirm Password" />
         </div>
         <div class="fieldContainer">
-          <v-icon class="icon" name="PrLock" />
-          <input v-model="dropdown" type="degree" class="formField" placeholder="Enter Degree" />
+          <v-icon name="pr-briefcase" inverse scale="1.5"/>
+          <input v-model="degree" type="degree" class="formField" placeholder="Enter Degree" />
         </div>
 
-        <div class="fieldContainer">
+        <div class="checkText">
+          <ToggleButton></ToggleButton>
+          <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
           <p>I agree to the <a class="brandText">Terms and Conditions</a></p>
         </div>
 
-
         <BaseButton @click="handleSignup">Sign Up!</BaseButton>
 
-        <hr>
+        <hr />
 
-        <div class="formTitle">
-          <p>
-            Already have an account?
-            <RouterLink class="brandText" to="/signup">Log in here!</RouterLink>
-          </p>
+        <div class="formTitle formSubtitle">
+          <p>Already have an account?</p>
+          <RouterLink class="brandText" to="/signup">Log in here!</RouterLink>
         </div>
-      </div>  
+      </div>
     </div>
+    <FooterBar></FooterBar>
   </main>
 </template>
 
 <script setup>
 import BaseButton from '@/components/BaseButton.vue'
+import FooterBar from '@/components/FooterBar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const name = ref('')
 const email = ref('')
 const password = ref('')
+const passwordConfirm = ref('')
+const degree = ref('')
 const router = useRouter()
 
 function handleSignup() {
-  console.log('Signing up:', name.value, email.value)
+  console.log('Signing up:', name.value, email.value, degree.value)
   router.push('/')
 }
 </script>
@@ -94,13 +97,26 @@ function handleSignup() {
   color: var(--color-text);
 }
 
-.brandText{
+.formSubtitle{
+  display: flex;
+  justify-content: space-between;
+}
+
+.brandText {
   color: var(--color-brandText);
 }
 
-.fieldContainer{
+
+.fieldContainer {
   display: flex;
   flex-direction: row;
   gap: 16px;
+  align-items: center;
+}
+
+.checkText {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }
 </style>

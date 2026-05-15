@@ -1,14 +1,10 @@
 <template>
   <button
-      :class="[
-      'tgl',
-      'tgl--${variant}',
-      'tgl--${size}',
-      ]"
+    :class="['tgl', 'tgl--${variant}', 'tgl--${size}']"
     :disabled="disabled"
     @click="$emit('click', $event)"
-      >
-      <slot />
+  >
+    <slot />
   </button>
 </template>
 
@@ -27,7 +23,7 @@ defineProps({
   disabled: {
     type: Boolean,
     default: false,
-  }
+  },
 })
 
 defineEmits(['click'])
@@ -49,8 +45,8 @@ defineEmits(['click'])
     transform 0.1s;
 }
 
-.tgl:active:not(:disabled){
-  transform: scale(0.97)
+.tgl:active:not(:disabled) {
+  transform: scale(0.97);
 }
 .tgl:disabled {
   opacity: 0.5;
@@ -85,7 +81,6 @@ defineEmits(['click'])
   background: var(--ca-brand-grey-3);
 }
 
-
 /* Sizes */
 .tgl--sm {
   padding: 0.4rem 1rem;
@@ -99,5 +94,4 @@ defineEmits(['click'])
   padding: 0.85rem 2rem;
   font-size: 1.1rem;
 }
-
 </style>

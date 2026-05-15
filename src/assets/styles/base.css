@@ -1,7 +1,10 @@
-
-*, *::before, *::after { 
-  box-sizing: border-box; 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   text-decoration: none;
+  margin: 0;
+  padding: 0;
   font-family: AtkinsonHyperLegible;
 }
 
@@ -24,8 +27,8 @@
   --ca-bg-light-2: #ededed;
   --ca-bg-dark-1: #1c1b22;
   --ca-bg-dark-2: #2b2a33;
-  --ca-bg-blue-1: #80a8c2;
-  --ca-bg-blue-2: #273f52;
+  --ca-bg-blue-1: #273f52;
+  --ca-bg-blue-2: #80a8c2;
 
   --ca-tag-buslaw: #7e2057;
   --ca-tag-health: #cc7a9e;
@@ -53,26 +56,30 @@
 :root {
   --color-background-1: var(--ca-bg-light-1);
   --color-background-2: var(--ca-bg-light-2);
+  --color-shadow: var(--ca-brand-grey-3);
 
   --color-heading: var(--ca-text-light-1);
-  --color-brandText: var(--ca-text-blue-light);
   --color-text: var(--ca-text-light-1);
+  --color-brandText: var(--ca-text-blue-light);
+  --color-text-invert: var(var(--ca-text-dark-1))
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --color-background-1: var(--ca-bg-dark-1);
     --color-background-2: var(--ca-bg-dark-2);
+    --color-shadow: var(--ca-bg-dark-2);
 
     --color-heading: var(--ca-text-dark-1);
     --color-text: var(--ca-text-dark-1);
     --color-brandText: var(--ca-text-blue-dark);
+    --color-text-invert: var(var(--ca-text-light-1))
   }
 }
 
 @font-face {
-    font-family: AtkinsonHyperLegible;
-    src: url(../fonts/AtkinsonHyperlegible/AtkinsonHyperlegible-Regular.ttf);
+  font-family: AtkinsonHyperLegible;
+  src: url(../fonts/AtkinsonHyperlegible/AtkinsonHyperlegible-Regular.ttf);
 }
 
 body {
@@ -90,7 +97,7 @@ main {
 }
 
 hr {
-  color: var(--color-brandText);
+  color: var(--ca-brand-blue-2);
   margin: 0px;
 }
 
@@ -103,15 +110,17 @@ p {
   width: 100%;
   justify-content: center;
   align-items: center;
-  box-shadow: 2px 2px 1px var(--color-background-2);
+  box-shadow: 2px 2px 1px var(--color-shadow);
+  background-color: var(--color-background-1);
   position: sticky;
   top: 0;
   z-index: 100;
   color: var(--color-text);
+  padding: 16px 0;
 }
 
-.header h1{
- font-weight: 300;
+.header h1 {
+  font-weight: 300;
 }
 
 .logo {
@@ -122,20 +131,7 @@ p {
 .icon {
   width: 32px;
   height: 32px;
-}
-
-.footer {
-  display: flex;
-  background-color: var(--ca-bg-blue-2);
-  color: var(--color-text);
-  width: 100%;
-  font-size: small;
-  justify-content: center;
-  align-items: center;
-}
-
-.footer p {
-  margin: 4px;
+  color: var(--colour-text);
 }
 
 .title {
@@ -153,8 +149,18 @@ p {
   font-weight: 300;
   background-color: var(--color-background-1);
   color: var(--color-text);
-  border-color: var(--ca-bg-blue-2);
+  border: 1px solid var(--ca-brand-blue-2);
   border-radius: 16px;
   padding: 8px;
   width: 100%;
+  accent-color: var(--ca-brand-blue-2);
+}
+
+.checkboxCustom {
+  border-radius: 32px;
+  border: 2px;
+  cursor: pointer;
+  /* border-color: var(--ca-brand-grey-1);
+  background-color: var(--ca--grey-3); */
+  accent-color: var(--ca-brand-blue-2);
 }

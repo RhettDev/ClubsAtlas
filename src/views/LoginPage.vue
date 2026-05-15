@@ -10,48 +10,45 @@
           <h2>Welcome <span class="brandText">Back</span></h2>
           <p>Log in to see your clubs and upcoming events</p>
         </div>
-        <hr>
+        <hr />
 
         <div class="fieldContainer">
-          <v-icon class="icon" name="PrLock" />
+          <v-icon name="pr-envelope" inverse scale="1.5"/>
           <input v-model="email" type="email" class="formField" placeholder="Email Address" />
         </div>
 
         <div class="fieldContainer">
-          <v-icon class="icon" name="PrLock" />
+          <v-icon name="pr-lock" inverse scale="1.5"/>
           <input v-model="password" type="password" class="formField" placeholder="Password" />
         </div>
 
-        <div class="fieldContainer">
-          <!-- <ToggleButton variant="primary" @click="onClick()"></ToggleButton> -->
-          <p>Remember Me <a class="brandText">Forgot Password?</a></p>
+        <div class="formSubtitle">
+          <div class="checkText">
+            <!-- <ToggleButton variant="primary" @click="onClick()"></ToggleButton> -->
+            <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
+            <p>Remember Me </p>
+          </div>
+          <a class="brandText">Forgot Password?</a> 
         </div>
 
         <BaseButton @click="handleLogin">Log In</BaseButton>
 
-        <hr>
+        <hr />
 
-        <div class="formTitle">
-          <p>
-            Don't have an account?
-            <RouterLink variant="primary" class="brandText" to="/signup">Sign up here!</RouterLink>
-          </p>
+        <div class="formTitle formSubtitle">
+          <p>Don't have an account?</p>
+          <RouterLink variant="primary" class="brandText" to="/signup">Sign up here!</RouterLink>
         </div>
       </div>
     </div>
-    <section class="footer">
-      <p>Terms - Privacy - Contact</p>
-      <!-- <RouterLink to="/login">Terms</RouterLink>
-      <p>-</p>
-      <RouterLink to="/login">Privacy</RouterLink>
-      <p>-</p>
-      <RouterLink to="/login">Contact</RouterLink> -->
-    </section>
+
+    <FooterBar></FooterBar>
   </main>
 </template>
 
 <script setup>
 import BaseButton from '@/components/BaseButton.vue'
+import FooterBar from '@/components/FooterBar.vue'
 // import ToggleButton from '@/components/ToggleButton.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -91,13 +88,25 @@ function handleLogin() {
   color: var(--color-text);
 }
 
-.brandText{
+.formSubtitle{
+  display: flex;
+  justify-content: space-between;
+}
+
+.brandText {
   color: var(--color-brandText);
 }
 
-.fieldContainer{
+.fieldContainer {
   display: flex;
   flex-direction: row;
   gap: 16px;
+  align-items: center;
+}
+
+.checkText {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
 }
 </style>
