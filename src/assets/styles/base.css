@@ -59,7 +59,8 @@
   --color-shadow: var(--ca-brand-grey-3);
 
   --color-heading: var(--ca-text-light-1);
-  --color-text: var(--ca-text-light-1);
+  --color-text-1: var(--ca-text-light-1);
+  --color-text-2: var(--ca-text-light-2);
   --color-brandText: var(--ca-text-blue-light);
   --color-text-invert: var(var(--ca-text-dark-1))
 }
@@ -71,7 +72,8 @@
     --color-shadow: var(--ca-bg-dark-2);
 
     --color-heading: var(--ca-text-dark-1);
-    --color-text: var(--ca-text-dark-1);
+    --color-text-1: var(--ca-text-dark-1);
+    --color-text-2: var(--ca-text-dark-2);
     --color-brandText: var(--ca-text-blue-dark);
     --color-text-invert: var(var(--ca-text-light-1))
   }
@@ -102,7 +104,7 @@ hr {
 }
 
 p {
-  color: var(--color-text);
+  color: var(--color-text-1);
 }
 
 .header {
@@ -115,7 +117,7 @@ p {
   position: sticky;
   top: 0;
   z-index: 100;
-  color: var(--color-text);
+  color: var(--color-text-1);
   padding: 16px 0;
 }
 
@@ -131,7 +133,7 @@ p {
 .icon {
   width: 32px;
   height: 32px;
-  color: var(--colour-text);
+  color: var(--colour-text-1);
 }
 
 .title {
@@ -141,14 +143,14 @@ p {
   margin-left: 0;
   margin-right: 0;
   font-weight: bold;
-  color: var(--color-text);
+  color: var(--color-text-1);
   font-weight: 300;
 }
 
 .formField {
   font-weight: 300;
   background-color: var(--color-background-1);
-  color: var(--color-text);
+  color: var(--color-text-1);
   border: 1px solid var(--ca-brand-blue-2);
   border-radius: 16px;
   padding: 8px;

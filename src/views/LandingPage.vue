@@ -29,6 +29,9 @@ import FooterBar from '@/components/FooterBar.vue'
         <RouterLink to="/login">
           <BaseButton variant="secondary">Login</BaseButton>
         </RouterLink>
+        <RouterLink to="/admin">
+          <BaseButton variant="secondary">AdminView</BaseButton>
+        </RouterLink>
       </div>
     </section>
 
@@ -51,7 +54,7 @@ import FooterBar from '@/components/FooterBar.vue'
   display: grid;
   grid-template-rows: repeat(auto-fit, minmax(10px, 1fr));
   gap: 1rem;
-  color: var(--color-text);
+  color: var(--color-text-1);
 }
 
 .subtitle {

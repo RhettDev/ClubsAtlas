@@ -7,7 +7,7 @@
 
     <div class="hero">
       <section id="sideBar" class="bLeft">
-        <RouterLink variant="primary" class="menuEntry active" to="/admin">
+        <RouterLink variant="primary" class="menuEntry" to="/admin">
           <v-icon name="pr-bars" inverse scale="1.5"/>
           Dashboard
         </RouterLink>
@@ -15,7 +15,7 @@
           <v-icon name="pr-upload" inverse scale="1.5"/>
           Upload New Event
         </RouterLink>
-        <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
+        <RouterLink variant="primary" class="menuEntry active" to="/admin/update-home">
           <v-icon name="pr-home" inverse scale="1.5"/>
           Update Club Profile
         </RouterLink>
@@ -34,7 +34,7 @@
       </section>
 
       <section id="analyitcsBar" class="bRight">
-        <h2>analytics panel</h2>
+        <!-- Empty -->
       </section>
     </div>
 
@@ -80,7 +80,7 @@ import FooterBar from '@/components/FooterBar.vue'
 }
 
 .bRight {
-  flex: 1;
+  flex: 0.7;
 }
 
 .bCenter {

@@ -85,7 +85,7 @@ function handleLogin() {
 
 .formTitle {
   text-align: left;
-  color: var(--color-text);
+  color: var(--color-text-1);
 }
 
 .formSubtitle{
