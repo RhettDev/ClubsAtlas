@@ -79,8 +79,10 @@ function handleLogin() {
   display: inline-flex;
   flex-direction: column;
   width: max-content;
+  max-width: 100%;
   height: auto;
   gap: 16px;
+  padding: 0 32px;
 }
 
 .formTitle {
