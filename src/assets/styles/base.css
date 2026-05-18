@@ -121,14 +121,20 @@ p {
   padding: 16px 0;
 }
 
+.header.clubHeader{
+  justify-content: space-between;
+  padding: 16px 8px;
+}
+
 .header h1 {
   font-weight: 300;
 }
 
 .logo {
-  width: 64px;
+  height: 32px;
   margin: 0px 8px;
 }
+
 
 .icon {
   width: 32px;
@@ -166,3 +172,5 @@ p {
   background-color: var(--ca--grey-3); */
   accent-color: var(--ca-brand-blue-2);
 }
+
+

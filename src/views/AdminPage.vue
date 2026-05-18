@@ -1,12 +1,34 @@
 <template>
   <main id="adminMain">
-    <section class="header">
-      <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
-      <h1>ClubsAtlas</h1>
-    </section>
+    <HeaderClubs @click="onHeaderMenuClick"></HeaderClubs>
+    <!-- Mobiel Naviation -->
+    <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
+    <div id="navDropDown" class="dropDownMenu">
+      <RouterLink variant="primary" class="menuEntry active" to="/admin" @click="onHeaderMenuClick">
+        <v-icon name="pr-bars" inverse scale="1.2"/>
+        Dashboard
+      </RouterLink>
+      <RouterLink variant="primary" class="menuEntry" to="/admin/new-event" >
+        <v-icon name="pr-upload" inverse scale="1.2"/>
+        Upload New Event
+      </RouterLink>
+      <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
+        <v-icon name="pr-home" inverse scale="1.2"/>
+        Update Club Profile
+      </RouterLink>
+      <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm">
+        <v-icon name="pr-users" inverse scale="1.2"/>
+        General Meetings
+      </RouterLink>
+      <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
+        <v-icon name="pr-cog" inverse scale="1.2"/>
+        Settings
+      </RouterLink>
+    </div>
 
-    <div class="hero">
-      <section id="sideBar" class="bLeft">
+    <!-- Desktop Navigation -->
+    <div class="hero desktopView">
+      <section id="sideBar" class="bLeft ">
         <RouterLink variant="primary" class="menuEntry active" to="/admin">
           <v-icon name="pr-bars" inverse scale="1.5"/>
           Dashboard
@@ -29,6 +51,7 @@
         </RouterLink>
       </section>
 
+      <!-- Desktop View -->
       <section id="eventsList" class="bCenter">
         <h1>main body</h1>
       </section>
@@ -36,6 +59,18 @@
       <section id="analyitcsBar" class="bRight">
         <h2>analytics panel</h2>
       </section>
+    </div>
+
+    <!-- Mobile View -->
+    <div class="hero mobileView">
+      <section id="analyitcsBar" class="bLeft">
+        <h2>analytics panel</h2>
+      </section>
+
+      <section id="eventsList" class="bCenter">
+        <h1>main body</h1>
+      </section>
+      
     </div>
 
     <FooterBar></FooterBar>
@@ -46,6 +81,20 @@
 <script setup>
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
+import HeaderClubs from '@/components/HeaderClubs.vue'
+
+const onHeaderMenuClick = (event) =>{
+  console.log(event)
+  let navDD = document.getElementById("navDropDown");
+    if (navDD.style.display === "flex"){ // Check if menu is open, then close it 
+        navDD.style.display = "none";
+        document.getElementById('navBackdrop').classList.remove('show');
+    }
+    else { // Open the menu 
+        navDD.style.display = "flex";
+        document.getElementById('navBackdrop').classList.add('show');
+    }
+}
 
 </script>
 
@@ -107,5 +156,47 @@ import FooterBar from '@/components/FooterBar.vue'
   color: var(--color-brandText);
   border-bottom: 2px solid var(--color-brandText);
 }
+
+.mobileView{
+  display: none;
+}
+
+.dropDownMenu {
+  display: none;
+  position: fixed;
+  background-color: var(--color-background-2);
+  border-radius: 16px;
+  padding: 10px 20px;
+  z-index: 90;
+  top: 8%;
+  left: 1%;
+  flex-direction: column;
+  gap: 16px;
+  font-size: large;
+  overflow: auto;
+}
+
+.dropDownMenu a.active {
+  color: var(--color-brandText);
+  border-bottom: 2px solid var(--color-brandText);
+}
+
+@media screen and (max-width: 688px) {
+  .desktopView { display: none; }
+  .mobileView { display: block; }
+  .hero {flex-direction: column;}
+}
+
+.backdrop {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1;
+}
+.backdrop.show { display: block; }
 
 </style>
