@@ -1,9 +1,7 @@
 <template>
   <main class="auth-page">
-    <section class="header">
-      <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
-      <h1>ClubsAtlas</h1>
-    </section>
+    <HeaderBar></HeaderBar>
+
     <div class="hero">
       <!-- Step Tracker -->
       <div class="stepTracker">
@@ -90,10 +88,9 @@
               <h2>Apart of <span class="brandText">specific</span> a faith or nationality?</h2>
             </div>
             <div class="dropDownContainer">
-              <div class="dropdown">
-                <p>Faith</p>
-                <v-icon name="pr-chevron-down" inverse scale="1.5" />
-              </div>
+              <DropDown>
+                <template #title>Faith</template>
+              </DropDown>
               <div class="dropdown">
                 <p>Nationality</p>
                 <v-icon name="pr-chevron-down" inverse scale="1.5" />
@@ -181,6 +178,8 @@
 <script setup>
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
+import HeaderBar from '@/components/HeaderGeneric.vue'
+import DropDown from '@/components/DropDown.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
