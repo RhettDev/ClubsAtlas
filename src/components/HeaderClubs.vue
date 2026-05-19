@@ -1,16 +1,16 @@
 <template>
   <section class="header clubHeader">
-      <div class="clubLogo">
-        <v-btn class="mobileText menuButton" icon @click="$emit('click', $event)">
-          <v-icon class="mobileText" name="pr-bars" inverse scale="1.5"/>
-        </v-btn>
-        <img class="logo" src="../assets/logos/clubCECLogo.svg" alt="Curtin Engineers Club Logo" />
-        <h2 class="desktopText">Curtin Engineers Club (CEC)</h2>
-        <h2 class="mobileText">CEC</h2>
-        <!-- <slot name="clubName" class="clubLogoText"></slot> -->
-      </div>
-      <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
-    </section>
+    <div class="clubLogo">
+      <v-btn class="mobileText menuButton" icon @click="$emit('click', $event)">
+        <v-icon class="mobileText" name="pr-bars" inverse scale="1.5" />
+      </v-btn>
+      <img class="logo" src="../assets/logos/clubCECLogo.svg" alt="Curtin Engineers Club Logo" />
+      <h2 class="desktopText">Curtin Engineers Club (CEC)</h2>
+      <h2 class="mobileText">CEC</h2>
+      <!-- <slot name="clubName" class="clubLogoText"></slot> -->
+    </div>
+    <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
+  </section>
 </template>
 
 <script setup>
@@ -29,9 +29,9 @@ defineEmits(['click'])
   top: 0;
   z-index: 100;
   color: var(--color-text-1);
-  padding: 16px 0;
+  /* padding: 16px 0; */
 }
-.header.clubHeader{
+.header.clubHeader {
   justify-content: space-between;
   padding: 16px 8px;
 }
@@ -43,21 +43,25 @@ defineEmits(['click'])
   align-items: center;
 }
 
-.clubLogoText{
+.clubLogoText {
   font-weight: 200;
   color: var(--color-text-1);
 }
 
-.menuButton{
+.menuButton {
   cursor: pointer;
 }
 
-.desktopText{
+.desktopText {
   display: none;
 }
 
 @media screen and (min-width: 688px) {
-  .desktopText { display: block; }
-  .mobileText { display: none; }
+  .desktopText {
+    display: block;
+  }
+  .mobileText {
+    display: none;
+  }
 }
 </style>

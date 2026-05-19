@@ -10,15 +10,15 @@
           <h2>Welcome <span class="brandText">Back</span></h2>
           <p>Log in to see your clubs and upcoming events</p>
         </div>
-        <hr />
+        <hr class="fgHR" />
 
         <div class="fieldContainer">
-          <v-icon name="pr-envelope" inverse scale="1.5"/>
+          <v-icon name="pr-envelope" inverse scale="1.5" />
           <input v-model="email" type="email" class="formField" placeholder="Email Address" />
         </div>
 
         <div class="fieldContainer">
-          <v-icon name="pr-lock" inverse scale="1.5"/>
+          <v-icon name="pr-lock" inverse scale="1.5" />
           <input v-model="password" type="password" class="formField" placeholder="Password" />
         </div>
 
@@ -26,14 +26,14 @@
           <div class="checkText">
             <!-- <ToggleButton variant="primary" @click="onClick()"></ToggleButton> -->
             <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
-            <p>Remember Me </p>
+            <p>Remember Me</p>
           </div>
-          <a class="brandText">Forgot Password?</a> 
+          <a class="brandText">Forgot Password?</a>
         </div>
 
         <BaseButton @click="handleLogin">Log In</BaseButton>
 
-        <hr />
+        <hr class="fgHR" />
 
         <div class="formTitle formSubtitle">
           <p>Don't have an account?</p>
@@ -90,7 +90,7 @@ function handleLogin() {
   color: var(--color-text-1);
 }
 
-.formSubtitle{
+.formSubtitle {
   display: flex;
   justify-content: space-between;
 }

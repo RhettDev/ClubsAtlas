@@ -7,48 +7,51 @@
     <div class="hero">
       <!-- Step Tracker -->
       <div class="stepTracker">
-          <div
-            v-for="n in totalSteps"
-            :key="n"
-            class="stepPip"
-            :class="{
-              'is-done': n < currentStep,
-              'is-active': n === currentStep,
-            }"
-            @click="n < currentStep && goTo(n)"
-          >
-          </div>
+        <div
+          v-for="n in totalSteps"
+          :key="n"
+          class="stepPip"
+          :class="{
+            'is-done': n < currentStep,
+            'is-active': n === currentStep,
+          }"
+          @click="n < currentStep && goTo(n)"
+        ></div>
       </div>
 
       <!-- Step Panels -->
       <div class="stepView">
         <Transition :name="transitionName" mode="out-in">
-
           <!-- Step One: Account Details -->
           <div v-if="currentStep === 1" key="step1" class="form">
             <div class="formTitle">
               <h2>Welcome to <span class="brandText">ClubsAtlas</span></h2>
               <p>Create your account and discover the world of University clubs and events!</p>
             </div>
-            <hr />
+            <hr class="fgHR" />
             <div class="fieldContainer">
-              <v-icon name="pr-user" inverse scale="1.5"/>
+              <v-icon name="pr-user" inverse scale="1.5" />
               <input v-model="name" type="text" class="formField" placeholder="Full Name" />
             </div>
             <div class="fieldContainer">
-              <v-icon name="pr-envelope" inverse scale="1.5"/>
+              <v-icon name="pr-envelope" inverse scale="1.5" />
               <input v-model="email" type="email" class="formField" placeholder="Email Address" />
             </div>
             <div class="fieldContainer">
-              <v-icon name="pr-lock" inverse scale="1.5"/>
+              <v-icon name="pr-lock" inverse scale="1.5" />
               <input v-model="password" type="password" class="formField" placeholder="Password" />
             </div>
             <div class="fieldContainer">
-              <v-icon name="pr-lock" inverse scale="1.5"/>
-              <input v-model="passwordConfirm" type="password" class="formField" placeholder="Confirm Password" />
+              <v-icon name="pr-lock" inverse scale="1.5" />
+              <input
+                v-model="passwordConfirm"
+                type="password"
+                class="formField"
+                placeholder="Confirm Password"
+              />
             </div>
             <div class="fieldContainer">
-              <v-icon name="pr-briefcase" inverse scale="1.5"/>
+              <v-icon name="pr-briefcase" inverse scale="1.5" />
               <input v-model="degree" type="degree" class="formField" placeholder="Enter Degree" />
             </div>
             <div class="checkText">
@@ -59,8 +62,8 @@
             <div class="formTitle formSubtitle">
               <p>Already have an account?</p>
               <RouterLink class="brandText" to="/signup"> Log in here!</RouterLink>
-            </div> 
-            <hr />
+            </div>
+            <hr class="fgHR" />
           </div>
 
           <!-- Step Two: Personal Interests -->
@@ -69,74 +72,78 @@
               <h2>Who are <span class="brandText">you?</span></h2>
               <p>Tell us some of your interest and hobbies</p>
             </div>
-            <hr />
+            <hr class="fgHR" />
             <div class="interestList">
               <button
                 v-for="item in interests"
                 :key="item.id"
                 class="interestTag"
-                :class="{selected: form.interests.includes(item.id)}"
-                @click="toggleInterest(item.id)">
-
+                :class="{ selected: form.interests.includes(item.id) }"
+                @click="toggleInterest(item.id)"
+              >
                 <span class="tagIcon">{{ item.icon }}</span>
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
             </div>
-            <hr />
+            <hr class="fgHR" />
             <div class="formTitleWide">
               <h2>Apart of <span class="brandText">specific</span> a faith or nationality?</h2>
             </div>
             <div class="dropDownContainer">
               <div class="dropdown">
                 <p>Faith</p>
-                <v-icon name="pr-chevron-down" inverse scale="1.5"/>
+                <v-icon name="pr-chevron-down" inverse scale="1.5" />
               </div>
               <div class="dropdown">
                 <p>Nationality</p>
-                <v-icon name="pr-chevron-down" inverse scale="1.5"/>
+                <v-icon name="pr-chevron-down" inverse scale="1.5" />
               </div>
             </div>
-            <hr />
+            <hr class="fgHR" />
           </div>
 
           <!-- Step Three: Club Style Choice -->
           <div v-else-if="currentStep === 3" key="step3" class="form">
             <div class="formTitle">
-              <h2>What are <span class="brandText">you</span> looking for in a <span class="brandText">club?</span> </h2>
+              <h2>
+                What are <span class="brandText">you</span> looking for in a
+                <span class="brandText">club?</span>
+              </h2>
               <p>Create your account and discover the world of University clubs and events!</p>
             </div>
-            <hr />
+            <hr class="fgHR" />
             <div class="clubTypeList">
               <button
                 v-for="item in clubType"
                 :key="item.id"
                 class="interestTag"
-                :class="{selected: form.clubType.includes(item.id)}"
-                @click="toggleClubType(item.id)">
-
+                :class="{ selected: form.clubType.includes(item.id) }"
+                @click="toggleClubType(item.id)"
+              >
                 <span class="tagIcon">{{ item.icon }}</span>
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
             </div>
-            <hr />
+            <hr class="fgHR" />
           </div>
-
 
           <!-- Step Four: Club Selection -->
           <div v-else-if="currentStep === 4" key="step4" class="form">
             <div class="formTitle">
-              <h2>These clubs are <span class="brandText">waiting for you</span>, take the change now!</h2>
+              <h2>
+                These clubs are <span class="brandText">waiting for you</span>, take the change now!
+              </h2>
               <p>Based on your answers these are suggested clubs for you!</p>
             </div>
-            <hr />
+            <hr class="fgHR" />
             <div class="clubTypeList">
               <button
                 v-for="item in clubExamples"
                 :key="item.id"
                 class="clubTag"
-                :class="{selected: form.clubExamples.includes(item.id)}"
-                @click="toggleClubType(item.id)">
-
+                :class="{ selected: form.clubExamples.includes(item.id) }"
+                @click="toggleClubType(item.id)"
+              >
                 <div class="clubName">
                   <span class="tagIcon">{{ item.icon }}</span>
                   <span class="tagLabel">{{ item.label }}</span>
@@ -147,38 +154,25 @@
                 </span>
               </button>
             </div>
-            <hr />
+            <hr class="fgHR" />
           </div>
         </Transition>
       </div>
 
       <!-- Footer nav -->
       <div class="stepNavBtns">
-        <BaseButton
-          class="btn-ghost"
-          :disabled="currentStep === 1"
-          @click="prev"
-        >Back</BaseButton>
-
-        <BaseButton
-          v-if="currentStep < totalSteps"
-          class="btn-secondary"
-          @click="next"
+        <BaseButton variant="secondary" :disabled="currentStep === 1" @click="prev"
+          >Back</BaseButton
         >
-          Continue 
+
+        <BaseButton v-if="currentStep < totalSteps" variant="primary" @click="next">
+          Continue
         </BaseButton>
 
-        <BaseButton
-          v-else
-          class="btn-primary"
-          :disabled="submitting"
-          @click="handleSignup"
-        >
-        Get Your Calendar!
+        <BaseButton v-else class="btn-primary" :disabled="submitting" @click="handleSignup">
+          <RouterLink to="/calendar" class="routerText">Get Your Calendar!</RouterLink>
         </BaseButton>
       </div>
-      
-
     </div>
     <FooterBar></FooterBar>
   </main>
@@ -241,7 +235,11 @@ const clubExamples = [
   { id: 'curtinEngineersClub', icon: '🎨', label: 'Curtin Engineers Club' },
   { id: 'curtinFreeFoodSociety', icon: '⚙️', label: 'Curtin Free Food Society' },
   { id: 'curtinEducationStudentsSociety', icon: '📊', label: 'Curtin Education Students Society' },
-  { id: 'CurtinBusinessCommerceAssociation', icon: '📣', label: 'Curtin Business & Commerce Association' },
+  {
+    id: 'CurtinBusinessCommerceAssociation',
+    icon: '📣',
+    label: 'Curtin Business & Commerce Association',
+  },
 ]
 
 function toggleInterest(id) {
@@ -255,7 +253,6 @@ function toggleClubType(id) {
   if (idx === -1) form.value.clubType.push(id)
   else form.value.clubType.splice(idx, 1)
 }
-
 
 // function validate(step) {
 //   const e = {}
@@ -283,7 +280,7 @@ function next() {
   // if (!validate(currentStep.value)) return
   // transitionName.value = 'slide-forward'
   currentStep.value = currentStep.value + 1
-  console.log("new" + currentStep.value)
+  console.log('new' + currentStep.value)
 }
 
 function prev() {
@@ -324,19 +321,22 @@ function handleSignup() {
   color: var(--color-text-1);
 }
 
-.formTitleWide{
+.formTitleWide {
   text-align: left;
   color: var(--color-text-1);
 }
 
-.formSubtitle{
+.formSubtitle {
   display: flex;
   justify-content: space-between;
 }
 
-
 .brandText {
   color: var(--color-brandText);
+}
+
+.routerText {
+  color: var(--color-text-1);
 }
 
 .fieldContainer {
@@ -403,8 +403,13 @@ function handleSignup() {
   color: var(--color-text-2);
 }
 
-.tagIcon { font-size: 1.4rem; }
-.tagLabel { font-size: 1rem; font-weight: 500; }
+.tagIcon {
+  font-size: 1.4rem;
+}
+.tagLabel {
+  font-size: 1rem;
+  font-weight: 500;
+}
 
 .clubTypeList {
   display: flex;
@@ -434,7 +439,6 @@ function handleSignup() {
   align-items: center;
 }
 
-
 /* ── Transitions ── */
 .slide-forward-enter-active,
 .slide-forward-leave-active,
@@ -444,11 +448,22 @@ function handleSignup() {
   position: absolute;
   width: max-content;
 }
-.slide-forward-enter-from { opacity: 0; transform: translateX(50px); }
-.slide-forward-leave-to  { opacity: 0; transform: translateX(-50px); }
-.slide-back-enter-from   { opacity: 0; transform: translateX(-50px); }
-.slide-back-leave-to     { opacity: 0; transform: translateX(50px); }
-
+.slide-forward-enter-from {
+  opacity: 0;
+  transform: translateX(50px);
+}
+.slide-forward-leave-to {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+.slide-back-enter-from {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+.slide-back-leave-to {
+  opacity: 0;
+  transform: translateX(50px);
+}
 
 .dropDownContainer {
   display: flex;
@@ -477,7 +492,7 @@ function handleSignup() {
 }
 
 @media screen and (max-width: 688px) {
-  .dropDownContainer{
+  .dropDownContainer {
     flex-direction: column;
   }
 }
