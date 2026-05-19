@@ -59,7 +59,7 @@
             </div>
             <div class="formTitle formSubtitle">
               <p>Already have an account?</p>
-              <RouterLink class="brandText" to="/signup"> Log in here!</RouterLink>
+              <RouterLink class="brandText" to="/login"> Log in here!</RouterLink>
             </div>
             <hr class="fgHR" />
           </div>
@@ -91,10 +91,9 @@
               <DropDown>
                 <template #title>Faith</template>
               </DropDown>
-              <div class="dropdown">
-                <p>Nationality</p>
-                <v-icon name="pr-chevron-down" inverse scale="1.5" />
-              </div>
+              <DropDown>
+                <template #title>Nationality</template>
+              </DropDown>
             </div>
             <hr class="fgHR" />
           </div>
@@ -158,17 +157,17 @@
 
       <!-- Footer nav -->
       <div class="stepNavBtns">
-        <BaseButton variant="secondary" :disabled="currentStep === 1" @click="prev"
-          >Back</BaseButton
-        >
+        <BaseButton variant="secondary" :disabled="currentStep === 1" @click="prev">
+          Back
+        </BaseButton>
 
         <BaseButton v-if="currentStep < totalSteps" variant="primary" @click="next">
           Continue
         </BaseButton>
+        <RouterLink v-else to="/calendar">
 
-        <BaseButton v-else class="btn-primary" :disabled="submitting" @click="handleSignup">
-          <RouterLink to="/calendar" class="routerText">Get Your Calendar!</RouterLink>
-        </BaseButton>
+          <BaseButton variant="primary" @click="handleSignup">Get Your Calendar!</BaseButton>
+        </RouterLink>
       </div>
     </div>
     <FooterBar></FooterBar>
@@ -181,7 +180,7 @@ import FooterBar from '@/components/FooterBar.vue'
 import HeaderBar from '@/components/HeaderGeneric.vue'
 import DropDown from '@/components/DropDown.vue'
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 
 const currentStep = ref(1)
 const totalSteps = 4
@@ -291,6 +290,7 @@ function handleSignup() {
   console.log('Signing up:', form.value.name, form.value.email, form.value.degree)
   useRouter.push('/')
 }
+
 </script>
 
 <style scoped>

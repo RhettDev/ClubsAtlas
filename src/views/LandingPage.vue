@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
+import HeaderBar from '@/components/HeaderGeneric.vue'
 </script>
 
 <template>
   <main id="landing">
-    <section class="header">
-      <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
-      <h1>ClubsAtlas</h1>
-    </section>
+    <HeaderBar></HeaderBar>
     <!-- Hero Section -->
     <section class="hero">
       <div class="subhero">

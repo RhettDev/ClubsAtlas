@@ -1,11 +1,8 @@
 <template>
   <main class="auth-page">
-    <section class="header">
-      <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
-      <h1>ClubsAtlas</h1>
-    </section>
+    <HeaderBar></HeaderBar>
     <div class="hero">
-      <div class="form">
+      <div v-if="currentStep === 1" key="login" class="form">
         <div class="formTitle">
           <h2>Welcome <span class="brandText">Back</span></h2>
           <p>Log in to see your clubs and upcoming events</p>
@@ -28,7 +25,7 @@
             <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
             <p>Remember Me</p>
           </div>
-          <a class="brandText">Forgot Password?</a>
+          <a class="brandText linkText" @click="panelSwap">Forgot Password?</a>
         </div>
 
         <BaseButton @click="handleLogin">Log In</BaseButton>
@@ -37,11 +34,54 @@
 
         <div class="formTitle formSubtitle">
           <p>Don't have an account?</p>
-          <RouterLink variant="primary" class="brandText" to="/signup">Sign up here!</RouterLink>
+          <RouterLink class="brandText linkText" to="/signup">Sign up here!</RouterLink>
         </div>
       </div>
-    </div>
 
+      <div v-else-if="currentStep === 2" key="forgot" class="form">
+        <div class="formTitle">
+          <h2>Forgot your <span class="brandText">password?</span></h2>
+          <p>Enter account email to send reset password link</p>
+        </div>
+        <hr class="fgHR" />
+
+        <div class="fieldContainer">
+          <v-icon name="pr-envelope" inverse scale="1.5" />
+          <input v-model="email" type="email" class="formField" placeholder="Email Address" />
+        </div>
+
+        <div class="fieldContainer">
+          <v-icon name="pr-envelope" inverse scale="1.5" />
+          <input v-model="email" type="emailConfirm" class="formField" placeholder="Renenter Email" />
+        </div>
+
+        <BaseButton @click="panelSwap">Reset Password</BaseButton>
+
+        <hr class="fgHR" />
+      </div>
+
+      <div v-else-if="currentStep === 3" key="reset" class="form">
+        <div class="formTitle">
+          <h2>Enter your new <span class="brandText">password</span></h2>
+          <p>Enter account email to send reset password link</p>
+        </div>
+        <hr class="fgHR" />
+
+        <div class="fieldContainer">
+          <v-icon name="pr-lock" inverse scale="1.5" />
+          <input v-model="password" type="password" class="formField" placeholder="Password" />
+        </div>
+
+        <div class="fieldContainer">
+          <v-icon name="pr-lock" inverse scale="1.5" />
+          <input v-model="password" type="passwordConfrim" class="formField" placeholder="Confirm Password" />
+        </div>
+
+        <BaseButton @click="panelSwap">Confirm Password Reset</BaseButton>
+
+        <hr class="fgHR" />
+      </div>
+    </div>
     <FooterBar></FooterBar>
   </main>
 </template>
@@ -50,17 +90,33 @@
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 // import ToggleButton from '@/components/ToggleButton.vue'
+import HeaderBar from '@/components/HeaderGeneric.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 const email = ref('') // ref() makes a value reactive
 const password = ref('')
 const router = useRouter()
+const currentStep = ref(1)
 
 function handleLogin() {
   // Replace with real auth logic (API call, etc.)
   console.log('Logging in:', email.value, password.value)
   router.push('/') // Programmatic navigation after login
+}
+
+function panelSwap(){
+  let newValue;
+  if(currentStep.value == 1){
+    newValue = 2;
+  }
+  else if(currentStep.value == 2){
+    newValue = 3;
+  }
+  else if(currentStep.value == 3){
+    newValue = 1;
+  }
+  currentStep.value = newValue;
 }
 </script>
 
@@ -97,6 +153,9 @@ function handleLogin() {
 
 .brandText {
   color: var(--color-brandText);
+}
+.linkText {
+  cursor: pointer;
 }
 
 .fieldContainer {

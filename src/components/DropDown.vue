@@ -10,14 +10,13 @@
     <option v-for="option in options" :key="option.id" :value="option.value" class="dropTitle">
       {{ option.text }}
     </option>
-    <p>Selected: {{ selectedItem }}</p>
   </select>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 
-const selectedItem = ref([''])
+const selectedItem = ref('')
 const options = ref([
   { id: 1, text: 'Option A', value: 'a', selected: 'f' },
   { id: 2, text: 'Option B', value: 'b', selected: 'f' },
