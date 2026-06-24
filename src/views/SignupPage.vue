@@ -173,7 +173,7 @@
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderBar from '@/components/HeaderGeneric.vue'
-import DropDown from '@/components/DropDown.vue'
+import DropDown from '@/components/InterestDropDown.vue'
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
@@ -453,7 +453,7 @@ function handleSignup() {
 }
 
 /* ── Transitions ── */
-.slide-forward-enter-active,
+/* .slide-forward-enter-active,
 .slide-forward-leave-active,
 .slide-back-enter-active,
 .slide-back-leave-active {
@@ -476,29 +476,17 @@ function handleSignup() {
 .slide-back-leave-to {
   opacity: 0;
   transform: translateX(50px);
-}
+} */
 
 .dropDownContainer {
   display: flex;
   flex-direction: row;
   width: 100%;
   gap: 16px;
-  align-items: center;
+  align-items: start;
 }
 
-.dropdown {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  gap: 6px;
-  padding: 6px 8px;
-  border-radius: 16px;
-  border: 2px solid var(--ca-brand-blue-1);
-  background: var(--color-background-1);
-  color: var(--color-text-1);
-  justify-content: space-between;
-}
+
 
 .dropdown p {
   margin: 0;

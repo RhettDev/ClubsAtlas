@@ -91,7 +91,7 @@ onUnmounted(() => {
   text-align: start;
   width: 100%;
   position: absolute;
-  top: 100%;   
+  bottom: 100%;   
   left: 0;
   z-index: 100;
   border-radius: 16px;
