@@ -68,7 +68,7 @@
           <div v-else-if="currentStep === 2" key="step2" class="form">
             <div class="formTitle">
               <h2>Who are <span class="brandText">you?</span></h2>
-              <p>Tell us some of your interest and hobbies</p>
+              <p>Tell us some of your interests and hobbies</p>
             </div>
             <hr class="fgHR" />
             <div class="interestList">
@@ -88,12 +88,8 @@
               <h2>Apart of <span class="brandText">specific</span> a faith or nationality?</h2>
             </div>
             <div class="dropDownContainer">
-              <DropDown>
-                <template #title>Faith</template>
-              </DropDown>
-              <DropDown>
-                <template #title>Nationality</template>
-              </DropDown>
+              <DropDown :options="optionsFaith" :v-model="selectedFaith"> </DropDown>
+              <DropDown :options="optionsNation" :v-model="selectedNation"> </DropDown>
             </div>
             <hr class="fgHR" />
           </div>
@@ -165,7 +161,6 @@
           Continue
         </BaseButton>
         <RouterLink v-else to="/calendar">
-
           <BaseButton variant="primary" @click="handleSignup">Get Your Calendar!</BaseButton>
         </RouterLink>
       </div>
@@ -240,6 +235,26 @@ const clubExamples = [
   },
 ]
 
+const selectedFaith = ref(null)
+const selectedNation = ref(null)
+const optionsFaith = ref(['Christianity', 'Muslim', 'Islam', 'Sikh', 'None'])
+const optionsNation = ref([
+  'African',
+  'Chinese',
+  'European',
+  'Filipino',
+  'First Nations',
+  'Indonesian',
+  'Japanese',
+  'Malaysian',
+  'Middle Eastern',
+  'Singaporean',
+  'South Asian',
+  'Thai',
+  'Vietnamese',
+  'None',
+])
+
 function toggleInterest(id) {
   const idx = form.value.interests.indexOf(id)
   if (idx === -1) form.value.interests.push(id)
@@ -290,7 +305,6 @@ function handleSignup() {
   console.log('Signing up:', form.value.name, form.value.email, form.value.degree)
   useRouter.push('/')
 }
-
 </script>
 
 <style scoped>

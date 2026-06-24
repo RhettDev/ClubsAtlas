@@ -1,31 +1,62 @@
 <template>
-  <!-- <div class="dropdown">
-    <slot name="title">Dropdown</slot>
-    <v-btn class="menuButton" icon @click="$emit('click', $event)">
-      <v-icon class="mobileText" name="pr-chevron-down" inverse scale="1.5" />
-    </v-btn>
-  </div> -->
-  <select v-model="selectedItem" class="dropdown">
-    <option disabled value="" class="dropTitle"><slot name="title">Dropdown</slot></option>
-    <option v-for="option in options" :key="option.id" :value="option.value" class="dropTitle">
-      {{ option.text }}
-    </option>
-  </select>
+  <div class="dropdown" ref="dropDownRef">
+    <div class="dropdownSelected" @click="isOpen = true">
+      {{ mappedSelected }}
+    </div>
+    <div class="dropdownOptions" v-if="isOpen">
+      <div
+        class="option"
+        v-for="option in props.options"
+        :key="option"
+        @click="toggleOption(option)"
+      >
+        {{ option }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted, computed } from 'vue'
 
-const selectedItem = ref('')
-const options = ref([
-  { id: 1, text: 'Option A', value: 'a', selected: 'f' },
-  { id: 2, text: 'Option B', value: 'b', selected: 'f' },
-  { id: 3, text: 'Option C', value: 'c', selected: 'f' },
-  { id: 4, text: 'Option D', value: 'd', selected: 'f' },
-  { id: 5, text: 'Option E', value: 'e', selected: 'f' },
-  { id: 6, text: 'Option F', value: 'f', selected: 'f' },
-  { id: 7, text: 'Option G', value: 'g', selected: 'f' },
-])
+const props = defineProps({
+  options: {
+    type: Array,
+    required: true,
+  },
+  value: {
+    default: null,
+  },
+})
+
+const emit = defineEmits(['update:value'])
+
+const isOpen = ref(false)
+const dropDownRef = ref(null)
+const selectedOption = ref(null)
+
+const outsideClick = (element) => {
+  if (!dropDownRef.value.contains(element.target)) {
+    isOpen.value = false
+  }
+}
+
+const mappedSelected = computed(() => {
+  return selectedOption.value?.name || selectedOption.value || 'Select Below'
+})
+
+const toggleOption = (option) => {
+  selectedOption.value = option
+  emit('update:value', option)
+  isOpen.value = false
+}
+
+onMounted(() => {
+  document.addEventListener('click', outsideClick)
+})
+onUnmounted(() => {
+  document.removeEventListener('click', outsideClick)
+})
 </script>
 
 <style scope>

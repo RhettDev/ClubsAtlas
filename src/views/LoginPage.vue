@@ -1,3 +1,4 @@
+<!-- HTML Structure -->
 <template>
   <main class="auth-page">
     <HeaderBar></HeaderBar>
@@ -52,7 +53,12 @@
 
         <div class="fieldContainer">
           <v-icon name="pr-envelope" inverse scale="1.5" />
-          <input v-model="email" type="emailConfirm" class="formField" placeholder="Renenter Email" />
+          <input
+            v-model="email"
+            type="emailConfirm"
+            class="formField"
+            placeholder="Renenter Email"
+          />
         </div>
 
         <BaseButton @click="panelSwap">Reset Password</BaseButton>
@@ -74,7 +80,12 @@
 
         <div class="fieldContainer">
           <v-icon name="pr-lock" inverse scale="1.5" />
-          <input v-model="password" type="passwordConfrim" class="formField" placeholder="Confirm Password" />
+          <input
+            v-model="password"
+            type="passwordConfrim"
+            class="formField"
+            placeholder="Confirm Password"
+          />
         </div>
 
         <BaseButton @click="panelSwap">Confirm Password Reset</BaseButton>
@@ -87,6 +98,7 @@
 </template>
 
 <script setup>
+// Imports
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 // import ToggleButton from '@/components/ToggleButton.vue'
@@ -94,10 +106,13 @@ import HeaderBar from '@/components/HeaderGeneric.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
+// Variables
 const email = ref('') // ref() makes a value reactive
 const password = ref('')
 const router = useRouter()
 const currentStep = ref(1)
+
+// Functions
 
 function handleLogin() {
   // Replace with real auth logic (API call, etc.)
@@ -105,21 +120,20 @@ function handleLogin() {
   router.push('/') // Programmatic navigation after login
 }
 
-function panelSwap(){
-  let newValue;
-  if(currentStep.value == 1){
-    newValue = 2;
+function panelSwap() {
+  let newValue
+  if (currentStep.value == 1) {
+    newValue = 2
+  } else if (currentStep.value == 2) {
+    newValue = 3
+  } else if (currentStep.value == 3) {
+    newValue = 1
   }
-  else if(currentStep.value == 2){
-    newValue = 3;
-  }
-  else if(currentStep.value == 3){
-    newValue = 1;
-  }
-  currentStep.value = newValue;
+  currentStep.value = newValue
 }
 </script>
 
+<!-- CSS Classes -->
 <style scoped>
 .hero {
   width: 100%;
