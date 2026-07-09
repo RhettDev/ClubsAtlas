@@ -13,8 +13,10 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
     "make": "^0.0.0",
     "oh-vue-icons": "^1.0.0-rc3",
+    "pg": "^8.22.0",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"
   },
@@ -34,5 +36,18 @@
   },
   "engines": {
     "node": "^20.19.0 || >=22.12.0"
-  }
+  },
+  "description": "The ClubsAtlas is my final year project, a club discovery platform for Curtin University students.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RhettDev/ClubsAtlas.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RhettDev/ClubsAtlas/issues"
+  },
+  "homepage": "https://github.com/RhettDev/ClubsAtlas#readme"
 }

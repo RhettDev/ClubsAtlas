@@ -161,3 +161,23 @@ p {
   background-color: var(--ca--grey-3); */
   accent-color: var(--ca-brand-blue-2);
 }
+
+.menuEntry{
+  display: flex;
+  padding: 4px 0;
+  gap: 10px;
+  color: var(--color-text-2);
+  font-size: 1.3rem;
+  text-align: right;
+  justify-content: space-between;
+}
+
+.menuEntry a.active {
+  color: var(--color-brandText);
+  border-bottom: 2px solid var(--color-brandText);
+}
+
+.menuEntry:hover {
+  color: var(--color-brandText);
+  border-bottom: 2px solid var(--color-brandText);
+}

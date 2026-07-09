@@ -37,8 +37,30 @@
         <div id="yourClubs">
           <h2>Your Clubs</h2>
           <hr class="bgHR" />
+          <div>
+            <p v-if="loading">Loading...</p>
+            <p v-else-if="error">Error: {{ error }}</p>
+            <ul v-else>
+              <li v-for="club in clubs" :key="club.id">
+                {{ club.clubName }}
+              </li>
+            </ul>
+          </div>
         </div>
-        <div id="calendarMenu"></div>
+        <div id="calendarMenu">
+        <div class="menuEntry active">
+          Your Clubs
+        </div>
+        <div class="menuEntry">
+          Suggested Clubs
+        </div>
+        <div class="menuEntry">
+          Club Search
+        </div>
+        <RouterLink class="menuEntry" to="calendar/showcase">
+          Weekly Showcase
+        </RouterLink>
+        </div>
       </section>
     </div>
 
@@ -61,6 +83,24 @@
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
+
+import { ref, onMounted } from 'vue';
+
+const clubs = ref([]);
+const loading = ref(true);
+const error = ref(null);
+
+onMounted(async () => {
+  try {
+    const response = await fetch('http://localhost:3001/api/clubs');
+    if (!response.ok) throw new Error('Failed to fetch clubs');
+    clubs.value = await response.json();
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
+})
 
 // Data
 // const clubExamples = [
@@ -87,6 +127,7 @@ const onHeaderMenuClick = (event) => {
     document.getElementById('navBackdrop').classList.add('show')
   }
 }
+
 </script>
 
 <style scoped>
