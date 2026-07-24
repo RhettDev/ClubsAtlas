@@ -51,7 +51,27 @@
       </section>
 
       <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
+        <div id="PageTitle" class="pageHeader">
+          <h1 class="title">New Event</h1>
+          <hr class="fgHR">
+        </div>
+        <div class="fieldButtonContainer" id="TidyHQLinkInput">
+          <FormField
+            v-model="eventTitle"
+            label="Create Event from TidyHQ?"
+            placeholder="TidyHQ Public Event Link"
+            variant="fieldContainer--halfWidth">
+          </FormField>
+          <BaseButton>Submit</BaseButton>
+        </div>
+        <hr class="fgHR">
+        <div id="inputFields">
+
+        </div>
+        <hr class="fgHR">
+        <div id="saveCancelButtons">
+
+        </div>
       </section>
 
       <section id="analyitcsBar" class="bRight">
@@ -75,6 +95,8 @@
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
+import FormField from '@/components/FormField.vue'
+import BaseButton from '@/components/BaseButton.vue'
 const onHeaderMenuClick = (event) =>{
   console.log(event)
   let navDD = document.getElementById("navDropDown");
@@ -127,6 +149,15 @@ const onHeaderMenuClick = (event) =>{
 .bCenter {
   flex: 2;
   box-shadow: 2px 0px var(--color-background-2);
+}
+
+.fieldButtonContainer{
+  display: flex;
+  flex-direction: row;
+}
+
+.fieldButtonContainer FormField{
+  width: max-content;
 }
 
 .menuEntry{

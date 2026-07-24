@@ -1,11 +1,70 @@
 <template>
-  <input :class="['form', 'form--${variant}', 'form--${description}']" />
+  <div 
+    :class="[
+      'fieldContainer', 
+      `fieldContainer--${variant}`
+      ]">
+    <label v-if="showLabel" class="fieldLabel" :for="fieldID">
+      {{ label }}
+    </label>
+    <input 
+      :id="fieldID"
+      :type="type"
+      :placeholder="placeholder"
+      :disabled="disabled"
+      :value="modelValue"
+      class="formField"
+      @input="$emit('update:modelValue', $event.target.value)"/>
+  </div>
 </template>
 
-<script>
-export default {
-  name: 'FormField',
-}
+<script setup>
+defineProps({
+  variant: {
+    type: String,
+    default: 'primary',
+    validator: (v) => ['halfWidth', 'fullWidth', 'mobile'].includes(v),
+  },
+  label: { type: String, default: ''},
+  showLabel: { type: Boolean, default: true }, 
+  placeholder: { type: String, default: 'Enter Field Data' },
+  disabled: { type: Boolean, default: false },
+  modelValue: { type: String, default: '' },
+  type: { type: String, default: 'text' }
+})
+
+defineEmits(['update:modelValue'])
+
 </script>
 
-<style></style>
+<style scoped>
+
+.fieldContainer{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.fieldContainer--fullWidth{
+  width: 100%;
+}
+
+.fieldContainer--halfwidth{
+  width: 50%;
+}
+
+.fieldContainer--mobile{
+  flex-direction: column;
+}
+
+.fieldLabel{
+  color: var(--color-text-2);
+  text-align: left;
+}
+
+.formField:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+</style>
