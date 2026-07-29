@@ -4,33 +4,29 @@
     <!-- Mobiel Naviation -->
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
     <div id="navDropDown" class="dropDownMenu">
+      <h3 class="menuEntry">Today</h3>
+      <h3 class="menuEntry active">Month View</h3>
+      <h3 class="menuEntry">Week View</h3>
+      <hr class="fgHR" />
+      <h3>Clubs List</h3>
+      <hr class="fgHR" />
       <RouterLink variant="primary" class="menuEntry active" to="/admin" @click="onHeaderMenuClick">
-        <v-icon name="pr-bars" inverse scale="1.2" />
-        Dashboard
+        Your Clubs
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/new-event">
-        <v-icon name="pr-upload" inverse scale="1.2" />
-        Upload New Event
+        Suggested Clubs
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
-        <v-icon name="pr-home" inverse scale="1.2" />
-        Update Club Profile
+        Weekly Showcase
       </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm">
-        <v-icon name="pr-users" inverse scale="1.2" />
-        General Meetings
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-        <v-icon name="pr-cog" inverse scale="1.2" />
-        Settings
-      </RouterLink>
+      <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm"> Settings </RouterLink>
     </div>
 
     <!-- Desktop Navigation -->
     <div class="hero desktopView">
       <!-- Desktop View -->
       <section id="calendarBody" class="bCenter">
-        <div v-if="loadingEvents" class="backendLoadingMsg">Loading Calendar...</div>
+        <!-- <div v-if="loadingEvents" class="backendLoadingMsg">Loading Calendar...</div>
         <div v-else-if="errorMessage" class="backendLoadingMsg">
           Failed to load: {{ errorMessage }}
         </div>
@@ -39,19 +35,23 @@
             {{ event.id }}
             {{ event.eventTitle }}
           </div>
+        </div> -->
+        <div class="calenderGrid">
+          <div v-for="day in dayAcronymsMS" :key="day" class="dayLabels">
+            {{ day }}
+          </div>
         </div>
       </section>
 
       <section id="clubsSideBar" class="bRight">
         <div id="yourClubs">
-          <h2>Your Clubs</h2>
+          <h3 class="pageSubHeader">Your Clubs</h3>
           <hr class="bgHR" />
           <div>
             <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
             <div v-else-if="errorMessage" class="backendLoadingMsg">
               Failed to load: {{ errorMessage }}
             </div>
-            <div v-else-if="nulltest"></div>
             <ul v-else>
               <li v-for="club in clubs" :key="club.id">
                 {{ club.clubName }}
@@ -71,7 +71,7 @@
     <!-- Mobile View -->
     <div class="hero mobileView">
       <section id="analyitcsBar" class="bLeft">
-        <h2>analytics panel</h2>
+        <h3>analytics panel</h3>
       </section>
 
       <section id="eventsList" class="bCenter">
@@ -88,6 +88,7 @@
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
 import { ref, onMounted } from 'vue'
+import { computed } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { errorMessages } from 'vue/compiler-sfc'
 
@@ -96,7 +97,6 @@ const events = ref([])
 const loadingEvents = ref(true)
 const loadingClubs = ref(true)
 const errorMessage = ref(null)
-const nulltest = ref(1)
 
 async function getClubsData() {
   try {
@@ -105,7 +105,6 @@ async function getClubsData() {
 
     if (error) throw error
     events.value = data
-    if ((events.value = null)) nulltest.value = null
   } catch (error) {
     errorMessages.value = error.message
     console.error('Error fetching data:', error)
@@ -134,18 +133,6 @@ onMounted(() => {
   getEventData()
 })
 
-// Data
-// const clubExamples = [
-//   { id: 'curtinEngineersClub', icon: '🎨', label: 'Curtin Engineers Club' },
-//   { id: 'curtinFreeFoodSociety', icon: '⚙️', label: 'Curtin Free Food Society' },
-//   { id: 'curtinEducationStudentsSociety', icon: '📊', label: 'Curtin Education Students Society' },
-//   {
-//     id: 'CurtinBusinessCommerceAssociation',
-//     icon: '📣',
-//     label: 'Curtin Business & Commerce Association',
-//   },
-// ]
-
 const onHeaderMenuClick = (event) => {
   console.log(event)
   let navDD = document.getElementById('navDropDown')
@@ -159,6 +146,23 @@ const onHeaderMenuClick = (event) => {
     document.getElementById('navBackdrop').classList.add('show')
   }
 }
+
+// Calendar Functions
+const currentDate = ref(new Date())
+const selectedDate = ref(null)
+const dayAcronymsMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monday Start
+const dayAcronymsSS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Sunday Start
+const currentMonthName = computed(() => {
+  return currentDate.value.toLocaleString('default', { month: 'long' })
+})
+const currentYear = computed(() => currentDate.value.getFullYear())
+const currentMonth = computed(() => currentDate.value.getMonth())
+const daysInMonth = computed(() => {
+  return new Date(currentYear.value, currentMonth.value + 1, 0).getDate()
+})
+const firstDayOffset = computed(() => {
+  return new Date(currentYear.value, currentMonth.value, 1).getDay()
+})
 </script>
 
 <style scoped>
@@ -292,5 +296,31 @@ const onHeaderMenuClick = (event) => {
 .clubName {
   display: flex;
   align-items: center;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.dayLabels {
+  text-align: center;
+  color: var(--color-text-1);
+  font-size: 0.9rem;
+}
+
+.calendarDay {
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+  font-size: 0.95rem;
+}
+
+.calendaDay.empty {
+  cursor: default;
 }
 </style>
