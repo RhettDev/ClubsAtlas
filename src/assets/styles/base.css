@@ -162,7 +162,7 @@ p {
   accent-color: var(--ca-brand-blue-2);
 }
 
-.menuEntry{
+.menuEntry {
   display: flex;
   padding: 4px 0;
   gap: 10px;
@@ -182,13 +182,24 @@ p {
   border-bottom: 2px solid var(--color-brandText);
 }
 
-.pageHeader{
+.pageHeader {
   text-align: left;
-
+  margin: 16px;
 }
-.pageHeader .title{
+.pageHeader .title {
   margin-bottom: 2px;
 }
+.pageSubHeader {
+  text-align: center;
+  color: var(--color-text-1);
+  font-weight: 400;
+}
+
+.backendLoadingMsg {
+  color: var(--color-text-1);
+  font-weight: 600;
+}
+
 
 .bCenter {
   flex: 2;

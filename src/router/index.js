@@ -8,6 +8,7 @@ import EventUploadPage from '@/views/EventUploadPage.vue'
 import ClubProfilePage from '@/views/ClubProfilePage.vue'
 import GeneralMeetingsPage from '@/views/GeneralMeetingsPage.vue'
 import AdminSettingsPage from '@/views/AdminSettingsPage.vue'
+import UserSettingsPage from '@/views/UserSettingsPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -16,6 +17,7 @@ const router = createRouter({
     { path: '/login', component: LoginPage },
     { path: '/signup', component: SignupPage },
     { path: '/calendar', component: CalendarPage },
+    { path: '/settings', component: UserSettingsPage },
     { path: '/admin', component: AdminPage },
     { path: '/admin/new-event', component: EventUploadPage },
     { path: '/admin/update-home', component: ClubProfilePage },
