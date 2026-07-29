@@ -30,7 +30,16 @@
     <div class="hero desktopView">
       <!-- Desktop View -->
       <section id="calendarBody" class="bCenter">
-        <h1>Calendar body</h1>
+        <div v-if="loadingEvents" class="backendLoadingMsg">Loading Calendar...</div>
+        <div v-else-if="errorMessage" class="backendLoadingMsg">
+          Failed to load: {{ errorMessage }}
+        </div>
+        <div v-else>
+          <div v-for="event in events" :key="event.id">
+            {{ event.id }}
+            {{ event.eventTitle }}
+          </div>
+        </div>
       </section>
 
       <section id="clubsSideBar" class="bRight">
@@ -38,8 +47,11 @@
           <h2>Your Clubs</h2>
           <hr class="bgHR" />
           <div>
-            <p v-if="loading">Loading...</p>
-            <p v-else-if="error">Error: {{ error }}</p>
+            <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
+            <div v-else-if="errorMessage" class="backendLoadingMsg">
+              Failed to load: {{ errorMessage }}
+            </div>
+            <div v-else-if="nulltest"></div>
             <ul v-else>
               <li v-for="club in clubs" :key="club.id">
                 {{ club.clubName }}
@@ -48,18 +60,10 @@
           </div>
         </div>
         <div id="calendarMenu">
-        <div class="menuEntry active">
-          Your Clubs
-        </div>
-        <div class="menuEntry">
-          Suggested Clubs
-        </div>
-        <div class="menuEntry">
-          Club Search
-        </div>
-        <RouterLink class="menuEntry" to="calendar/showcase">
-          Weekly Showcase
-        </RouterLink>
+          <div class="menuEntry active">Your Clubs</div>
+          <div class="menuEntry">Suggested Clubs</div>
+          <div class="menuEntry">Club Search</div>
+          <RouterLink class="menuEntry" to="calendar/showcase"> Weekly Showcase </RouterLink>
         </div>
       </section>
     </div>
@@ -83,23 +87,51 @@
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
+import { ref, onMounted } from 'vue'
+import { supabase } from '../../backend/supabase'
+import { errorMessages } from 'vue/compiler-sfc'
 
-import { ref, onMounted } from 'vue';
+const clubs = ref([])
+const events = ref([])
+const loadingEvents = ref(true)
+const loadingClubs = ref(true)
+const errorMessage = ref(null)
+const nulltest = ref(1)
 
-const clubs = ref([]);
-const loading = ref(true);
-const error = ref(null);
-
-onMounted(async () => {
+async function getClubsData() {
   try {
-    const response = await fetch('http://localhost:3001/api/clubs');
-    if (!response.ok) throw new Error('Failed to fetch clubs');
-    clubs.value = await response.json();
-  } catch (err) {
-    error.value = err.message;
+    loadingClubs.value = true
+    const { data, error } = await supabase.from('clubs').select('*')
+
+    if (error) throw error
+    events.value = data
+    if ((events.value = null)) nulltest.value = null
+  } catch (error) {
+    errorMessages.value = error.message
+    console.error('Error fetching data:', error)
   } finally {
-    loading.value = false;
+    loadingClubs.value = false
   }
+}
+
+async function getEventData() {
+  try {
+    loadingEvents.value = true
+    const { data, error } = await supabase.from('events').select('*')
+
+    if (error) throw error
+    events.value = data
+  } catch (error) {
+    errorMessages.value = error.message
+    console.error('Error fetching data:', error)
+  } finally {
+    loadingEvents.value = false
+  }
+}
+
+onMounted(() => {
+  getClubsData()
+  getEventData()
 })
 
 // Data
@@ -127,7 +159,6 @@ const onHeaderMenuClick = (event) => {
     document.getElementById('navBackdrop').classList.add('show')
   }
 }
-
 </script>
 
 <style scoped>

@@ -13,6 +13,7 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.111.0",
     "dotenv": "^17.4.2",
     "make": "^0.0.0",
     "oh-vue-icons": "^1.0.0-rc3",
