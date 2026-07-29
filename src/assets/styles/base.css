@@ -184,9 +184,30 @@ p {
 
 .pageHeader{
   text-align: left;
-  margin: 16px;
 
 }
 .pageHeader .title{
   margin-bottom: 2px;
+}
+
+.bCenter {
+  flex: 2;
+  box-shadow: 2px 0px var(--color-background-2);
+  padding: 8px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+
+.fieldLabel{
+  color: var(--color-text-2);
+  text-align: left;
+  margin-bottom: 4px;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
 }

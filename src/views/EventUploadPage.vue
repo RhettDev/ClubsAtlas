@@ -50,27 +50,81 @@
         </RouterLink>
       </section>
 
-      <section id="eventsList" class="bCenter">
+      <section id="Content" class="bCenter">
         <div id="PageTitle" class="pageHeader">
           <h1 class="title">New Event</h1>
           <hr class="fgHR">
         </div>
         <div class="fieldButtonContainer" id="TidyHQLinkInput">
           <FormField
-            v-model="eventTitle"
+            v-model="eventLink"
             label="Create Event from TidyHQ?"
             placeholder="TidyHQ Public Event Link"
-            variant="fieldContainer--halfWidth">
+            variant="halfWidth">
           </FormField>
           <BaseButton>Submit</BaseButton>
         </div>
         <hr class="fgHR">
-        <div id="inputFields">
+        <div id="inputFields" class="fieldsContainer">
+          <FormField
+            v-model="eventTitle"
+            label="Title"
+            placeholder="Title of Event"
+            variant="halfWidth">
+          </FormField>
+          <div id="eventStart" class="dateTimeContainer">
+            <FormField
+              v-model="eventDate"
+              label="Start Time"
+              placeholder="Date"
+              variant="quartWidth">
+            </FormField>
+            <FormField
+              v-model="eventStartTime"
+              label=""
+              placeholder="Time"
+              variant="quartWidth">
+            </FormField>
+          </div>
+          <div id="eventEnd" class="dateTimeContainer">
+            <FormField
+              v-model="eventDate"
+              label="End Time"
+              placeholder="Date"
+              variant="quartWidth">
+            </FormField>
+            <FormField
+              v-model="eventStartTime"
+              label=""
+              placeholder="Time"
+              variant="quartWidth">
+            </FormField>
+          </div>
+          <FormField
+            v-model="paragraph"
+            label="Event Description"
+            placeholder="Description of the event and details guests will need. Include times, links and location!"
+            variant="fullWidth">
+          </FormField>
+          <!-- image upload -->
+          <FormField
+            v-model="link"
+            label="External Link"
+            placeholder="Link to ticket page or social media post"
+            variant="halfWidth">
+          </FormField>
+          <!-- Tags -->
+          <div id="previewEventContainer" class="buttonLabelContainer">
+            <label class="fieldLabel">Preview Event</label>
+            <BaseButton>Public Event</BaseButton>
+          </div>
 
         </div>
         <hr class="fgHR">
-        <div id="saveCancelButtons">
-
+        <div id="saveCancelButtons" class="buttonContainer">
+          <BaseButton>Publish</BaseButton>
+          <BaseButton>Save</BaseButton>
+          <BaseButton variant="secondary">Cancel</BaseButton>
         </div>
       </section>
 
@@ -146,18 +200,25 @@ const onHeaderMenuClick = (event) =>{
   flex: 0.7;
 }
 
-.bCenter {
-  flex: 2;
-  box-shadow: 2px 0px var(--color-background-2);
-}
-
 .fieldButtonContainer{
   display: flex;
   flex-direction: row;
+  align-items: end;
+}
+
+.fieldButtonContainer button{
+  margin: 0 8px;
 }
 
 .fieldButtonContainer FormField{
   width: max-content;
+  align-items: end;
+}
+
+.fieldsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .menuEntry{
@@ -216,5 +277,22 @@ const onHeaderMenuClick = (event) =>{
     z-index: 1;
 }
 .backdrop.show { display: block; }
+
+.dateTimeContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 8px;
+  width: 40%;
+}
+
+.buttonLabelContainer {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+.buttonLabelContainer button{
+  margin: 0;
+}
 
 </style>
