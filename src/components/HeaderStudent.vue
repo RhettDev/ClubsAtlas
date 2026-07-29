@@ -16,7 +16,7 @@
         <BaseButton>Week</BaseButton>
       </div>
       <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
-      <RouterLink to="/userSettings">
+      <RouterLink to="/settings">
         <v-icon class="mobileView" name="pr-user" inverse scale="2" />
       </RouterLink>
     </div>
