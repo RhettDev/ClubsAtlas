@@ -36,8 +36,43 @@
             {{ event.eventTitle }}
           </div>
         </div> -->
-        <div class="calenderGrid">
+        <div class="dayGrid">
           <div v-for="day in dayAcronymsMS" :key="day" class="dayLabels">
+            {{ day }}
+          </div>
+        </div>
+        <div class="calendarGrid">
+          <!-- Get left over days -->
+          <div
+            v-for="day in firstDayOffset"
+            :key="day"
+            class="calendarDay altMonthDay"
+            :class="{
+              isToday: isToday(day),
+            }"
+          >
+            {{ day }}
+          </div>
+          <!-- Get days for Current Month -->
+          <div
+            v-for="day in daysInMonth"
+            :key="day"
+            class="calendarDay"
+            :class="{
+              isToday: isToday(day),
+            }"
+          >
+            {{ day }}
+          </div>
+          <!-- Get Extra Days for the Next Month -->
+          <div
+            v-for="day in extraDays"
+            :key="day"
+            class="calendarDay altMonthDay"
+            :class="{
+              isToday: isToday(day),
+            }"
+          >
             {{ day }}
           </div>
         </div>
@@ -70,12 +105,25 @@
 
     <!-- Mobile View -->
     <div class="hero mobileView">
-      <section id="analyitcsBar" class="bLeft">
-        <h3>analytics panel</h3>
-      </section>
-
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
+      <section id="calendarContainer" class="bCenter">
+        <div class="dayGrid">
+          <div v-for="day in dayLetterMS" :key="day" class="dayLabels">
+            {{ day }}
+          </div>
+        </div>
+        <div class="calendarGrid">
+          <!-- Get days for Current Month -->
+          <div
+            v-for="day in daysInMonth"
+            :key="day"
+            class="calendarDay"
+            :class="{
+              isToday: isToday(day),
+            }"
+          >
+            {{ day }}
+          </div>
+        </div>
       </section>
     </div>
 
@@ -152,52 +200,35 @@ const currentDate = ref(new Date())
 const selectedDate = ref(null)
 const dayAcronymsMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monday Start
 const dayAcronymsSS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Sunday Start
-const currentMonthName = computed(() => {
-  return currentDate.value.toLocaleString('default', { month: 'long' })
-})
+const dayLetterMS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Monday Start
+const dayLetterSS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Sunday Start
+
 const currentYear = computed(() => currentDate.value.getFullYear())
 const currentMonth = computed(() => currentDate.value.getMonth())
 const daysInMonth = computed(() => {
   return new Date(currentYear.value, currentMonth.value + 1, 0).getDate()
 })
 const firstDayOffset = computed(() => {
-  return new Date(currentYear.value, currentMonth.value, 1).getDay()
+  return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
 })
+const extraDays = computed(() => {
+  return new Date(currentYear.value, currentMonth.value + 2, 1).getDay() - 1
+})
+
+// Highlight the current system date
+const isToday = (day) => {
+  const today = new Date()
+  return (
+    today.getDate() === day &&
+    today.getMonth() === currentMonth.value &&
+    today.getFullYear() === currentYear.value
+  )
+}
 </script>
 
 <style scoped>
-.hero {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-  /* align-items: start; */
-  flex: 1;
-}
-
-.body {
-  display: flex;
-  width: 100%;
-}
-
-.bRight a.active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-.bRight {
-  display: flex;
-  flex-direction: column;
-  flex: 0.6;
-  box-shadow: 2px 0px var(--color-background-2);
-  padding: 16px;
-  gap: 4px;
-}
-
-.bCenter {
-  flex: 2;
-  box-shadow: 2px 0px var(--color-background-2);
+.calendarWapper {
+  max-width: 100%;
 }
 
 .menuEntry {
@@ -301,26 +332,47 @@ const firstDayOffset = computed(() => {
 .calendarGrid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  height: 100%;
 }
 
 .dayLabels {
   text-align: center;
   color: var(--color-text-1);
   font-size: 0.9rem;
+  max-height: max-content;
+  padding: 4px 0;
 }
 
 .calendarDay {
-  aspect-ratio: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
-  border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: var(--color-background-2) 0.2s;
   font-size: 0.95rem;
+  text-align: center;
+  border: 1px solid var(--color-background-2);
+  padding: 4px;
+  color: var(--color-text-1);
+  font-size: small;
+}
+
+.calendarDay:hover {
+  background-color: var(--color-background-2);
 }
 
 .calendaDay.empty {
   cursor: default;
+}
+
+.altMonthDay {
+  opacity: 0.5;
+}
+
+.dayGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.isToday {
+  border: 2px solid var(--color-brandText);
+  border-radius: 8px;
 }
 </style>
