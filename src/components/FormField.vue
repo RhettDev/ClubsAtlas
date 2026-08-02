@@ -49,8 +49,12 @@ defineEmits(['update:modelValue'])
   width: 100%;
 }
 
-.fieldContainer--halfwidth{
-  width: 50%;
+.fieldContainer--halfWidth{
+  width: 40%;
+}
+
+.fieldContainer--quartWidth{
+  width: 30%;
 }
 
 .fieldContainer--mobile{
@@ -60,6 +64,7 @@ defineEmits(['update:modelValue'])
 .fieldLabel{
   color: var(--color-text-2);
   text-align: left;
+  margin-bottom: 4px;
 }
 
 .formField:disabled {
