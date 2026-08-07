@@ -1,5 +1,5 @@
 <template>
-  <main id="adminMain">
+  <main id="adminMain" class="body">
     <HeaderStudent @click="onHeaderMenuClick"></HeaderStudent>
     <!-- Mobiel Naviation -->
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
@@ -26,54 +26,23 @@
     <div class="hero desktopView">
       <!-- Desktop View -->
       <section id="calendarBody" class="bCenter">
-        <!-- <div v-if="loadingEvents" class="backendLoadingMsg">Loading Calendar...</div>
-        <div v-else-if="errorMessage" class="backendLoadingMsg">
-          Failed to load: {{ errorMessage }}
-        </div>
-        <div v-else>
-          <div v-for="event in events" :key="event.id">
-            {{ event.id }}
-            {{ event.eventTitle }}
-          </div>
-        </div> -->
         <div class="dayGrid">
+          <!-- Day Headers -->
           <div v-for="day in dayAcronymsMS" :key="day" class="dayLabels">
             {{ day }}
           </div>
         </div>
         <div class="calendarGrid">
-          <!-- Get left over days -->
           <div
-            v-for="day in firstDayOffset"
-            :key="day"
-            class="calendarDay altMonthDay"
-            :class="{
-              isToday: isToday(day),
-            }"
-          >
-            {{ day }}
-          </div>
-          <!-- Get days for Current Month -->
-          <div
-            v-for="day in daysInMonth"
-            :key="day"
+            v-for="day in days"
+            :key="day.date"
             class="calendarDay"
             :class="{
               isToday: isToday(day),
+              // altMonthDay: !cell.isCurrentMonth,
             }"
           >
-            {{ day }}
-          </div>
-          <!-- Get Extra Days for the Next Month -->
-          <div
-            v-for="day in extraDays"
-            :key="day"
-            class="calendarDay altMonthDay"
-            :class="{
-              isToday: isToday(day),
-            }"
-          >
-            {{ day }}
+            {{ day.date.getDate() }}
           </div>
         </div>
       </section>
@@ -82,19 +51,29 @@
         <div id="yourClubs">
           <h3 class="pageSubHeader">Your Clubs</h3>
           <hr class="bgHR" />
-          <div>
+          <div id="clubsData" class="clubsContainer">
             <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
             <div v-else-if="errorMessage" class="backendLoadingMsg">
               Failed to load: {{ errorMessage }}
             </div>
-            <ul v-else>
-              <li v-for="club in clubs" :key="club.id">
-                {{ club.clubName }}
+            <ul v-else class="loadedClubs">
+              <li v-for="club in usersClubs" :key="club.id">
+                <div id="clubDetails" class="clubEntry">
+                  <!-- <img src="club.logoURL" /> -->
+                  {{ club.name }}
+                  <v-icon name="pr-chevron-down" inverse scale="1.5" />
+                </div>
+                <!-- <div class="tagDetails">
+                  <li v-for="tag in clubTags" :key="tag.id" class="tagListing">
+                    {{ tag.tagName }}
+                  </li>
+                </div> -->
               </li>
             </ul>
           </div>
         </div>
-        <div id="calendarMenu">
+        <div id="calendarMenu" class="calendarMenuContainer">
+          <hr class="bgHR" />
           <div class="menuEntry active">Your Clubs</div>
           <div class="menuEntry">Suggested Clubs</div>
           <div class="menuEntry">Club Search</div>
@@ -114,7 +93,7 @@
         <div class="calendarGrid">
           <!-- Get days for Current Month -->
           <div
-            v-for="day in daysInMonth"
+            v-for="day in days"
             :key="day"
             class="calendarDay"
             :class="{
@@ -135,31 +114,85 @@
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
+import { calendar } from '@/composables/calender'
 import { ref, onMounted } from 'vue'
 import { computed } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { errorMessages } from 'vue/compiler-sfc'
 
-const clubs = ref([])
 const events = ref([])
+const usersClubs = ref([])
+// const clubsTags = ref([])
+// const studentUser = ref([])
 const loadingEvents = ref(true)
 const loadingClubs = ref(true)
+// const loadingClubTags = ref(true)
+// const loadingUser = ref(true)
 const errorMessage = ref(null)
+const studentID = ref(1)
+// const currentUser = ref([])
+const { currentDate, viewMode } = calendar()
 
-async function getClubsData() {
+// async function getClubsData() {
+//   try {
+//     loadingClubs.value = true
+//     const { data, error } = await supabase.from('clubs').select('*')
+
+//     if (error) throw error
+//     clubs.value = data
+//   } catch (error) {
+//     errorMessages.value = error.message
+//     console.error('Error fetching data:', error)
+//   } finally {
+//     loadingClubs.value = false
+//   }
+// }
+
+async function getUsersClubs() {
   try {
     loadingClubs.value = true
-    const { data, error } = await supabase.from('clubs').select('*')
+    const { data: student, error } = await supabase
+      .from('studentUser')
+      .select('followingClubs')
+      .eq('id', studentID.value)
+      .single()
 
     if (error) throw error
-    events.value = data
+
+    const { data: clubs, error: clubsError } = await supabase
+      .from('clubs')
+      .select('*')
+      .in('id', student.followingClubs)
+
+    if (clubsError) throw clubsError // Need to remove any clubs not active/exist
+
+    usersClubs.value = clubs
   } catch (error) {
     errorMessages.value = error.message
     console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
   } finally {
     loadingClubs.value = false
   }
 }
+
+// async function getClubTags() {
+//   try {
+//     loadingClubTags.value = true
+//     const { data, error } = await supabase.from('clubTags').select('*').eq('clubID', clubID)
+
+//     console.log(data)
+//     c
+
+//     if (error) throw error
+//   } catch (error) {
+//     errorMessages.value = error.message
+//     console.error('Error fetching data:', error)
+//     console.log('Error type:', typeof error)
+//   } finally {
+//     loadingClubTags.value = false
+//   }
+// }
 
 async function getEventData() {
   try {
@@ -177,12 +210,14 @@ async function getEventData() {
 }
 
 onMounted(() => {
-  getClubsData()
+  // getClubsData()
   getEventData()
+  getUsersClubs()
+  // getClubTags()
+  getCalendarGrid(currentYear, currentMonth)
 })
 
-const onHeaderMenuClick = (event) => {
-  console.log(event)
+const onHeaderMenuClick = () => {
   let navDD = document.getElementById('navDropDown')
   if (navDD.style.display === 'flex') {
     // Check if menu is open, then close it
@@ -195,25 +230,38 @@ const onHeaderMenuClick = (event) => {
   }
 }
 
+// const onClubEntryClick = () => {
+//   let clubDD = document.getElementById('tagListing')
+//   if (clubDD.style.display === 'flex') {
+//     // Check if tags are open, then close it
+//     clubDD.style.display = 'none'
+//     document.getElementById('navBackdrop').classList.remove('show')
+//   } else {
+//     // Open the tags
+//     clubDD.style.display = 'flex'
+//     document.getElementById('navBackdrop').classList.add('show')
+//   }
+// }
+
 // Calendar Functions
-const currentDate = ref(new Date())
-const selectedDate = ref(null)
+// const currentDate = ref(new Date())
+// const selectedDate = ref(null)
 const dayAcronymsMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monday Start
-const dayAcronymsSS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Sunday Start
+// const dayAcronymsSS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Sunday Start
 const dayLetterMS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Monday Start
-const dayLetterSS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Sunday Start
+// const dayLetterSS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Sunday Start
 
 const currentYear = computed(() => currentDate.value.getFullYear())
 const currentMonth = computed(() => currentDate.value.getMonth())
-const daysInMonth = computed(() => {
-  return new Date(currentYear.value, currentMonth.value + 1, 0).getDate()
-})
-const firstDayOffset = computed(() => {
-  return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
-})
-const extraDays = computed(() => {
-  return new Date(currentYear.value, currentMonth.value + 2, 1).getDay() - 1
-})
+// const daysInMonth = computed(() => {
+//   return new Date(currentYear.value, currentMonth.value + 1, 0).getDate()
+// })
+// const firstDayOffSet = computed(() => {
+//   return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
+// })
+// const extraDays = computed(() => {
+//   return new Date(currentYear.value, currentMonth.value + 2, 1).getDay() - 1
+// })
 
 // Highlight the current system date
 const isToday = (day) => {
@@ -224,11 +272,76 @@ const isToday = (day) => {
     today.getFullYear() === currentYear.value
   )
 }
+
+const days = ref([])
+
+function getCalendarGrid(year, month) {
+  // const firstDayOffSet = new Date(year, month, 1).getDay()
+  // const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const daysInMonth = computed(() => {
+    return new Date(year.value, month.value, 0).getDate()
+  })
+  // const firstDayOffSet = computed(() => {
+  //   return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
+  // })
+
+  // Leading Days (Previous Month)
+  // for (let i = firstDayOffSet; i.value > 0; i.value--) {
+  //   const date = new Date(year, month, i.value - 1)
+  //   days.value.push({ date, isCurrentMonth: false })
+  // }
+
+  // Current Month Days
+  for (let d = 1; d <= daysInMonth.value; d++) {
+    const date = new Date(year.value, month.value, d)
+    days.value.push({ date, isCurrentMonth: true })
+  }
+
+  // Trailing Days
+  // while (days.value.length % 7 !== 0) {
+  //   const finalIndex = days.value.length - (firstDayOffSet.value + daysInMonth.value) + 1
+  //   const date = new Date(year, month + 1, finalIndex)
+  //   days.value.push({ date, isCurrentMonth: false })
+  // }
+  return days
+}
 </script>
 
 <style scoped>
 .calendarWapper {
   max-width: 100%;
+}
+
+#clubsSideBar {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+#yourClubs {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+#clubsData {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.loadedClubs {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  padding-right: 4px;
+}
+
+.calendarMenuContainer {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-top: 12px;
 }
 
 .menuEntry {

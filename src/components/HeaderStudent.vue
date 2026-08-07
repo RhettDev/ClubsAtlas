@@ -5,8 +5,8 @@
         <v-icon class="mobileView" name="pr-bars" inverse scale="1.6" />
       </v-btn>
       <CalendarControls>
-        <template #month>April</template>
-        <template #year>2026</template>
+        <template #month>{{ currentMonthName }}</template>
+        <template #year>{{ currentYear }}</template>
       </CalendarControls>
     </div>
 
@@ -26,6 +26,16 @@
 <script setup>
 import BaseButton from './BaseButton.vue'
 import CalendarControls from './CalendarControls.vue'
+import { ref } from 'vue'
+import { computed } from 'vue'
+
+const currentDate = ref(new Date())
+const currentYear = computed(() => {
+  return currentDate.value.toLocaleString('default', { year: 'numeric' })
+})
+const currentMonthName = computed(() => {
+  return currentDate.value.toLocaleString('default', { month: 'long' })
+})
 
 defineEmits(['click'])
 </script>

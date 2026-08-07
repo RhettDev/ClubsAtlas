@@ -84,6 +84,13 @@
   src: url(../fonts/AtkinsonHyperlegible/AtkinsonHyperlegible-Regular.ttf);
 }
 
+html,
+body,
+#app {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -94,6 +101,7 @@ main {
   flex-direction: column;
   margin: 0px;
   min-height: 100vh;
+  height: 100vh;
   background-color: var(--color-background-1);
 }
 
@@ -214,9 +222,12 @@ p {
   display: flex;
   flex-direction: column;
   flex: 0.6;
+  min-height: 0;
   box-shadow: 2px 0px var(--color-background-2);
   padding: 16px;
   gap: 4px;
+  justify-content: space-between;
+  overflow: hidden;
 }
 
 .bCenter {
@@ -232,15 +243,16 @@ p {
   text-align: center;
   /* align-items: start; */
   flex: 1;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .bCenter {
   flex: 2;
+  min-height: 0;
   box-shadow: 2px 0px var(--color-background-2);
-  padding: 8px 16px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
 }
 
 .fieldLabel {
@@ -253,4 +265,46 @@ p {
   display: flex;
   flex-direction: row;
   align-items: start;
+}
+
+.clubEntry {
+  display: flex;
+  flex-direction: row;
+  color: var(--color-text-1);
+  text-align: start;
+  padding: 6px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clubEntry img {
+  border-radius: 16px;
+}
+
+.loadedClubs {
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+}
+
+.clubsContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.calendarMenuContainer {
+  flex-shrink: 0;
+}
+
+.tagEntry {
+  display: block;
+}
+
+.tagListing {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  justify-content: left;
 }
