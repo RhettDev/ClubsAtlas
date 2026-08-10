@@ -50,7 +50,7 @@
         </RouterLink>
       </section>
 
-      <section id="Content" class="bCenter">
+      <section id="Content" class="bCenterAdmin">
         <div id="PageTitle" class="pageHeader">
           <h1 class="title">New Event</h1>
           <hr class="fgHR">
@@ -189,6 +189,7 @@ const onHeaderMenuClick = (event) =>{
   box-shadow: 2px 0px var(--color-background-2);
   padding: 16px;
   gap: 4px;
+  min-width: 190px;
 }
 
 .bLeft a.active {
@@ -198,6 +199,7 @@ const onHeaderMenuClick = (event) =>{
 
 .bRight {
   flex: 0.7;
+  box-shadow: -2px 0px var(--color-background-2);
 }
 
 .fieldButtonContainer{

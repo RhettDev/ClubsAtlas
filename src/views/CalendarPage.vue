@@ -1,5 +1,5 @@
 <template>
-  <main id="adminMain" class="body">
+  <main id="adminMain" class="body calendarMain">
     <HeaderStudent @click="onHeaderMenuClick"></HeaderStudent>
     <!-- Mobiel Naviation -->
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>

@@ -47,14 +47,17 @@ defineEmits(['update:modelValue'])
 
 .fieldContainer--fullWidth{
   width: 100%;
+  min-width: 500px;
 }
 
 .fieldContainer--halfWidth{
   width: 40%;
+  min-width: 250px;
 }
 
 .fieldContainer--quartWidth{
   width: 30%;
+  min-width: 60px;
 }
 
 .fieldContainer--mobile{
