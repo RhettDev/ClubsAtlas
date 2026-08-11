@@ -4,10 +4,12 @@
       <v-btn class="mobileView menuButton" icon @click="$emit('click', $event)">
         <v-icon class="mobileView" name="pr-bars" inverse scale="1.6" />
       </v-btn>
-      <CalendarControls>
-        <template #month>{{ currentMonthName }}</template>
-        <template #year>{{ currentYear }}</template>
-      </CalendarControls>
+
+      <BaseButton @click="goToToday">Today</BaseButton>
+      <v-icon class="chevControl" name="pr-chevron-left" inverse scale="1.5" @click="shiftPeriod(-1)"/>
+      <v-icon class="chevControl" name="pr-chevron-right" inverse scale="1.5" @click="shiftPeriod(1)"/>
+      <span class="displayLabel">{{ displayLabel }}</span>
+
     </div>
 
     <div id="right" class="headerRight">
@@ -25,17 +27,9 @@
 
 <script setup>
 import BaseButton from './BaseButton.vue'
-import CalendarControls from './CalendarControls.vue'
-import { ref } from 'vue'
-import { computed } from 'vue'
+import { calendar } from '@/composables/calender'
+const { displayLabel, goToToday, shiftPeriod } = calendar()
 
-const currentDate = ref(new Date())
-const currentYear = computed(() => {
-  return currentDate.value.toLocaleString('default', { year: 'numeric' })
-})
-const currentMonthName = computed(() => {
-  return currentDate.value.toLocaleString('default', { month: 'long' })
-})
 
 defineEmits(['click'])
 </script>
@@ -83,6 +77,21 @@ defineEmits(['click'])
   cursor: pointer;
 }
 
+.displayLabel{
+  color: var(--color-text-1);
+  /* padding: 16px; */
+  font-size: larger;
+}
+
+.chevControl:hover{
+  background-color: var(--color-background-2);
+  border-radius: 16px;
+  cursor: pointer;
+}
+.chevControl:active{
+  transform: scale(0.9);
+}
+
 .desktopView {
   display: none;
 }
@@ -96,9 +105,4 @@ defineEmits(['click'])
   }
 }
 
-.month,
-.year {
-  color: var(--color-text-1);
-  padding: 16px;
-}
 </style>

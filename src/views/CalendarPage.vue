@@ -39,7 +39,7 @@
             class="calendarDay"
             :class="{
               isToday: isToday(day),
-              // altMonthDay: !cell.isCurrentMonth,
+              altMonthDay: !day.isCurrentMonth,
             }"
           >
             {{ day.date.getDate() }}
@@ -98,6 +98,7 @@
             class="calendarDay"
             :class="{
               isToday: isToday(day),
+              altMonthDay: !day.isCurrentMonth,
             }"
           >
             {{ day }}
@@ -131,7 +132,7 @@ const loadingClubs = ref(true)
 const errorMessage = ref(null)
 const studentID = ref(1)
 // const currentUser = ref([])
-const { currentDate, viewMode } = calendar()
+const { currentDate } = calendar()
 
 // async function getClubsData() {
 //   try {
@@ -208,13 +209,14 @@ async function getEventData() {
     loadingEvents.value = false
   }
 }
-
+// const calendarGrid = ref([])
 onMounted(() => {
   // getClubsData()
   getEventData()
   getUsersClubs()
   // getClubTags()
   getCalendarGrid(currentYear, currentMonth)
+  // calendarGrid.value = getCalendarGrid(currentYear, currentMonth)
 })
 
 const onHeaderMenuClick = () => {
@@ -245,7 +247,6 @@ const onHeaderMenuClick = () => {
 
 // Calendar Functions
 // const currentDate = ref(new Date())
-// const selectedDate = ref(null)
 const dayAcronymsMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monday Start
 // const dayAcronymsSS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Sunday Start
 const dayLetterMS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Monday Start
@@ -253,43 +254,32 @@ const dayLetterMS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Monday Start
 
 const currentYear = computed(() => currentDate.value.getFullYear())
 const currentMonth = computed(() => currentDate.value.getMonth())
-// const daysInMonth = computed(() => {
-//   return new Date(currentYear.value, currentMonth.value + 1, 0).getDate()
-// })
-// const firstDayOffSet = computed(() => {
-//   return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
-// })
-// const extraDays = computed(() => {
-//   return new Date(currentYear.value, currentMonth.value + 2, 1).getDay() - 1
-// })
+const firstDayOffSet = computed(() => {
+  return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
+})
 
 // Highlight the current system date
 const isToday = (day) => {
   const today = new Date()
   return (
-    today.getDate() === day &&
+    today.getDate() === day.date.getDate() &&
     today.getMonth() === currentMonth.value &&
     today.getFullYear() === currentYear.value
   )
 }
-
 const days = ref([])
 
+
 function getCalendarGrid(year, month) {
-  // const firstDayOffSet = new Date(year, month, 1).getDay()
-  // const daysInMonth = new Date(year, month + 1, 0).getDate()
   const daysInMonth = computed(() => {
     return new Date(year.value, month.value, 0).getDate()
   })
-  // const firstDayOffSet = computed(() => {
-  //   return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
-  // })
 
   // Leading Days (Previous Month)
-  // for (let i = firstDayOffSet; i.value > 0; i.value--) {
-  //   const date = new Date(year, month, i.value - 1)
-  //   days.value.push({ date, isCurrentMonth: false })
-  // }
+  for (let i = firstDayOffSet.value; i > 0; i--) {
+    const date = new Date(year.value, month.value, 1 - i)
+    days.value.push({ date, isCurrentMonth: false })
+  }
 
   // Current Month Days
   for (let d = 1; d <= daysInMonth.value; d++) {
@@ -298,11 +288,11 @@ function getCalendarGrid(year, month) {
   }
 
   // Trailing Days
-  // while (days.value.length % 7 !== 0) {
-  //   const finalIndex = days.value.length - (firstDayOffSet.value + daysInMonth.value) + 1
-  //   const date = new Date(year, month + 1, finalIndex)
-  //   days.value.push({ date, isCurrentMonth: false })
-  // }
+  while (days.value.length % 7 !== 0) {
+    const finalIndex = days.value.length - (firstDayOffSet.value + daysInMonth.value) + 1
+    const date = new Date(year.value, month.value + 1, finalIndex)
+    days.value.push({ date, isCurrentMonth: false })
+  }
   return days
 }
 </script>
@@ -476,7 +466,7 @@ function getCalendarGrid(year, month) {
 }
 
 .altMonthDay {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .dayGrid {
