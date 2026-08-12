@@ -94,14 +94,14 @@
           <!-- Get days for Current Month -->
           <div
             v-for="day in days"
-            :key="day"
+            :key="day.date"
             class="calendarDay"
             :class="{
               isToday: isToday(day),
               altMonthDay: !day.isCurrentMonth,
             }"
           >
-            {{ day }}
+            {{ day.date.getDate() }}
           </div>
         </div>
       </section>
@@ -117,7 +117,6 @@ import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
 import { calendar } from '@/composables/calender'
 import { ref, onMounted } from 'vue'
-import { computed } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { errorMessages } from 'vue/compiler-sfc'
 
@@ -132,7 +131,7 @@ const loadingClubs = ref(true)
 const errorMessage = ref(null)
 const studentID = ref(1)
 // const currentUser = ref([])
-const { currentDate } = calendar()
+const { currentYear, currentMonth, days } = calendar()
 
 // async function getClubsData() {
 //   try {
@@ -215,8 +214,6 @@ onMounted(() => {
   getEventData()
   getUsersClubs()
   // getClubTags()
-  getCalendarGrid(currentYear, currentMonth)
-  // calendarGrid.value = getCalendarGrid(currentYear, currentMonth)
 })
 
 const onHeaderMenuClick = () => {
@@ -252,12 +249,6 @@ const dayAcronymsMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monda
 const dayLetterMS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Monday Start
 // const dayLetterSS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Sunday Start
 
-const currentYear = computed(() => currentDate.value.getFullYear())
-const currentMonth = computed(() => currentDate.value.getMonth())
-const firstDayOffSet = computed(() => {
-  return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
-})
-
 // Highlight the current system date
 const isToday = (day) => {
   const today = new Date()
@@ -266,34 +257,6 @@ const isToday = (day) => {
     today.getMonth() === currentMonth.value &&
     today.getFullYear() === currentYear.value
   )
-}
-const days = ref([])
-
-
-function getCalendarGrid(year, month) {
-  const daysInMonth = computed(() => {
-    return new Date(year.value, month.value, 0).getDate()
-  })
-
-  // Leading Days (Previous Month)
-  for (let i = firstDayOffSet.value; i > 0; i--) {
-    const date = new Date(year.value, month.value, 1 - i)
-    days.value.push({ date, isCurrentMonth: false })
-  }
-
-  // Current Month Days
-  for (let d = 1; d <= daysInMonth.value; d++) {
-    const date = new Date(year.value, month.value, d)
-    days.value.push({ date, isCurrentMonth: true })
-  }
-
-  // Trailing Days
-  while (days.value.length % 7 !== 0) {
-    const finalIndex = days.value.length - (firstDayOffSet.value + daysInMonth.value) + 1
-    const date = new Date(year.value, month.value + 1, finalIndex)
-    days.value.push({ date, isCurrentMonth: false })
-  }
-  return days
 }
 </script>
 
@@ -383,7 +346,7 @@ function getCalendarGrid(year, month) {
     display: none;
   }
   .mobileView {
-    display: block;
+    display: flex;
   }
   .hero {
     flex-direction: column;

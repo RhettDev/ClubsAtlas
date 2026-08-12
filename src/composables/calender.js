@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 
 const currentDate = ref(new Date())
 const viewMode = ref('month')
@@ -8,6 +8,29 @@ const currentMonth = computed(() => currentDate.value.getMonth())
 const firstDayOffSet = computed(() => {
   return new Date(currentYear.value, currentMonth.value, 1).getDay() - 1
 })
+
+function buildCalendarGrid() {
+  days.value = []
+  const daysInMonth = new Date(currentYear.value, currentMonth.value + 1, 0).getDate()
+
+  for (let i = firstDayOffSet.value; i > 0; i--) {
+    const date = new Date(currentYear.value, currentMonth.value, 1 - i)
+    days.value.push({ date, isCurrentMonth: false })
+  }
+
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(currentYear.value, currentMonth.value, d)
+    days.value.push({ date, isCurrentMonth: true })
+  }
+
+  while (days.value.length % 7 !== 0) {
+    const finalIndex = days.value.length - (firstDayOffSet.value + daysInMonth) + 1
+    const date = new Date(currentYear.value, currentMonth.value + 1, finalIndex)
+    days.value.push({ date, isCurrentMonth: false })
+  }
+}
+
+watch(currentDate, buildCalendarGrid, { immediate: true })
 
 export function calendar() {
   const displayLabel = computed(() =>
@@ -32,31 +55,15 @@ export function calendar() {
     currentDate.value = d
   }
 
-  // function getCalendarGrid(year, month) {
-  //   const daysInMonth = computed(() => {
-  //     return new Date(year.value, month.value, 0).getDate()
-  //   })
-
-  //   // Leading Days (Previous Month)
-  //   for (let i = firstDayOffSet.value; i > 0; i--) {
-  //     const date = new Date(year.value, month.value, 1 - i)
-  //     days.value.push({ date, isCurrentMonth: false })
-  //   }
-
-  //   // Current Month Days
-  //   for (let d = 1; d <= daysInMonth.value; d++) {
-  //     const date = new Date(year.value, month.value, d)
-  //     days.value.push({ date, isCurrentMonth: true })
-  //   }
-
-  //   // Trailing Days
-  //   while (days.value.length % 7 !== 0) {
-  //     const finalIndex = days.value.length - (firstDayOffSet.value + daysInMonth.value) + 1
-  //     const date = new Date(year.value, month.value + 1, finalIndex)
-  //     days.value.push({ date, isCurrentMonth: false })
-  //   }
-  //   return days
-  // }
-
-  return { days, currentDate, viewMode, displayLabel, goToToday, setViewMode, shiftPeriod }
+  return {
+    days,
+    currentDate,
+    currentYear,
+    currentMonth,
+    viewMode,
+    displayLabel,
+    goToToday,
+    setViewMode,
+    shiftPeriod,
+  }
 }
