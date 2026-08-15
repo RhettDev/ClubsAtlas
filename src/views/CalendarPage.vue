@@ -120,53 +120,23 @@ import { ref, onMounted } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { errorMessages } from 'vue/compiler-sfc'
 
-const events = ref([])
 const usersClubs = ref([])
-// const clubsTags = ref([])
 // const studentUser = ref([])
-const loadingEvents = ref(true)
 const loadingClubs = ref(true)
-// const loadingClubTags = ref(true)
-// const loadingUser = ref(true)
 const errorMessage = ref(null)
-const studentID = ref(1)
-// const currentUser = ref([])
+const studentUserID = ref(1)
 const { currentYear, currentMonth, days } = calendar()
-
-// async function getClubsData() {
-//   try {
-//     loadingClubs.value = true
-//     const { data, error } = await supabase.from('clubs').select('*')
-
-//     if (error) throw error
-//     clubs.value = data
-//   } catch (error) {
-//     errorMessages.value = error.message
-//     console.error('Error fetching data:', error)
-//   } finally {
-//     loadingClubs.value = false
-//   }
-// }
 
 async function getUsersClubs() {
   try {
     loadingClubs.value = true
-    const { data: student, error } = await supabase
-      .from('studentUser')
-      .select('followingClubs')
-      .eq('id', studentID.value)
-      .single()
+    
+    let studentid = studentUserID.value
+    let { data, error } = await supabase.rpc('getfollowingclubsdata', { studentid })
 
     if (error) throw error
 
-    const { data: clubs, error: clubsError } = await supabase
-      .from('clubs')
-      .select('*')
-      .in('id', student.followingClubs)
-
-    if (clubsError) throw clubsError // Need to remove any clubs not active/exist
-
-    usersClubs.value = clubs
+    usersClubs.value = data
   } catch (error) {
     errorMessages.value = error.message
     console.error('Error fetching data:', error)
@@ -175,45 +145,8 @@ async function getUsersClubs() {
     loadingClubs.value = false
   }
 }
-
-// async function getClubTags() {
-//   try {
-//     loadingClubTags.value = true
-//     const { data, error } = await supabase.from('clubTags').select('*').eq('clubID', clubID)
-
-//     console.log(data)
-//     c
-
-//     if (error) throw error
-//   } catch (error) {
-//     errorMessages.value = error.message
-//     console.error('Error fetching data:', error)
-//     console.log('Error type:', typeof error)
-//   } finally {
-//     loadingClubTags.value = false
-//   }
-// }
-
-async function getEventData() {
-  try {
-    loadingEvents.value = true
-    const { data, error } = await supabase.from('events').select('*')
-
-    if (error) throw error
-    events.value = data
-  } catch (error) {
-    errorMessages.value = error.message
-    console.error('Error fetching data:', error)
-  } finally {
-    loadingEvents.value = false
-  }
-}
-// const calendarGrid = ref([])
 onMounted(() => {
-  // getClubsData()
-  getEventData()
   getUsersClubs()
-  // getClubTags()
 })
 
 const onHeaderMenuClick = () => {
@@ -243,6 +176,7 @@ const onHeaderMenuClick = () => {
 // }
 
 // Calendar Functions
+
 // const currentDate = ref(new Date())
 const dayAcronymsMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monday Start
 // const dayAcronymsSS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Sunday Start
