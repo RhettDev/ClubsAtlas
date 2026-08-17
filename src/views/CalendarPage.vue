@@ -57,18 +57,13 @@
               Failed to load: {{ errorMessage }}
             </div>
             <ul v-else class="loadedClubs">
-              <li v-for="club in usersClubs" :key="club.id">
-                <div id="clubDetails" class="clubEntry">
-                  <!-- <img src="club.logoURL" /> -->
-                  {{ club.name }}
-                  <v-icon name="pr-chevron-down" inverse scale="1.5" />
-                </div>
-                <!-- <div class="tagDetails">
-                  <li v-for="tag in clubTags" :key="tag.id" class="tagListing">
-                    {{ tag.tagName }}
-                  </li>
-                </div> -->
-              </li>
+              <ClubListEntry
+                v-for="club in usersClubs"
+                :key="club.id"
+                :club="club"
+                :isOpen="openClubId === club.id"
+                @toggle="toggleDropdown(club.id)"
+              />
             </ul>
           </div>
         </div>
@@ -115,6 +110,7 @@
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
+import ClubListEntry from '@/components/ClubListEntry.vue'
 import { calendar } from '@/composables/calender'
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../backend/supabase'
@@ -125,6 +121,15 @@ const usersClubs = ref([])
 const loadingClubs = ref(true)
 const errorMessage = ref(null)
 const studentUserID = ref(1)
+const clubsID = ref(1)
+const loadingCTags = ref(true)
+
+const openClubId = ref(null)
+
+function toggleDropdown(id) {
+  openClubId.value = openClubId.value === id ? null : id
+}
+
 const { currentYear, currentMonth, days } = calendar()
 
 async function getUsersClubs() {
@@ -145,8 +150,31 @@ async function getUsersClubs() {
     loadingClubs.value = false
   }
 }
+
+async function getClubTags(clubsID){
+  try {
+    loadingCTags.value = true
+    let clubid = clubsID.value
+
+    let { data, error } = await supabase.rpc('getclubstags', { clubid })
+    // console.log(data)
+
+    if (error) throw error
+    else console.log(data)
+  } catch (error){ 
+    errorMessages.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingCTags.value = false
+  }
+}
+
+
+
 onMounted(() => {
   getUsersClubs()
+  getClubTags(clubsID)
 })
 
 const onHeaderMenuClick = () => {
@@ -161,21 +189,6 @@ const onHeaderMenuClick = () => {
     document.getElementById('navBackdrop').classList.add('show')
   }
 }
-
-// const onClubEntryClick = () => {
-//   let clubDD = document.getElementById('tagListing')
-//   if (clubDD.style.display === 'flex') {
-//     // Check if tags are open, then close it
-//     clubDD.style.display = 'none'
-//     document.getElementById('navBackdrop').classList.remove('show')
-//   } else {
-//     // Open the tags
-//     clubDD.style.display = 'flex'
-//     document.getElementById('navBackdrop').classList.add('show')
-//   }
-// }
-
-// Calendar Functions
 
 // const currentDate = ref(new Date())
 const dayAcronymsMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monday Start
@@ -374,5 +387,9 @@ const isToday = (day) => {
 .isToday {
   border: 2px solid var(--color-brandText);
   border-radius: 8px;
+}
+
+.clubDropDown{
+  display: none;
 }
 </style>
