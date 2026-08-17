@@ -5,23 +5,23 @@
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
     <div id="navDropDown" class="dropDownMenu">
       <RouterLink variant="primary" class="menuEntry active" to="/admin" @click="onHeaderMenuClick">
-        <v-icon name="pr-bars" inverse scale="1.2"/>
+        <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.2"/>
         Dashboard
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/new-event" >
-        <v-icon name="pr-upload" inverse scale="1.2"/>
+        <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.2"/>
         Upload New Event
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
-        <v-icon name="pr-home" inverse scale="1.2"/>
+        <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.2"/>
         Update Club Profile
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm">
-        <v-icon name="pr-users" inverse scale="1.2"/>
+        <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.2"/>
         General Meetings
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-        <v-icon name="pr-cog" inverse scale="1.2"/>
+        <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.2"/>
         Settings
       </RouterLink>
     </div>
@@ -30,23 +30,23 @@
     <div class="hero desktopView">
       <section id="sideBar" class="bLeft ">
         <RouterLink variant="primary" class="menuEntry active" to="/admin">
-          <v-icon name="pr-bars" inverse scale="1.5"/>
+          <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
           Dashboard
         </RouterLink>
         <RouterLink variant="primary" class="menuEntry" to="/admin/new-event">
-          <v-icon name="pr-upload" inverse scale="1.5"/>
+          <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.5"/>
           Upload New Event
         </RouterLink>
         <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
-          <v-icon name="pr-home" inverse scale="1.5"/>
+          <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.5"/>
           Update Club Profile
         </RouterLink>
         <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm">
-          <v-icon name="pr-users" inverse scale="1.5"/>
+          <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.5"/>
           General Meetings
         </RouterLink>
         <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-          <v-icon name="pr-cog" inverse scale="1.5"/>
+          <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.5"/>
           Settings
         </RouterLink>
       </section>

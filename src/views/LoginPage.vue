@@ -11,12 +11,12 @@
         <hr class="fgHR" />
 
         <div class="fieldContainer">
-          <v-icon name="pr-envelope" inverse scale="1.5" />
+          <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
           <input v-model="email" type="email" class="formField" placeholder="Email Address" />
         </div>
 
         <div class="fieldContainer">
-          <v-icon name="pr-lock" inverse scale="1.5" />
+          <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
           <input v-model="password" type="password" class="formField" placeholder="Password" />
         </div>
 
@@ -47,12 +47,12 @@
         <hr class="fgHR" />
 
         <div class="fieldContainer">
-          <v-icon name="pr-envelope" inverse scale="1.5" />
+          <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
           <input v-model="email" type="email" class="formField" placeholder="Email Address" />
         </div>
 
         <div class="fieldContainer">
-          <v-icon name="pr-envelope" inverse scale="1.5" />
+          <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
           <input
             v-model="email"
             type="emailConfirm"
@@ -74,12 +74,12 @@
         <hr class="fgHR" />
 
         <div class="fieldContainer">
-          <v-icon name="pr-lock" inverse scale="1.5" />
+          <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
           <input v-model="password" type="password" class="formField" placeholder="Password" />
         </div>
 
         <div class="fieldContainer">
-          <v-icon name="pr-lock" inverse scale="1.5" />
+          <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
           <input
             v-model="password"
             type="passwordConfrim"

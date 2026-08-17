@@ -2,7 +2,7 @@
   <section class="header clubHeader">
     <div class="clubLogo">
       <v-btn class="mobileText menuButton" icon @click="$emit('click', $event)">
-        <v-icon class="mobileText" name="pr-bars" inverse scale="1.5" />
+        <v-icon class="mobileText" name="pr-bars" fill="var(--color-text-1)" scale="1.5" />
       </v-btn>
       <img class="logo" src="../assets/logos/clubCECLogo.svg" alt="Curtin Engineers Club Logo" />
       <h2 class="desktopText">Curtin Engineers Club (CEC)</h2>

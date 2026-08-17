@@ -28,19 +28,19 @@
             </div>
             <hr class="fgHR" />
             <div class="fieldContainer">
-              <v-icon name="pr-user" inverse scale="1.5" />
+              <v-icon name="pr-user" fill="var(--color-text-1)" scale="1.5" />
               <input v-model="name" type="text" class="formField" placeholder="Full Name" />
             </div>
             <div class="fieldContainer">
-              <v-icon name="pr-envelope" inverse scale="1.5" />
+              <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
               <input v-model="email" type="email" class="formField" placeholder="Email Address" />
             </div>
             <div class="fieldContainer">
-              <v-icon name="pr-lock" inverse scale="1.5" />
+              <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
               <input v-model="password" type="password" class="formField" placeholder="Password" />
             </div>
             <div class="fieldContainer">
-              <v-icon name="pr-lock" inverse scale="1.5" />
+              <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
               <input
                 v-model="passwordConfirm"
                 type="password"
@@ -49,7 +49,7 @@
               />
             </div>
             <div class="fieldContainer">
-              <v-icon name="pr-briefcase" inverse scale="1.5" />
+              <v-icon name="pr-briefcase" fill="var(--color-text-1)" scale="1.5" />
               <input v-model="degree" type="degree" class="formField" placeholder="Enter Degree" />
             </div>
             <div class="checkText">

@@ -2,7 +2,7 @@
   <li >
     <div class="clubRow" @click="emit('toggle')" :class="{open: isOpen}">
       <span class="clubName">{{ club.name }}</span>
-      <v-icon name="pr-chevron-down" inverse scale="1.5" class="chevron" :class="{open: isOpen}"/>
+      <v-icon name="pr-chevron-down" fill="var(--color-text-1)" scale="1.5" class="chevron" :class="{open: isOpen}"/>
     </div>
 
     <div v-if="isOpen" class="dropdownMenu">
@@ -16,11 +16,11 @@
       </div>
       <div class="dropdownOption">
         <p>View Club Profile</p>
-        <v-icon name="pr-info-circle" inverse scale="1.5"/>
+        <v-icon name="pr-info-circle" fill="var(--color-text-1)" scale="1.3"/>
       </div>
       <div class="dropdownOption">
         <p>Remove Club From Calendar</p>
-        <v-icon name="pr-trash" inverse scale="1.5"/>
+        <v-icon name="pr-trash" fill="var(--color-text-1)" scale="1.3"/>
       </div>
     </div>
   </li>
@@ -79,7 +79,7 @@ const emit = defineEmits(['toggle', 'selectOption'])
 }
 
 .dropdownOption:hover {
-  background: var(--color-brandText);
+  background: var(--color-brandText-2);
   border-radius: 16px;
 }
 

@@ -4,8 +4,8 @@
       <div id="selectedOption">
         {{ mappedSelected }}
       </div>
-      <div id="chevron" v-if="isOpen"><v-icon name="pr-chevron-up" inverse scale="1.5" /></div>
-      <div id="chevron" v-else-if="isOpen === false"><v-icon name="pr-chevron-down" inverse scale="1.5" /></div>
+      <div id="chevron" v-if="isOpen"><v-icon name="pr-chevron-up" fill="var(--color-text-1)" scale="1.5" /></div>
+      <div id="chevron" v-else-if="isOpen === false"><v-icon name="pr-chevron-down" fill="var(--color-text-1)" scale="1.5" /></div>
     </div>
     <div class="dropdownOptions" v-if="isOpen">
       <div

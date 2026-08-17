@@ -2,12 +2,12 @@
   <section class="header studentHeader">
     <div id="left" class="headerLeft">
       <v-btn class="mobileView menuButton" icon @click="$emit('click', $event)">
-        <v-icon class="mobileView" name="pr-bars" inverse scale="1.6" />
+        <v-icon class="mobileView" name="pr-bars" fill="var(--color-text-1)" scale="1.6" />
       </v-btn>
 
       <BaseButton @click="goToToday">Today</BaseButton>
-      <v-icon class="chevControl" name="pr-chevron-left" inverse scale="1.5" @click="shiftPeriod(-1)"/>
-      <v-icon class="chevControl" name="pr-chevron-right" inverse scale="1.5" @click="shiftPeriod(1)"/>
+      <v-icon class="chevControl" name="pr-chevron-left" fill="var(--color-text-1)" scale="1.5" @click="shiftPeriod(-1)"/>
+      <v-icon class="chevControl" name="pr-chevron-right" fill="var(--color-text-1)" scale="1.5" @click="shiftPeriod(1)"/>
       <span class="displayLabel">{{ displayLabel }}</span>
 
     </div>
@@ -19,7 +19,7 @@
       </div>
       <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
       <RouterLink to="/settings">
-        <v-icon class="mobileView" name="pr-user" inverse scale="2" />
+        <v-icon class="mobileView" name="pr-user" fill="var(--color-text-1)" scale="2" />
       </RouterLink>
     </div>
   </section>
