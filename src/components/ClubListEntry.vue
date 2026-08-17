@@ -8,11 +8,11 @@
     <div v-if="isOpen" class="dropdownMenu">
       <div class="dropdownOption">
         <p>Toggle Club Display</p>
-        <v-icon name="pr-info-circle" inverse scale="1.5"/>
+        <input type="checkbox" id="clubDisplay" v-model="checkedOptions" class="checkboxCustom" />
       </div>
       <div class="dropdownOption">
         <p>Toggle General Meeting</p>
-        <v-icon name="pr-info-circle" inverse scale="1.5"/>
+        <input type="checkbox" id="generalMeeting" v-model="checkedOptions" class="checkboxCustom" />
       </div>
       <div class="dropdownOption">
         <p>View Club Profile</p>
@@ -81,5 +81,9 @@ const emit = defineEmits(['toggle', 'selectOption'])
 .dropdownOption:hover {
   background: var(--color-brandText);
   border-radius: 16px;
+}
+
+.checkboxCustom {
+  margin: 0 8px;
 }
 </style>
