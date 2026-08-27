@@ -8,11 +8,15 @@ const loading = ref(true)
 
 async function fetchProfile(authUserId) {
   // try student first then club
-  const { data: student } = await supabase
-    .from('StudentUser')
+  profile.value = null
+  userType.value = null
+  const { data: student, error: studentError } = await supabase
+    .from('studentUser')
     .select('*')
     .eq('AuthUserID', authUserId)
     .maybeSingle()
+
+  if (studentError) throw studentError
 
   if (student) {
     profile.value = student
@@ -20,15 +24,20 @@ async function fetchProfile(authUserId) {
     return
   }
 
-  const { data: club } = await supabase
-    .from('ClubUser')
+  const { data: club, error: clubError } = await supabase
+    .from('clubUser')
     .select('*')
     .eq('AuthUserID', authUserId)
     .maybeSingle()
 
+  if (clubError) throw clubError
+  console.log(club)
+
   if (club) {
     profile.value = club
     userType.value = 'club'
+    console.log("club category")
+    return
   }
 }
 
@@ -49,6 +58,11 @@ export function useAuth() {
   async function login(email, password) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) throw error
+    
+    if (data.user) {
+      await fetchProfile(data.user.id)
+    }
+    
     return data
   }
 

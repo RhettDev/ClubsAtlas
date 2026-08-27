@@ -114,11 +114,11 @@ const email = ref('') // ref() makes a value reactive
 const password = ref('')
 const router = useRouter()
 const currentStep = ref(1)
-const userType = ref(useAuth.userType)
+const checked = ref(false)
 
 const errorMsg = ref('')
 const submitting = ref(false)
-const { login } = useAuth()
+const { login, userType } = useAuth()
 
 // Functions
 
@@ -127,10 +127,12 @@ async function handleLogin() {
   submitting.value = true
   try {
     await login(email.value, password.value)
-    if (userType.value == 'student') {
+    if (userType.value === 'student') {
       router.push('/calendar')
-    } else if (userType.value == 'club') {
-      router.push('/calendar')
+    } else if (userType.value === 'club') {
+      router.push('/admin')
+    } else {
+      console.error('Error fetching userType')
     }
   } catch (error) {
     console.error('Error fetching data:', error)
