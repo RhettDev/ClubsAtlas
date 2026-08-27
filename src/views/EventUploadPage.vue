@@ -202,27 +202,6 @@ const onHeaderMenuClick = (event) =>{
   box-shadow: -2px 0px var(--color-background-2);
 }
 
-.fieldButtonContainer{
-  display: flex;
-  flex-direction: row;
-  align-items: end;
-}
-
-.fieldButtonContainer button{
-  margin: 0 8px;
-}
-
-.fieldButtonContainer FormField{
-  width: max-content;
-  align-items: end;
-}
-
-.fieldsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
 .menuEntry{
   display: flex;
   padding: 4px 0;
@@ -280,21 +259,5 @@ const onHeaderMenuClick = (event) =>{
 }
 .backdrop.show { display: block; }
 
-.dateTimeContainer{
-  display: flex;
-  flex-direction: row;
-  align-items: end;
-  gap: 8px;
-  width: 40%;
-}
-
-.buttonLabelContainer {
-  display: flex;
-  flex-direction: column;
-  width: max-content;
-}
-.buttonLabelContainer button{
-  margin: 0;
-}
 
 </style>

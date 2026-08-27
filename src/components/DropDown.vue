@@ -5,7 +5,7 @@
         {{ mappedSelected }}
       </div>
       <div id="chevron" v-if="isOpen"><v-icon name="pr-chevron-up" fill="var(--color-text-1)" scale="1.5" /></div>
-      <div id="chevron" v-else-if="isOpen === false"><v-icon name="pr-chevron-down" fill="var(--color-text-1)" scale="1.5" /></div>
+      <div id="chevron" v-else-if="!isOpen"><v-icon name="pr-chevron-down" fill="var(--color-text-1)" scale="1.5" /></div>
     </div>
     <div class="dropdownOptions" v-if="isOpen">
       <div
@@ -98,6 +98,8 @@ onUnmounted(() => {
   border: 2px solid var(--ca-brand-blue-1);
   background: var(--color-background-1);
   padding: 10px 14px;
+  height: max-content;
+  overflow: scroll;
 }
 
 .option{

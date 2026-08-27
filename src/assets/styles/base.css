@@ -317,3 +317,51 @@ bcenter.header.clubHeader {
   align-items: start;
   justify-content: left;
 }
+
+.dateTimeContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 8px;
+  width: 40%;
+}
+
+.buttonLabelContainer {
+  display: flex;
+  flex-direction: column;
+  width: max-content;
+}
+.buttonLabelContainer button{
+  margin: 0;
+}
+
+.fieldButtonContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+}
+
+.fieldButtonContainer button{
+  margin: 0 8px;
+}
+
+.fieldButtonContainer FormField{
+  width: max-content;
+  align-items: end;
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.buttonContainer button {
+  margin: 0 8px;
+}
+
+.fieldsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

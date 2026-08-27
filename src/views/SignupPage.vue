@@ -209,11 +209,11 @@ const interests = [
   { id: 'painting', icon: '✍️', label: 'Painting' },
   { id: 'robotics', icon: '💹', label: 'Robotics' },
   { id: 'activism', icon: '🧭', label: 'Activism' },
-  { id: 'media', icon: '🎨', label: 'Media' },
-  { id: 'photography', icon: '⚙️', label: 'Photography' },
+  { id: 'crafts', icon: '🎨', label: 'Crafts' },
+  { id: 'visualmedia', icon: '⚙️', label: 'Visual Media' }, // photography, movies, 
   { id: 'academic', icon: '📊', label: 'Academic' },
   { id: 'networking', icon: '📣', label: 'Networking' },
-  { id: 'cardgames', icon: '🧩', label: 'Card Games' },
+  { id: 'tabletopgames', icon: '🧩', label: 'Tabletop Games' },
   { id: 'adventure', icon: '🧩', label: 'Adventure' },
 ]
 

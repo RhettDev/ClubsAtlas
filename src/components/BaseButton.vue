@@ -9,7 +9,6 @@
     :disabled="disabled || loading"
     @click="$emit('click', $event)"
   >
-    <span v-if="loading" class="btn__spinner" />
     <slot />
   </button>
 </template>
@@ -27,10 +26,6 @@ defineProps({
     validator: (v) => ['sm', 'md', 'lg'].includes(v),
   },
   disabled: {
-    type: Boolean,
-    default: false,
-  },
-  loading: {
     type: Boolean,
     default: false,
   },
@@ -122,15 +117,6 @@ defineEmits(['click'])
   font-size: 1.1rem;
 }
 
-/* Spinner */
-.btn__spinner {
-  width: 1em;
-  height: 1em;
-  border: 2px solid transparent;
-  border-top-color: currentColor;
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-}
 
 @keyframes spin {
   to {
