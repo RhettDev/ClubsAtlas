@@ -12,12 +12,24 @@
 
         <div class="fieldContainer">
           <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
-          <input v-model="email" type="email" class="formField" placeholder="Email Address" />
+          <input
+            v-model="email"
+            type="email"
+            class="formField"
+            placeholder="Email Address"
+            required
+          />
         </div>
 
         <div class="fieldContainer">
           <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
-          <input v-model="password" type="password" class="formField" placeholder="Password" />
+          <input
+            v-model="password"
+            type="password"
+            class="formField"
+            placeholder="Password"
+            required
+          />
         </div>
 
         <div class="formSubtitle">
@@ -31,6 +43,8 @@
 
         <BaseButton @click="handleLogin">Log In</BaseButton>
 
+        <p v-if="errorMsg">{{ errorMsg }}</p>
+
         <hr class="fgHR" />
 
         <div class="formTitle formSubtitle">
@@ -41,8 +55,8 @@
 
       <div v-else-if="currentStep === 2" key="forgot" class="form">
         <div class="formTitle">
-          <h2>Forgot your <span class="brandText">password?</span></h2>
-          <p>Enter account email to send reset password link</p>
+          <h2><span class="brandText">Forgot</span> your password</h2>
+          <p>Enter the email address your account is tied to for a password reset link</p>
         </div>
         <hr class="fgHR" />
 
@@ -50,17 +64,6 @@
           <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
           <input v-model="email" type="email" class="formField" placeholder="Email Address" />
         </div>
-
-        <div class="fieldContainer">
-          <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
-          <input
-            v-model="email"
-            type="emailConfirm"
-            class="formField"
-            placeholder="Renenter Email"
-          />
-        </div>
-
         <BaseButton @click="panelSwap">Reset Password</BaseButton>
 
         <hr class="fgHR" />
@@ -101,8 +104,8 @@
 // Imports
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
-// import ToggleButton from '@/components/ToggleButton.vue'
 import HeaderBar from '@/components/HeaderGeneric.vue'
+import { useAuth } from '@/composables/useAuth'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -111,13 +114,30 @@ const email = ref('') // ref() makes a value reactive
 const password = ref('')
 const router = useRouter()
 const currentStep = ref(1)
+const userType = ref(useAuth.userType)
+
+const errorMsg = ref('')
+const submitting = ref(false)
+const { login } = useAuth()
 
 // Functions
 
-function handleLogin() {
-  // Replace with real auth logic (API call, etc.)
-  console.log('Logging in:', email.value, password.value)
-  router.push('/') // Programmatic navigation after login
+async function handleLogin() {
+  errorMsg.value = ''
+  submitting.value = true
+  try {
+    await login(email.value, password.value)
+    if (userType.value == 'student') {
+      router.push('/calendar')
+    } else if (userType.value == 'club') {
+      router.push('/calendar')
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    submitting.value = false
+  }
 }
 
 function panelSwap() {
@@ -153,6 +173,7 @@ function panelSwap() {
   height: auto;
   gap: 16px;
   padding: 0 32px;
+  max-width: 400px;
 }
 
 .formTitle {

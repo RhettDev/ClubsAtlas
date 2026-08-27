@@ -25,5 +25,25 @@ const router = createRouter({
     { path: '/admin/settings', component: AdminSettingsPage },
   ],
 })
-
 export default router
+
+import { useAuth } from '@/composables/useAuth'
+import { watch } from 'vue'
+
+router.beforeEach((to, from, next) => {
+  const { isLoggedIn, loading } = useAuth()
+
+  // wait for initial session check to resolve before guarding
+  if (loading.value) {
+    const unwatch = watch(loading, (val) => {
+      if (!val) {
+        unwatch()
+        if (to.meta.requiresAuth && !isLoggedIn.value) next('/login')
+        else next()
+      }
+    })
+  } else {
+    if (to.meta.requiresAuth && !isLoggedIn.value) next('/login')
+    else next()
+  }
+})
