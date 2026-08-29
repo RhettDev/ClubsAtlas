@@ -8,9 +8,9 @@
       <h3 class="menuEntry active">Month View</h3>
       <h3 class="menuEntry">Week View</h3>
       <hr class="fgHR" />
-      <h3>Clubs List</h3>
+      <h3 class="menuEntry">Clubs List</h3>
       <hr class="fgHR" />
-      <RouterLink variant="primary" class="menuEntry active" to="/admin" @click="onHeaderMenuClick">
+      <RouterLink variant="primary" class="menuEntry active" to="/" @click="onHeaderMenuClick">
         Your Clubs
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/new-event">
@@ -49,7 +49,7 @@
 
       <section id="clubsSideBar" class="bRight">
         <div id="yourClubs">
-          <h3 class="pageSubHeader">Your Clubs</h3>
+          <h2 class="pageSubHeader">Your Clubs</h2>
           <hr class="bgHR" />
           <div id="clubsData" class="clubsContainer">
             <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
@@ -132,7 +132,7 @@ function toggleDropdown(id) {
   openClubId.value = openClubId.value === id ? null : id
 }
 
-const { currentYear, currentMonth, days } = calendar()
+const { days } = calendar()
 
 async function getUsersClubs() {
   try {
@@ -159,7 +159,6 @@ async function getClubTags(clubsID) {
     let clubid = clubsID.value
 
     let { data, error } = await supabase.rpc('getclubstags', { clubid })
-    // console.log(data)
 
     if (error) throw error
     else console.log(data)
@@ -201,8 +200,8 @@ const isToday = (day) => {
   const today = new Date()
   return (
     today.getDate() === day.date.getDate() &&
-    today.getMonth() === currentMonth.value &&
-    today.getFullYear() === currentYear.value
+    today.getMonth() === day.date.getMonth() &&
+    today.getFullYear() === day.date.getFullYear()
   )
 }
 </script>
@@ -244,6 +243,11 @@ const isToday = (day) => {
   padding-top: 12px;
 }
 
+.calendarMenuContainer a.active{
+  color: var(--color-brandText);
+  border-bottom: 2px solid var(--color-brandText);
+}
+
 .menuEntry {
   display: flex;
   padding: 4px 0;
@@ -254,7 +258,7 @@ const isToday = (day) => {
   justify-content: space-between;
 }
 
-.menuEntry a.active {
+.menuEntry:active {
   color: var(--color-brandText);
   border-bottom: 2px solid var(--color-brandText);
 }
