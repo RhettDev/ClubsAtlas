@@ -199,22 +199,17 @@ const form = ref({
 // const errors = ref({})
 
 // Data
-
 const interests = [
-  { id: 'computing', icon: '🎨', label: 'Computing' },
   { id: 'music', icon: '⚙️', label: 'Music' },
-  { id: 'creativeArt', icon: '📊', label: 'Creative Arts' },
-  { id: 'gaming', icon: '📣', label: 'Gaming' },
-  { id: 'sports', icon: '🧩', label: 'Sports' },
-  { id: 'painting', icon: '✍️', label: 'Painting' },
-  { id: 'robotics', icon: '💹', label: 'Robotics' },
+  { id: 'games', icon: '📣', label: 'Games' },
   { id: 'activism', icon: '🧭', label: 'Activism' },
-  { id: 'crafts', icon: '🎨', label: 'Crafts' },
-  { id: 'visualmedia', icon: '⚙️', label: 'Visual Media' }, // photography, movies, 
-  { id: 'academic', icon: '📊', label: 'Academic' },
-  { id: 'networking', icon: '📣', label: 'Networking' },
-  { id: 'tabletopgames', icon: '🧩', label: 'Tabletop Games' },
   { id: 'adventure', icon: '🧩', label: 'Adventure' },
+  { id: 'sports', icon: '🧩', label: 'Sports' },
+  { id: 'crafts', icon: '🎨', label: 'Crafts' },
+  { id: 'digitalmedia', icon: '⚙️', label: 'Digital Media' }, // photography, movies,
+  { id: 'popculture', icon: '💹', label: 'Pop Culture' },
+  { id: 'fooddrink', icon: '💹', label: 'Food and Drink' },
+  { id: 'robotics', icon: '💹', label: 'Robotics' },
 ]
 
 const clubType = [
@@ -485,8 +480,6 @@ function handleSignup() {
   gap: 16px;
   align-items: start;
 }
-
-
 
 .dropdown p {
   margin: 0;
