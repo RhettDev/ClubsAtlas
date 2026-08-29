@@ -114,13 +114,15 @@ import ClubListEntry from '@/components/ClubListEntry.vue'
 import { calendar } from '@/composables/calender'
 import { ref, onMounted } from 'vue'
 import { supabase } from '../../backend/supabase'
+import { useAuth } from '@/composables/useAuth'
 import { errorMessages } from 'vue/compiler-sfc'
 
 const usersClubs = ref([])
 // const studentUser = ref([])
 const loadingClubs = ref(true)
 const errorMessage = ref(null)
-const studentUserID = ref(1)
+const { profile } = useAuth()
+const studentUserID = ref(profile.value.id)
 const clubsID = ref(1)
 const loadingCTags = ref(true)
 
@@ -135,7 +137,7 @@ const { currentYear, currentMonth, days } = calendar()
 async function getUsersClubs() {
   try {
     loadingClubs.value = true
-    
+
     let studentid = studentUserID.value
     let { data, error } = await supabase.rpc('getfollowingclubsdata', { studentid })
 
@@ -151,7 +153,7 @@ async function getUsersClubs() {
   }
 }
 
-async function getClubTags(clubsID){
+async function getClubTags(clubsID) {
   try {
     loadingCTags.value = true
     let clubid = clubsID.value
@@ -161,7 +163,7 @@ async function getClubTags(clubsID){
 
     if (error) throw error
     else console.log(data)
-  } catch (error){ 
+  } catch (error) {
     errorMessages.value = error.message
     console.error('Error fetching data:', error)
     console.log('Error type:', typeof error)
@@ -169,8 +171,6 @@ async function getClubTags(clubsID){
     loadingCTags.value = false
   }
 }
-
-
 
 onMounted(() => {
   getUsersClubs()
@@ -389,7 +389,7 @@ const isToday = (day) => {
   border-radius: 8px;
 }
 
-.clubDropDown{
+.clubDropDown {
   display: none;
 }
 </style>
