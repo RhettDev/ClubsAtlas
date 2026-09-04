@@ -63,7 +63,7 @@
   --color-text-2: var(--ca-text-light-2);
   --color-brandText: var(--ca-text-blue-light);
   --color-brandText-2: var(--ca-text-blue-dark);
-  --color-text-invert: var(var(--ca-text-dark-1));
+  --color-text-invert: var(--ca-text-dark-1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,7 +77,7 @@
     --color-text-2: var(--ca-text-dark-2);
     --color-brandText: var(--ca-text-blue-dark);
     --color-brandText-2: var(--ca-text-blue-light);
-    --color-text-invert: var(var(--ca-text-light-1));
+    --color-text-invert: var(--ca-text-light-1);
   }
 }
 

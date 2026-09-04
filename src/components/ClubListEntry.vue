@@ -1,7 +1,10 @@
 <template>
   <li>
     <div class="clubRow" @click="emit('toggle')" :class="{ open: isOpen }">
-      <span class="clubName">{{ club.name }}</span>
+      <div class="clubLogoName">
+        <img class="clubLogo" :src="club.logoURL">
+        <span class="clubName">{{ club.name }}</span>
+      </div>
       <v-icon
         name="pr-chevron-down"
         fill="var(--color-text-1)"
@@ -111,6 +114,20 @@ function handleConfirmed() {
 }
 .clubRow:hover {
   border-bottom: 1px solid var(--color-brandText);
+}
+
+.clubLogoName{
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  
+}
+
+.clubLogoName img{
+  width: 44px;
+  height: 44px;
+  border-radius: 32px;
 }
 
 .chevron {
