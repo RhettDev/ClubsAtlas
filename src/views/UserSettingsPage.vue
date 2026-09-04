@@ -5,19 +5,20 @@
       <section id="emptyLeft" class="bLeft">
         <!-- Empty -->
       </section>
-    
+
       <section id="Content" class="bCenterAdmin">
         <!-- Account Details -->
         <div id="PageTitle" class="pageHeader">
           <h1 class="title">Account Details</h1>
-          <hr class="fgHR">
+          <hr class="fgHR" />
         </div>
         <div class="fieldButtonContainer" id="changeName">
           <FormField
             v-model="changeName"
             label="Change Name"
             placeholder="Current Name"
-            variant="halfWidth">
+            variant="halfWidth"
+          >
           </FormField>
         </div>
         <div class="fieldButtonContainer" id="changeEmail">
@@ -25,7 +26,8 @@
             v-model="changeEmail"
             label="Change Email"
             placeholder="example@emai.com"
-            variant="halfWidth">
+            variant="halfWidth"
+          >
           </FormField>
         </div>
         <div class="buttonContainer" id="resetPassword">
@@ -34,31 +36,30 @@
         </div>
         <div class="buttonContainer" id="signOut">
           <p class="fieldLabel">Sign Out of Your Account</p>
-        <RouterLink to="/">
-          <BaseButton>Sign Out</BaseButton>
-        </RouterLink>
+          <RouterLink to="/">
+            <BaseButton>Sign Out</BaseButton>
+          </RouterLink>
         </div>
 
         <!-- Preferences -->
         <div id="PageTitle" class="pageHeader">
           <h1 class="title">Prefernces</h1>
-          <hr class="fgHR">
+          <hr class="fgHR" />
         </div>
-        
+
         <div class="buttonContainer" id="language">
           <p class="fieldLabel">Language</p>
-          <DropDown :options="languageList" :v-model="language"></DropDown>
+          <DropDown v-model="language" :options="languageList"></DropDown>
         </div>
         <div class="buttonContainer" id="timeFormat">
           <p class="fieldLabel">Preferred Time Format</p>
-          <DropDown :options="timeOptions" :v-model="timeFormat"></DropDown>
+          <DropDown v-model="timeFormat" :options="timeOptions"></DropDown>
         </div>
       </section>
       <section id="emptyRight" class="bRight">
         <!-- Empty -->
       </section>
     </div>
-      
   </main>
   <FooterBar></FooterBar>
 </template>
@@ -66,11 +67,11 @@
 <script setup>
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
-import FormField from '@/components/FormField.vue';
-import BaseButton from '@/components/BaseButton.vue';
-import DropDown from '@/components/DropDown.vue';
+import FormField from '@/components/FormField.vue'
+import BaseButton from '@/components/BaseButton.vue'
+import DropDown from '@/components/DropDown.vue'
 
-const languageList =([
+const languageList = [
   'English',
   'Mandarin Chinese (Simplified)',
   'Spanish',
@@ -90,13 +91,9 @@ const languageList =([
   'Thai',
   'Polish',
   'Dutch',
-  'Ukrainian'
-])
-const timeOptions = ([
-  'AM/PM',
-  '24-Hour'
-])
-
+  'Ukrainian',
+]
+const timeOptions = ['AM/PM', '24-Hour']
 </script>
 
 <style scope>
@@ -110,7 +107,7 @@ const timeOptions = ([
   flex: 1;
 }
 
-.body{
+.body {
   display: flex;
   width: 100%;
 }
