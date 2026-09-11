@@ -29,7 +29,7 @@
             <hr class="fgHR" />
             <div class="fieldContainer">
               <v-icon name="pr-user" fill="var(--color-text-1)" scale="1.5" />
-              <input v-model="name" type="text" class="formField" placeholder="Full Name" />
+              <input v-model="fullName" type="text" class="formField" placeholder="Full Name" />
             </div>
             <div class="fieldContainer">
               <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
@@ -50,12 +50,9 @@
             </div>
             <div class="fieldContainer">
               <v-icon name="pr-briefcase" fill="var(--color-text-1)" scale="1.5" />
-              <DropDown :options="degree" v-model="selectedDegree">
-                
-              </DropDown>
+              <DropDown v-model="selectedDegree" :options="optionsDegree"> </DropDown>
             </div>
             <div class="checkText">
-              <ToggleButton></ToggleButton>
               <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
               <p>I agree to the <a class="brandText">Terms and Conditions</a></p>
             </div>
@@ -70,7 +67,7 @@
           <div v-else-if="currentStep === 2" key="step2" class="form">
             <div class="formTitle">
               <h2>Who are <span class="brandText">you?</span></h2>
-              <p>Tell us some of your interests and hobbies</p>
+              <p>Select up to four of your interests and hobbies</p>
             </div>
             <hr class="fgHR" />
             <div class="interestList">
@@ -78,7 +75,10 @@
                 v-for="item in interests"
                 :key="item.id"
                 class="interestTag"
-                :class="{ selected: form.interests.includes(item.id) }"
+                :disabled="
+                  selectedInterests.length >= maxInterests && !selectedInterests.includes(item.id)
+                "
+                :class="{ selected: selectedInterests.includes(item.id) }"
                 @click="toggleInterest(item.id)"
               >
                 <span class="tagIcon">{{ item.icon }}</span>
@@ -90,8 +90,8 @@
               <h2>Apart of <span class="brandText">specific</span> a faith or nationality?</h2>
             </div>
             <div class="dropDownContainer">
-              <DropDown :options="optionsFaith" :v-model="selectedFaith"> </DropDown>
-              <DropDown :options="optionsNation" :v-model="selectedNation"> </DropDown>
+              <DropDown v-model="selectedFaith" :options="optionsFaith"> </DropDown>
+              <DropDown v-model="selectedNation" :options="optionsNation"> </DropDown>
             </div>
             <hr class="fgHR" />
           </div>
@@ -111,7 +111,7 @@
                 v-for="item in clubType"
                 :key="item.id"
                 class="interestTag"
-                :class="{ selected: form.clubType.includes(item.id) }"
+                :class="{ selected: selectedClubType === item.id }"
                 @click="toggleClubType(item.id)"
               >
                 <span class="tagIcon">{{ item.icon }}</span>
@@ -132,33 +132,33 @@
             <hr class="fgHR" />
             <div class="clubTypeList">
               <button
-                v-for="item in clubExamples"
+                v-for="item in givenClubs"
                 :key="item.id"
                 class="clubTag"
-                :class="{ selected: form.clubExamples.includes(item.id) }"
-                @click="toggleClubType(item.id)"
+                :disabled="loadingClubs"
+                :class="{ selected: selectedClubs.includes(item.id) }"
+                @click="toggleClubListing(item.id)"
               >
                 <div class="clubName">
                   <span class="tagIcon">{{ item.icon }}</span>
                   <span class="tagLabel">{{ item.label }}</span>
                 </div>
-                <span>
-                  <ToggleButton></ToggleButton>
-                  <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
-                </span>
               </button>
             </div>
+            <p v-if="loadingClubs">Loading clubs...</p>
+            <p v-else-if="givenClubs.length === 0">
+              Error finding clubs for you, please try again.
+            </p>
             <hr class="fgHR" />
           </div>
         </Transition>
       </div>
 
-      <!-- Footer nav -->
+      <!-- Navigation -->
       <div class="stepNavBtns">
         <BaseButton variant="secondary" :disabled="currentStep === 1" @click="prev">
           Back
         </BaseButton>
-
         <BaseButton v-if="currentStep < totalSteps" variant="primary" @click="next">
           Continue
         </BaseButton>
@@ -175,34 +175,50 @@
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderBar from '@/components/HeaderGeneric.vue'
-import DropDown from '@/components/DropDownSelect.vue'
-import { ref } from 'vue'
+import DropDown from '@/components/DropDown.vue'
+import { clubRecommendations } from '@/composables/clubRecommend.js'
+import { computed, onMounted, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 const currentStep = ref(1)
 const totalSteps = 4
-const clubsList = ref([])
-const submitting = ref(false)
-const showPassword = ref(false)
-const name = ref('')
+const maxInterests = 4
+// const submitting = ref(false)
+// const showPassword = ref(false)
+
+const fullName = ref('')
 const email = ref('')
 const password = ref('')
 const passwordConfirm = ref('')
+const selectedDegree = ref(null)
+const selectedFaith = ref(null)
+const selectedNation = ref(null)
+const selectedClubType = ref(null)
+const selectedInterests = ref([])
+const selectedClubs = ref([])
 
-const form = ref({
-  interests: [],
-  clubType: [],
-  clubExamples: [],
-  firstName: '',
-  lastName: '',
-  name: '',
-  email: '',
-  password: '',
-  passwordConfirm: '',
-  degree: '',
+const { filterClubs, finalClubs, getClubsFilter, loadingClubs } = clubRecommendations({
+  degree: selectedDegree,
+  faith: selectedFaith,
+  nationality: selectedNation,
+  type: selectedClubType,
+  intA: computed(() => selectedInterests.value[0]),
+  intB: computed(() => selectedInterests.value[1]),
+  intC: computed(() => selectedInterests.value[2]),
+  intD: computed(() => selectedInterests.value[3]),
 })
 
-// const errors = ref({})
+const givenClubs = computed(() =>
+  finalClubs.value.map((club) => ({
+    id: club.clubID ?? club.clubid ?? club.id,
+    logo: club.logoURL,
+    label: club.name,
+  })),
+)
+
+onMounted(async () => {
+  await getClubsFilter()
+})
 
 // Data
 const interests = [
@@ -216,30 +232,29 @@ const interests = [
   { id: 'popculture', icon: '💹', label: 'Pop Culture' },
   { id: 'fooddrink', icon: '💹', label: 'Food and Drink' },
   { id: 'robotics', icon: '💹', label: 'Robotics' },
+  { id: 'workshops', icon: '💹', label: 'Workshops' },
 ]
 
 const clubType = [
-  { id: 'party', icon: '🎨', label: 'Party Vibes' },
-  { id: 'chill', icon: '⚙️', label: 'Chill Socialising' },
-  { id: 'project', icon: '📊', label: 'Project Work' },
-  { id: 'study', icon: '📣', label: 'Social Study' },
+  { id: 'PartyVibes', icon: '🎨', label: 'Party Vibes' },
+  { id: 'ChillSocialising', icon: '⚙️', label: 'Chill Socialising' },
+  { id: 'ProjectWork', icon: '📊', label: 'Project Work' },
+  { id: 'SocialStudy', icon: '📣', label: 'Social Study' },
 ]
 
-const clubExamples = [
-  { id: 'curtinEngineersClub', icon: '🎨', label: 'Curtin Engineers Club' },
-  { id: 'curtinFreeFoodSociety', icon: '⚙️', label: 'Curtin Free Food Society' },
-  { id: 'curtinEducationStudentsSociety', icon: '📊', label: 'Curtin Education Students Society' },
-  {
-    id: 'CurtinBusinessCommerceAssociation',
-    icon: '📣',
-    label: 'Curtin Business & Commerce Association',
-  },
-]
-
-const selectedFaith = ref(null)
-const selectedNation = ref(null)
-const selectedDegree = ref(null)
-const optionsFaith = ref(['Christianity', 'Muslim', 'Islam', 'Sikh', 'None'])
+const optionsDegree = ref([
+  'Engineering',
+  'Computing',
+  'Health Medical Sciences',
+  'Commerce and Law',
+  'Management and Marketing',
+  'Creative Arts',
+  'Humanities',
+  'Sciences',
+  'Education',
+  'Allied Health',
+])
+const optionsFaith = ref(['Christianity', 'Muslim', 'Hindu', 'Islam', 'Sikh', 'None'])
 const optionsNation = ref([
   'African',
   'Chinese',
@@ -271,15 +286,22 @@ const degree = ref([
 ])
 
 function toggleInterest(id) {
-  const idx = form.value.interests.indexOf(id)
-  if (idx === -1) form.value.interests.push(id)
-  else form.value.interests.splice(idx, 1)
+  const idx = selectedInterests.value.indexOf(id)
+  if (idx === -1) {
+    if (selectedInterests.value.length < maxInterests) selectedInterests.value.push(id)
+  } else {
+    selectedInterests.value.splice(idx, 1)
+  }
 }
 
 function toggleClubType(id) {
-  const idx = form.value.clubType.indexOf(id)
-  if (idx === -1) form.value.clubType.push(id)
-  else form.value.clubType.splice(idx, 1)
+  selectedClubType.value = id
+}
+
+function toggleClubListing(id) {
+  const idx = selectedClubs.value.indexOf(id)
+  if (idx === -1) selectedClubs.value.push(id)
+  else selectedClubs.value.splice(idx, 1)
 }
 
 // function validate(step) {
@@ -303,8 +325,10 @@ function toggleClubType(id) {
 //   return Object.keys(e).length === 0
 // }
 
-function next() {
-  if (!validate(currentStep.value)) return
+async function next() {
+  if (currentStep.value === 2 && selectedInterests.value.length > maxInterests) return
+  // if (!validate(currentStep.value)) return
+  if (currentStep.value === 3) await filterClubs()
   currentStep.value = currentStep.value + 1
 }
 
@@ -313,7 +337,7 @@ function prev() {
 }
 
 function handleSignup() {
-  console.log('Signing up:', form.value.name, form.value.email, form.value.degree)
+  console.log('Signing up:', fullName.value, email.value, selectedDegree.value)
   useRouter.push('/')
 }
 </script>
@@ -456,6 +480,12 @@ function handleSignup() {
   color: var(--color-text-1);
   cursor: pointer;
   transition: all 0.2s ease;
+}
+
+.clubTag.selected {
+  border-color: var(--ca-brand-blue-2);
+  background: var(--color-background-2);
+  color: var(--color-text-2);
 }
 
 .clubName {

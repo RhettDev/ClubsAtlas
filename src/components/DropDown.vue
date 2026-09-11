@@ -1,11 +1,15 @@
 <template>
   <div class="dropdown" ref="dropDownRef" @click="isOpen = true">
-    <div class="dropdownSelected" >
+    <div class="dropdownSelected">
       <div id="selectedOption">
         {{ mappedSelected }}
       </div>
-      <div id="chevron" v-if="isOpen"><v-icon name="pr-chevron-up" fill="var(--color-text-1)" scale="1.5" /></div>
-      <div id="chevron" v-else-if="!isOpen"><v-icon name="pr-chevron-down" fill="var(--color-text-1)" scale="1.5" /></div>
+      <div id="chevron" v-if="isOpen">
+        <v-icon name="pr-chevron-up" fill="var(--color-text-1)" scale="1.5" />
+      </div>
+      <div id="chevron" v-else-if="!isOpen">
+        <v-icon name="pr-chevron-down" fill="var(--color-text-1)" scale="1.5" />
+      </div>
     </div>
     <div class="dropdownOptions" v-if="isOpen">
       <div
@@ -28,16 +32,16 @@ const props = defineProps({
     type: Array,
     required: true,
   },
-  value: {
+  modelValue: {
     default: null,
   },
 })
 
-const emit = defineEmits(['update:value'])
+const emit = defineEmits(['update:modelValue'])
 
 const isOpen = ref(false)
 const dropDownRef = ref(null)
-const selectedOption = ref(null)
+const selectedOption = ref(props.modelValue)
 
 const outsideClick = (element) => {
   if (!dropDownRef.value.contains(element.target)) {
@@ -51,7 +55,7 @@ const mappedSelected = computed(() => {
 
 const toggleOption = (option) => {
   selectedOption.value = option
-  emit('update:value', option)
+  emit('update:modelValue', option)
   isOpen.value = false
 }
 
@@ -79,7 +83,7 @@ onUnmounted(() => {
   position: relative;
 }
 
-.dropdownSelected{
+.dropdownSelected {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -91,7 +95,7 @@ onUnmounted(() => {
   text-align: start;
   width: 100%;
   position: absolute;
-  top: 100%;   
+  top: 100%;
   left: 0;
   z-index: 100;
   border-radius: 16px;
@@ -102,7 +106,7 @@ onUnmounted(() => {
   overflow: scroll;
 }
 
-.option{
+.option {
   display: flex;
   width: 100%;
   gap: 8px;
@@ -110,7 +114,7 @@ onUnmounted(() => {
   /* position: absolute; */
 }
 
-.option:hover{
+.option:hover {
   background-color: var(--color-background-2);
   border-radius: 8px;
 }
