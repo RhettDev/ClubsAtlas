@@ -19,7 +19,7 @@
 
       <!-- Step Panels -->
       <div class="stepView">
-        <Transition :name="transitionName" mode="out-in">
+        <Transition>
           <!-- Step One: Account Details -->
           <div v-if="currentStep === 1" key="step1" class="form">
             <div class="formTitle">
@@ -50,7 +50,9 @@
             </div>
             <div class="fieldContainer">
               <v-icon name="pr-briefcase" fill="var(--color-text-1)" scale="1.5" />
-              <input v-model="degree" type="degree" class="formField" placeholder="Enter Degree" />
+              <DropDown :options="degree" v-model="selectedDegree">
+                
+              </DropDown>
             </div>
             <div class="checkText">
               <ToggleButton></ToggleButton>
@@ -173,15 +175,19 @@
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderBar from '@/components/HeaderGeneric.vue'
-import DropDown from '@/components/InterestDropDown.vue'
+import DropDown from '@/components/DropDownSelect.vue'
 import { ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 
 const currentStep = ref(1)
 const totalSteps = 4
-// const transitionName = ref('slide-forward')
-// const submitting = ref(false)
-// const showPassword = ref(false)
+const clubsList = ref([])
+const submitting = ref(false)
+const showPassword = ref(false)
+const name = ref('')
+const email = ref('')
+const password = ref('')
+const passwordConfirm = ref('')
 
 const form = ref({
   interests: [],
@@ -232,6 +238,7 @@ const clubExamples = [
 
 const selectedFaith = ref(null)
 const selectedNation = ref(null)
+const selectedDegree = ref(null)
 const optionsFaith = ref(['Christianity', 'Muslim', 'Islam', 'Sikh', 'None'])
 const optionsNation = ref([
   'African',
@@ -248,6 +255,19 @@ const optionsNation = ref([
   'Thai',
   'Vietnamese',
   'None',
+])
+
+const degree = ref([
+  { id: 'Engineering', label: 'Engineering' },
+  { id: 'Computing', label: 'Computing' },
+  { id: 'Medical', label: 'Health Medical Sciences' },
+  { id: 'Commerce', label: 'Commerce and Law' },
+  { id: 'Management', label: 'Management and Marketing' },
+  { id: 'Creative', label: 'Creative Arts' },
+  { id: 'Humanities', label: 'Humanities' }, // photography, movies,
+  { id: 'Sciences', label: 'Sciences' },
+  { id: 'Education', label: 'Education' },
+  { id: 'Allied', label: 'Allied Health' },
 ])
 
 function toggleInterest(id) {
@@ -284,15 +304,11 @@ function toggleClubType(id) {
 // }
 
 function next() {
-  console.log(currentStep.value)
-  // if (!validate(currentStep.value)) return
-  // transitionName.value = 'slide-forward'
+  if (!validate(currentStep.value)) return
   currentStep.value = currentStep.value + 1
-  console.log('new' + currentStep.value)
 }
 
 function prev() {
-  // transitionName.value = 'slide-back'
   currentStep.value--
 }
 
@@ -446,32 +462,6 @@ function handleSignup() {
   display: flex;
   align-items: center;
 }
-
-/* ── Transitions ── */
-/* .slide-forward-enter-active,
-.slide-forward-leave-active,
-.slide-back-enter-active,
-.slide-back-leave-active {
-  transition: all 0.38s;
-  position: absolute;
-  width: max-content;
-}
-.slide-forward-enter-from {
-  opacity: 0;
-  transform: translateX(50px);
-}
-.slide-forward-leave-to {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-.slide-back-enter-from {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-.slide-back-leave-to {
-  opacity: 0;
-  transform: translateX(50px);
-} */
 
 .dropDownContainer {
   display: flex;

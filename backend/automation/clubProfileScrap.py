@@ -80,7 +80,7 @@ for link in links:
         tempDesc = "Null"
 
 
-    row = [f"{id:05}", clubName, None, hexcode, cleanPathLogo, True, hexcode, None, None, 2000, cleanPathBanner]
+    row = [f"{id:05}", clubName, None, hexcode, cleanPathLogo, True, "description", None, None, 2000, cleanPathBanner]
     data.append(row)
 
 
