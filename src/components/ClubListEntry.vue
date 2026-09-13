@@ -15,7 +15,7 @@
     </div>
 
     <div v-if="isOpen" class="dropdownMenu">
-      <div class="dropdownOption">
+      <div v-if="visibleOptions.clubDisplay" class="dropdownOption" id="clubDisplay">
         <p>Toggle Club Display</p>
         <input
           type="checkbox"
@@ -24,15 +24,19 @@
           class="checkboxCustom"
         />
       </div>
-      <div class="dropdownOption">
+      <div v-if="visibleOptions.toggleGM" class="dropdownOption" id="toggleGM">
         <p>Toggle General Meeting</p>
         <input type="checkbox" id="generalMeeting" v-model="gmCheck" class="checkboxCustom" />
       </div>
-      <div class="dropdownOption">
+      <div v-if="visibleOptions.viewProfile" class="dropdownOption" id="viewProfile">
         <p>View Club Profile</p>
         <v-icon name="pr-info-circle" fill="var(--color-text-1)" scale="1.3" />
       </div>
-      <div class="dropdownOption" @click="askDeleteClub(club.name)">
+      <div v-if="visibleOptions.addClub" class="dropdownOption" @click="askAddClub(club.name)" id="addClub">
+        <p>Add Club To Calendar</p>
+        <v-icon name="pr-plus" fill="var(--color-text-1)" scale="1.3" />
+      </div>
+      <div v-if="visibleOptions.deleteClub" class="dropdownOption" @click="askDeleteClub(club.name)" id="deleteClub">
         <p>Remove Club From Calendar</p>
         <v-icon name="pr-trash" fill="var(--color-text-1)" scale="1.3" />
       </div>
@@ -56,6 +60,17 @@ import ConfirmationPop from './ConfirmationPop.vue'
 const props = defineProps({
   club: { type: Object, required: true },
   isOpen: { type: Boolean, default: false },
+  visibleOptions: {
+    type: Object,
+    default: () =>({
+      clubDisplay: true,
+      toggleGM: true,
+      viewProfile: true,
+      addClub: false,
+      deleteClub: true,
+      tags: false
+    })
+  }
 })
 
 const toggleDisplayCheck = ref(true)
@@ -93,6 +108,8 @@ function askDeleteClub(clubName) {
   }
   showConfirm.value = true
 }
+
+
 function handleConfirmed() {
   console.log('removing club:', props.club.id)
   // removeClub()

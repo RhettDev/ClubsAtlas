@@ -1,7 +1,7 @@
 <template>
   <main id="adminMain" class="body calendarMain">
     <HeaderStudent @click="onHeaderMenuClick"></HeaderStudent>
-    <!-- Mobiel Naviation -->
+    <!-- Mobile Naviation -->
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
     <div id="navDropDown" class="dropDownMenu">
       <h3 class="menuEntry">Today</h3>
@@ -9,17 +9,26 @@
       <h3 class="menuEntry">Week View</h3>
       <hr class="fgHR" />
       <h3 class="menuEntry">Clubs List</h3>
+      <div id="clubsData" class="clubsContainer">
+        <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
+        <div v-else-if="errorMessage" class="backendLoadingMsg">
+          Failed to load: {{ errorMessage }}
+        </div>
+        <ul v-else class="loadedClubs">
+          <ClubListEntry
+            v-for="club in usersClubs"
+            :key="club.id"
+            :club="club"
+            :isOpen="openClubId === club.id"
+            @toggle="toggleDropdown(club.id)"
+          />
+        </ul>
+      </div>
       <hr class="fgHR" />
-      <RouterLink variant="primary" class="menuEntry active" to="/" @click="onHeaderMenuClick">
-        Your Clubs
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/new-event">
-        Suggested Clubs
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
-        Weekly Showcase
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm"> Settings </RouterLink>
+      <a class="menuEntry" :class="{active: currentSideBar == 1}" @click="currentSideBar = 1">Your Clubs</a>
+      <a class="menuEntry" :class="{active: currentSideBar == 2}" @click="currentSideBar = 2">Suggested Clubs</a>
+      <a class="menuEntry" :class="{active: currentSideBar == 3}" @click="currentSideBar = 3">Club Search</a>
+      <RouterLink variant="primary" class="menuEntry" to="/settings"> Settings </RouterLink>
     </div>
 
     <!-- Desktop Navigation -->
@@ -48,7 +57,7 @@
       </section>
 
       <section id="clubsSideBar" class="bRight">
-        <div id="yourClubs">
+        <div id="yourClubs" v-if="currentSideBar === 1" key="yourClubs" >
           <h2 class="pageSubHeader">Your Clubs</h2>
           <hr class="bgHR" />
           <div id="clubsData" class="clubsContainer">
@@ -67,12 +76,68 @@
             </ul>
           </div>
         </div>
+        <div id="suggestedClubs" v-else-if="currentSideBar === 2" key="suggestedClubs" >
+          <h2 class="pageSubHeader">Suggested Clubs</h2>
+          <hr class="bgHR" />
+          <div id="suggestedClubsData" class="clubsContainer">
+            <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
+            <div v-else-if="errorMessage" class="backendLoadingMsg">
+              Failed to load: {{ errorMessage }}
+            </div>
+            <ul v-else class="loadedClubs">
+              <ClubListEntry
+                v-for="club in suggestedClubs"
+                :key="club.id"
+                :club="club"
+                :isOpen="openClubId === club.id"
+                :visibleOptions="{
+                  clubDisplay: false,
+                  toggleGM: false,
+                  viewProfile: true,
+                  addClub: true,
+                  deleteClub: false
+                }"
+                @toggle="toggleDropdown(club.id)"
+              />
+            </ul>
+          </div>
+        </div>
+        <div id="clubSearch" v-else-if="currentSideBar === 3" key="clubSearch" >
+          <h2 class="pageSubHeader">Club Search</h2>
+          <hr class="bgHR" />
+          <div class="searchContainer">
+            <input class="formField" v-model="clubSearch" type="text" placeholder="Search...">
+            <v-icon name="pr-filter" fill="var(--color-text-1)" scale="1.5" />
+          </div>
+          <div id="suggestedClubsData" class="clubsContainer">
+            <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
+            <div v-else-if="errorMessage" class="backendLoadingMsg">
+              Failed to load: {{ errorMessage }}
+            </div>
+            <ul v-else class="loadedClubs">
+              <ClubListEntry
+                v-for="club in searchedClubs"
+                :key="club.id"
+                :club="club"
+                :isOpen="openClubId === club.id"
+                :visibleOptions="{
+                  clubDisplay: false,
+                  toggleGM: false,
+                  viewProfile: true,
+                  addClub: true,
+                  deleteClub: false
+                }"
+                @toggle="toggleDropdown(club.id)"
+              />
+            </ul>
+          </div>
+        </div>
         <div id="calendarMenu" class="calendarMenuContainer">
           <hr class="bgHR" />
-          <div class="menuEntry active">Your Clubs</div>
-          <div class="menuEntry">Suggested Clubs</div>
-          <div class="menuEntry">Club Search</div>
-          <RouterLink class="menuEntry" to="calendar/showcase"> Weekly Showcase </RouterLink>
+          <a class="menuEntry" :class="{active: currentSideBar == 1}" @click="currentSideBar = 1">Your Clubs</a>
+          <a class="menuEntry" :class="{active: currentSideBar == 2}" @click="currentSideBar = 2">Suggested Clubs</a>
+          <a class="menuEntry" :class="{active: currentSideBar == 3}" @click="currentSideBar = 3">Club Search</a>
+          <!-- <RouterLink class="menuEntry" to="showcase"> Weekly Showcase </RouterLink> -->
         </div>
       </section>
     </div>
@@ -112,7 +177,7 @@ import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
 import ClubListEntry from '@/components/ClubListEntry.vue'
 import { calendar } from '@/composables/calender'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
 import { errorMessages } from 'vue/compiler-sfc'
@@ -125,14 +190,22 @@ const { profile } = useAuth()
 const studentUserID = ref(profile.value.id)
 const clubsID = ref(1)
 const loadingCTags = ref(true)
-
+const currentSideBar = ref(1)
 const openClubId = ref(null)
+const suggestedClubs = ref([])
+const allClubs = ref([])
+const clubSearch = ref('')
+
+const { days } = calendar()
+
+// Side Bar Allocation
+// Your Clubs: 1 (Default)
+// Suggested Clubs: 2
+// Club Search: 3
 
 function toggleDropdown(id) {
   openClubId.value = openClubId.value === id ? null : id
 }
-
-const { days } = calendar()
 
 async function getUsersClubs() {
   try {
@@ -153,6 +226,45 @@ async function getUsersClubs() {
   }
 }
 
+async function getSuggestedClubs() {
+  try {
+    loadingClubs.value = true
+
+    let { data, error } = await supabase.rpc('getfourclubsdata')
+
+    if (error) throw error
+
+    suggestedClubs.value = data
+
+  } catch (error) {
+    errorMessages.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingClubs.value = false
+  }
+}
+
+async function getAllClubs() {
+  try {
+    loadingClubs.value = true
+
+    let { data, error } = await supabase.rpc('getallclubsdata')
+
+    if (error) throw error
+
+    allClubs.value = data
+
+  } catch (error) {
+    errorMessages.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingClubs.value = false
+  }
+}
+
+
 async function getClubTags(clubsID) {
   try {
     loadingCTags.value = true
@@ -161,7 +273,7 @@ async function getClubTags(clubsID) {
     let { data, error } = await supabase.rpc('getclubstags', { clubid })
 
     if (error) throw error
-    else console.log(data)
+    else console.log("temp Tag Log", data)
   } catch (error) {
     errorMessages.value = error.message
     console.error('Error fetching data:', error)
@@ -173,7 +285,16 @@ async function getClubTags(clubsID) {
 
 onMounted(() => {
   getUsersClubs()
+  getSuggestedClubs()
+  getAllClubs()
   getClubTags(clubsID)
+})
+
+
+const searchedClubs = computed(() => {
+  return allClubs.value.filter(club => {
+    return club.name.toLowerCase().includes(clubSearch.value.toLowerCase())
+  })
 })
 
 const onHeaderMenuClick = () => {
@@ -217,14 +338,11 @@ const isToday = (day) => {
   min-height: 0;
 }
 
-#yourClubs {
+#yourClubs,
+#suggestedClubs,
+#clubSearch {
   display: flex;
   flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}
-
-#clubsData {
   flex: 1;
   min-height: 0;
   overflow: hidden;
@@ -284,7 +402,9 @@ const isToday = (day) => {
   flex-direction: column;
   gap: 16px;
   font-size: large;
-  overflow: auto;
+  max-width: 90%;
+  max-height: calc(100vh - 10% - 20px);
+  overflow-y: auto;
 }
 
 .dropDownMenu a.active {
@@ -395,5 +515,13 @@ const isToday = (day) => {
 
 .clubDropDown {
   display: none;
+}
+
+.searchContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin: 8px 0px;
 }
 </style>
