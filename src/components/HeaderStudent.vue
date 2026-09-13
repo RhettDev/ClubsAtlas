@@ -13,13 +13,13 @@
     </div>
 
     <div id="right" class="headerRight">
-      <div id="formatContainerTEMP" class="desktopView">
+      <!-- <div id="formatContainerTEMP" class="desktopView">
         <BaseButton>Month</BaseButton>
         <BaseButton>Week</BaseButton>
-      </div>
+      </div> -->
       <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
-      <RouterLink to="/settings">
-        <v-icon class="mobileView" name="pr-user" fill="var(--color-text-1)" scale="2" />
+      <RouterLink to="/settings" class="desktopView">
+        <v-icon name="pr-user" fill="var(--color-text-1)" scale="2" />
       </RouterLink>
     </div>
   </section>

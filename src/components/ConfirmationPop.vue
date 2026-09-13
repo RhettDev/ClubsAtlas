@@ -55,12 +55,13 @@ function handleCancel() {
   background: var(--color-background-2);
   border-radius: 8px;
   flex-direction: column;
-  padding: 8px 16px;
-  max-width: 40%;
+  padding: 16px 32px;
+  max-width: 30%;
   display: flex;
   align-items: center;
   text-align: center;
 }
+
 .dialogTitle {
   color: var(--color-text-1);
 }
@@ -72,5 +73,11 @@ function handleCancel() {
 .dialogButtonContainer {
   display: flex;
   flex-direction: row;
+}
+
+@media screen and (max-width: 688px) {
+  .dialogButtonContainer {
+    flex-direction: column;
+  }
 }
 </style>

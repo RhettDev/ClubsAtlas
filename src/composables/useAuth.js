@@ -31,12 +31,10 @@ async function fetchProfile(authUserId) {
     .maybeSingle()
 
   if (clubError) throw clubError
-  console.log(club)
 
   if (club) {
     profile.value = club
     userType.value = 'club'
-    console.log("club category")
     return
   }
 }

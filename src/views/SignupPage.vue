@@ -272,19 +272,6 @@ const optionsNation = ref([
   'None',
 ])
 
-const degree = ref([
-  { id: 'Engineering', label: 'Engineering' },
-  { id: 'Computing', label: 'Computing' },
-  { id: 'Medical', label: 'Health Medical Sciences' },
-  { id: 'Commerce', label: 'Commerce and Law' },
-  { id: 'Management', label: 'Management and Marketing' },
-  { id: 'Creative', label: 'Creative Arts' },
-  { id: 'Humanities', label: 'Humanities' }, // photography, movies,
-  { id: 'Sciences', label: 'Sciences' },
-  { id: 'Education', label: 'Education' },
-  { id: 'Allied', label: 'Allied Health' },
-])
-
 function toggleInterest(id) {
   const idx = selectedInterests.value.indexOf(id)
   if (idx === -1) {
