@@ -4,30 +4,91 @@
     <!-- Mobile Naviation -->
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
     <div id="navDropDown" class="dropDownMenu">
-      <h3 class="menuEntry">Today</h3>
-      <h3 class="menuEntry active">Month View</h3>
-      <h3 class="menuEntry">Week View</h3>
-      <hr class="fgHR" />
-      <h3 class="menuEntry">Clubs List</h3>
-      <div id="clubsData" class="clubsContainer">
-        <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
-        <div v-else-if="errorMessage" class="backendLoadingMsg">
-          Failed to load: {{ errorMessage }}
+      <div id="yourClubs" v-if="currentClubsMenu === 1" key="yourClubs" class="dropDownClubsMenu">
+        <h3 class="menuEntry">Today</h3>
+        <a class="menuEntry active">Month View</a>
+        <h3 class="menuEntry">Week View</h3>
+        <hr class="bgHR" />
+        <h3 class="menuEntry">Your Clubs</h3>
+        <div id="clubsData" class="clubsContainer">
+          <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
+          <div v-else-if="errorMessage" class="backendLoadingMsg">
+            Failed to load: {{ errorMessage }}
+          </div>
+          <ul v-else class="loadedClubs">
+            <ClubListEntry
+              v-for="club in usersClubs"
+              :key="club.id"
+              :club="club"
+              :isOpen="openClubId === club.id"
+              @toggle="toggleDropdown(club.id)"
+            />
+          </ul>
         </div>
-        <ul v-else class="loadedClubs">
-          <ClubListEntry
-            v-for="club in usersClubs"
-            :key="club.id"
-            :club="club"
-            :isOpen="openClubId === club.id"
-            @toggle="toggleDropdown(club.id)"
-          />
-        </ul>
       </div>
-      <hr class="fgHR" />
-      <a class="menuEntry" :class="{active: currentSideBar == 1}" @click="currentSideBar = 1">Your Clubs</a>
-      <a class="menuEntry" :class="{active: currentSideBar == 2}" @click="currentSideBar = 2">Suggested Clubs</a>
-      <a class="menuEntry" :class="{active: currentSideBar == 3}" @click="currentSideBar = 3">Club Search</a>
+      <div id="suggestedClubs" v-if="currentClubsMenu === 2" key="suggestedClubs" class="dropDownClubsMenu">
+        <h3 class="menuEntry">Suggested Clubs</h3>
+        <hr class="bgHR" />
+        <div id="suggestedClubsData" class="clubsContainer">
+          <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
+          <div v-else-if="errorMessage" class="backendLoadingMsg">
+            Failed to load: {{ errorMessage }}
+          </div>
+          <ul v-else class="loadedClubs">
+            <ClubListEntry
+              v-for="club in suggestedClubs"
+              :key="club.id"
+              :club="club"
+              :isOpen="openClubId === club.id"
+              :visibleOptions="{
+                clubDisplay: false,
+                toggleGM: false,
+                viewProfile: true,
+                addClub: true,
+                deleteClub: false
+              }"
+              @toggle="toggleDropdown(club.id)"
+            />
+          </ul>
+        </div>
+      </div>
+      <div id="clubSearch" v-if="currentClubsMenu === 3" key="clubSearch" class="dropDownClubsMenu">
+        <h3 class="menuEntry">Club Search</h3>
+        <hr class="bgHR" />
+        <div class="searchContainer">
+          <input class="formField" v-model="clubSearch" type="text" placeholder="Search...">
+          <v-icon name="pr-filter" fill="var(--color-text-1)" scale="1.5" />
+        </div>
+        <div id="clubSearch" class="clubsContainer">
+          <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
+          <div v-else-if="errorMessage" class="backendLoadingMsg">
+            Failed to load: {{ errorMessage }}
+          </div>
+          <ul v-else class="loadedClubs">
+            <ClubListEntry
+              v-for="club in searchedClubs"
+              :key="club.id"
+              :club="club"
+              :isOpen="openClubId === club.id"
+              :visibleOptions="{
+                clubDisplay: false,
+                toggleGM: false,
+                viewProfile: true,
+                addClub: true,
+                deleteClub: false
+              }"
+              @toggle="toggleDropdown(club.id)"
+            />
+          </ul>
+          <div v-if="searchedClubs.length == 0" class="backendLoadingMsg">No clubs match your search...</div>
+        </div>
+      </div>
+      
+      <hr class="bgHR" />
+      <a class="menuEntry" :class="{active: currentClubsMenu == 1}" @click="currentClubsMenu = 1">Your Clubs</a>
+      <a class="menuEntry" :class="{active: currentClubsMenu == 2}" @click="currentClubsMenu = 2">Suggested Clubs</a>
+      <a class="menuEntry" :class="{active: currentClubsMenu == 3}" @click="currentClubsMenu = 3">Club Search</a>
+      <hr class="bgHR" />
       <RouterLink variant="primary" class="menuEntry" to="/settings"> Settings </RouterLink>
     </div>
 
@@ -56,8 +117,8 @@
         </div>
       </section>
 
-      <section id="clubsSideBar" class="bRight">
-        <div id="yourClubs" v-if="currentSideBar === 1" key="yourClubs" >
+      <section id="currentClubsMenu" class="bRight">
+        <div id="yourClubs" v-if="currentClubsMenu === 1" key="yourClubs" >
           <h2 class="pageSubHeader">Your Clubs</h2>
           <hr class="bgHR" />
           <div id="clubsData" class="clubsContainer">
@@ -76,7 +137,7 @@
             </ul>
           </div>
         </div>
-        <div id="suggestedClubs" v-else-if="currentSideBar === 2" key="suggestedClubs" >
+        <div id="suggestedClubs" v-else-if="currentClubsMenu === 2" key="suggestedClubs" >
           <h2 class="pageSubHeader">Suggested Clubs</h2>
           <hr class="bgHR" />
           <div id="suggestedClubsData" class="clubsContainer">
@@ -102,7 +163,7 @@
             </ul>
           </div>
         </div>
-        <div id="clubSearch" v-else-if="currentSideBar === 3" key="clubSearch" >
+        <div id="clubSearch" v-else-if="currentClubsMenu === 3" key="clubSearch" >
           <h2 class="pageSubHeader">Club Search</h2>
           <hr class="bgHR" />
           <div class="searchContainer">
@@ -130,13 +191,14 @@
                 @toggle="toggleDropdown(club.id)"
               />
             </ul>
+            <div v-if="searchedClubs.length == 0" class="backendLoadingMsg">No clubs match your search...</div>
           </div>
         </div>
         <div id="calendarMenu" class="calendarMenuContainer">
           <hr class="bgHR" />
-          <a class="menuEntry" :class="{active: currentSideBar == 1}" @click="currentSideBar = 1">Your Clubs</a>
-          <a class="menuEntry" :class="{active: currentSideBar == 2}" @click="currentSideBar = 2">Suggested Clubs</a>
-          <a class="menuEntry" :class="{active: currentSideBar == 3}" @click="currentSideBar = 3">Club Search</a>
+          <a class="menuEntry" :class="{active: currentClubsMenu == 1}" @click="currentClubsMenu = 1">Your Clubs</a>
+          <a class="menuEntry" :class="{active: currentClubsMenu == 2}" @click="currentClubsMenu = 2">Suggested Clubs</a>
+          <a class="menuEntry" :class="{active: currentClubsMenu == 3}" @click="currentClubsMenu = 3">Club Search</a>
           <!-- <RouterLink class="menuEntry" to="showcase"> Weekly Showcase </RouterLink> -->
         </div>
       </section>
@@ -190,7 +252,7 @@ const { profile } = useAuth()
 const studentUserID = ref(profile.value.id)
 const clubsID = ref(1)
 const loadingCTags = ref(true)
-const currentSideBar = ref(1)
+const currentClubsMenu = ref(1)
 const openClubId = ref(null)
 const suggestedClubs = ref([])
 const allClubs = ref([])
@@ -297,6 +359,7 @@ const searchedClubs = computed(() => {
   })
 })
 
+
 const onHeaderMenuClick = () => {
   let navDD = document.getElementById('navDropDown')
   if (navDD.style.display === 'flex') {
@@ -332,7 +395,7 @@ const isToday = (day) => {
   max-width: 100%;
 }
 
-#clubsSideBar {
+#currentClubsMenu {
   display: flex;
   flex-direction: column;
   min-height: 0;
@@ -381,7 +444,7 @@ const isToday = (day) => {
   border-bottom: 2px solid var(--color-brandText);
 }
 
-.menuEntry:hover {
+.menuEntry:hover:not([disabled]) {
   color: var(--color-brandText);
   border-bottom: 2px solid var(--color-brandText);
 }
@@ -402,8 +465,8 @@ const isToday = (day) => {
   flex-direction: column;
   gap: 16px;
   font-size: large;
-  max-width: 90%;
-  max-height: calc(100vh - 10% - 20px);
+  width: 90%;
+  height: calc(100vh - 10% - 20px);
   overflow-y: auto;
 }
 
@@ -523,5 +586,11 @@ const isToday = (day) => {
   align-items: center;
   gap: 8px;
   margin: 8px 0px;
+}
+
+.dropDownClubsMenu {
+  gap: 8px;
+  margin-top: 4px;
+
 }
 </style>
