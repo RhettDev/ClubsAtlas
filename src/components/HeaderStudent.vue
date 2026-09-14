@@ -1,9 +1,9 @@
 <template>
   <section class="header studentHeader">
     <div id="left" class="headerLeft">
-      <v-btn class="mobileView menuButton" icon @click="$emit('click', $event)">
-        <v-icon class="mobileView" name="pr-bars" fill="var(--color-text-1)" scale="1.6" />
-      </v-btn>
+      <div class="mobileView">
+        <v-icon class="menuButton" name="pr-bars" fill="var(--color-text-1)" scale="1.6" @click="$emit('click', $event)"/>
+      </div>
 
       <BaseButton @click="goToToday">Today</BaseButton>
       <v-icon class="chevControl" name="pr-chevron-left" fill="var(--color-text-1)" scale="1.5" @click="shiftPeriod(-1)"/>
