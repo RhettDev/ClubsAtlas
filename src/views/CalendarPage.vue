@@ -113,6 +113,16 @@
             }"
           >
             {{ day.date.getDate() }}
+            <div
+              v-for="event in eventsForDate(day.date)"
+              :key="event.id || `${event.date}-${event.title}`"
+              class="eventCard"
+            >
+              {{ event.startTime }}
+              <!-- {{ event.acryonum }} -->
+              <p> - </p>
+              {{ event.eventTitle }}
+            </div>
           </div>
         </div>
       </section>
@@ -247,6 +257,7 @@ import { errorMessages } from 'vue/compiler-sfc'
 const usersClubs = ref([])
 // const studentUser = ref([])
 const loadingClubs = ref(true)
+const loadingEvents = ref(true)
 const errorMessage = ref(null)
 const { profile } = useAuth()
 const studentUserID = ref(profile.value.id)
@@ -256,7 +267,9 @@ const currentClubsMenu = ref(1)
 const openClubId = ref(null)
 const suggestedClubs = ref([])
 const allClubs = ref([])
+const events = ref([])
 const clubSearch = ref('')
+
 
 const { days } = calendar()
 
@@ -297,7 +310,6 @@ async function getSuggestedClubs() {
     if (error) throw error
 
     suggestedClubs.value = data
-
   } catch (error) {
     errorMessages.value = error.message
     console.error('Error fetching data:', error)
@@ -335,7 +347,7 @@ async function getClubTags(clubsID) {
     let { data, error } = await supabase.rpc('getclubstags', { clubid })
 
     if (error) throw error
-    else console.log("temp Tag Log", data)
+    else console.log(data)
   } catch (error) {
     errorMessages.value = error.message
     console.error('Error fetching data:', error)
@@ -345,20 +357,37 @@ async function getClubTags(clubsID) {
   }
 }
 
+async function getEventsData() {
+  try {
+    loadingEvents.value = true
+
+    let { data, error } = await supabase.rpc('geteventsdata')
+
+    if (error) throw error
+
+    events.value = data
+  } catch (error) {
+    errorMessages.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingEvents.value = false
+  }
+}
+
 onMounted(() => {
   getUsersClubs()
   getSuggestedClubs()
-  getAllClubs()
   getClubTags(clubsID)
+  getEventsData()
+  getAllClubs()
 })
-
 
 const searchedClubs = computed(() => {
   return allClubs.value.filter(club => {
     return club.name.toLowerCase().includes(clubSearch.value.toLowerCase())
   })
 })
-
 
 const onHeaderMenuClick = () => {
   let navDD = document.getElementById('navDropDown')
@@ -371,6 +400,21 @@ const onHeaderMenuClick = () => {
     navDD.style.display = 'flex'
     document.getElementById('navBackdrop').classList.add('show')
   }
+}
+
+function dateKey(date) {
+  const parsedDate = new Date(date)
+
+  const year = parsedDate.getFullYear()
+  const month = String(parsedDate.getMonth() + 1).padStart(2, '0')
+  const day = String(parsedDate.getDate()).padStart(2, '0')
+
+  return `${year}-${month}-${day}`
+}
+
+function eventsForDate(date) {
+  const calendarDate = dateKey(date)
+  return events.value.filter(event => dateKey(event.eventDate) === calendarDate)
 }
 
 // const currentDate = ref(new Date())
@@ -406,6 +450,12 @@ const isToday = (day) => {
 #clubSearch {
   display: flex;
   flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+#clubsData,
+#suggestedClubsData {
   flex: 1;
   min-height: 0;
   overflow: hidden;
@@ -444,7 +494,7 @@ const isToday = (day) => {
   border-bottom: 2px solid var(--color-brandText);
 }
 
-.menuEntry:hover:not([disabled]) {
+.menuEntry:hover {
   color: var(--color-brandText);
   border-bottom: 2px solid var(--color-brandText);
 }
@@ -531,7 +581,7 @@ const isToday = (day) => {
 
 .calendarGrid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   height: 100%;
 }
 
@@ -544,14 +594,17 @@ const isToday = (day) => {
 }
 
 .calendarDay {
+  display: grid;
   cursor: pointer;
   transition: var(--color-background-2) 0.2s;
-  font-size: 0.95rem;
   text-align: center;
   border: 1px solid var(--color-background-2);
-  padding: 4px;
+  padding: 2px;
   color: var(--color-text-1);
   font-size: small;
+  gap: 4px;
+  align-items: start;
+  align-content: start;
 }
 
 .calendarDay:hover {
@@ -563,12 +616,12 @@ const isToday = (day) => {
 }
 
 .altMonthDay {
-  opacity: 0.4;
+  opacity: 0.5;
 }
 
 .dayGrid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0,1fr));
 }
 
 .isToday {
@@ -591,6 +644,18 @@ const isToday = (day) => {
 .dropDownClubsMenu {
   gap: 8px;
   margin-top: 4px;
+}
 
+.eventCard{
+  display: flex;
+  flex-direction: row;
+  overflow-x: hidden;
+  background-color: var(--ca-brand-blue-1);
+  border-radius: 4px;
+  border-right: 0px;
+  text-overflow: clip;
+  white-space: nowrap;
+  width: 100%;
+  padding: 4px 8px;
 }
 </style>
