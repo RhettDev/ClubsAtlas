@@ -26,7 +26,12 @@
           </ul>
         </div>
       </div>
-      <div id="suggestedClubs" v-if="currentClubsMenu === 2" key="suggestedClubs" class="dropDownClubsMenu">
+      <div
+        id="suggestedClubs"
+        v-if="currentClubsMenu === 2"
+        key="suggestedClubs"
+        class="dropDownClubsMenu"
+      >
         <h3 class="menuEntry">Suggested Clubs</h3>
         <hr class="bgHR" />
         <div id="suggestedClubsData" class="clubsContainer">
@@ -45,7 +50,7 @@
                 toggleGM: false,
                 viewProfile: true,
                 addClub: true,
-                deleteClub: false
+                deleteClub: false,
               }"
               @toggle="toggleDropdown(club.id)"
             />
@@ -56,7 +61,7 @@
         <h3 class="menuEntry">Club Search</h3>
         <hr class="bgHR" />
         <div class="searchContainer">
-          <input class="formField" v-model="clubSearch" type="text" placeholder="Search...">
+          <input class="formField" v-model="clubSearch" type="text" placeholder="Search..." />
           <v-icon name="pr-filter" fill="var(--color-text-1)" scale="1.5" />
         </div>
         <div id="clubSearch" class="clubsContainer">
@@ -75,19 +80,27 @@
                 toggleGM: false,
                 viewProfile: true,
                 addClub: true,
-                deleteClub: false
+                deleteClub: false,
               }"
               @toggle="toggleDropdown(club.id)"
             />
           </ul>
-          <div v-if="searchedClubs.length == 0" class="backendLoadingMsg">No clubs match your search...</div>
+          <div v-if="searchedClubs.length == 0" class="backendLoadingMsg">
+            No clubs match your search...
+          </div>
         </div>
       </div>
-      
+
       <hr class="bgHR" />
-      <a class="menuEntry" :class="{active: currentClubsMenu == 1}" @click="currentClubsMenu = 1">Your Clubs</a>
-      <a class="menuEntry" :class="{active: currentClubsMenu == 2}" @click="currentClubsMenu = 2">Suggested Clubs</a>
-      <a class="menuEntry" :class="{active: currentClubsMenu == 3}" @click="currentClubsMenu = 3">Club Search</a>
+      <a class="menuEntry" :class="{ active: currentClubsMenu == 1 }" @click="currentClubsMenu = 1"
+        >Your Clubs</a
+      >
+      <a class="menuEntry" :class="{ active: currentClubsMenu == 2 }" @click="currentClubsMenu = 2"
+        >Suggested Clubs</a
+      >
+      <a class="menuEntry" :class="{ active: currentClubsMenu == 3 }" @click="currentClubsMenu = 3"
+        >Club Search</a
+      >
       <hr class="bgHR" />
       <RouterLink variant="primary" class="menuEntry" to="/settings"> Settings </RouterLink>
     </div>
@@ -120,7 +133,7 @@
             >
               {{ event.startTime }}
               <!-- {{ event.acryonum }} -->
-              <p> - </p>
+              <p>-</p>
               {{ event.eventTitle }}
             </div>
           </div>
@@ -128,7 +141,7 @@
       </section>
 
       <section id="currentClubsMenu" class="bRight">
-        <div id="yourClubs" v-if="currentClubsMenu === 1" key="yourClubs" >
+        <div id="yourClubs" v-if="currentClubsMenu === 1" key="yourClubs">
           <h2 class="pageSubHeader">Your Clubs</h2>
           <hr class="bgHR" />
           <div id="clubsData" class="clubsContainer">
@@ -147,7 +160,7 @@
             </ul>
           </div>
         </div>
-        <div id="suggestedClubs" v-else-if="currentClubsMenu === 2" key="suggestedClubs" >
+        <div id="suggestedClubs" v-else-if="currentClubsMenu === 2" key="suggestedClubs">
           <h2 class="pageSubHeader">Suggested Clubs</h2>
           <hr class="bgHR" />
           <div id="suggestedClubsData" class="clubsContainer">
@@ -166,18 +179,18 @@
                   toggleGM: false,
                   viewProfile: true,
                   addClub: true,
-                  deleteClub: false
+                  deleteClub: false,
                 }"
                 @toggle="toggleDropdown(club.id)"
               />
             </ul>
           </div>
         </div>
-        <div id="clubSearch" v-else-if="currentClubsMenu === 3" key="clubSearch" >
+        <div id="clubSearch" v-else-if="currentClubsMenu === 3" key="clubSearch">
           <h2 class="pageSubHeader">Club Search</h2>
           <hr class="bgHR" />
           <div class="searchContainer">
-            <input class="formField" v-model="clubSearch" type="text" placeholder="Search...">
+            <input class="formField" v-model="clubSearch" type="text" placeholder="Search..." />
             <v-icon name="pr-filter" fill="var(--color-text-1)" scale="1.5" />
           </div>
           <div id="suggestedClubsData" class="clubsContainer">
@@ -196,19 +209,36 @@
                   toggleGM: false,
                   viewProfile: true,
                   addClub: true,
-                  deleteClub: false
+                  deleteClub: false,
                 }"
                 @toggle="toggleDropdown(club.id)"
               />
             </ul>
-            <div v-if="searchedClubs.length == 0" class="backendLoadingMsg">No clubs match your search...</div>
+            <div v-if="searchedClubs.length == 0" class="backendLoadingMsg">
+              No clubs match your search...
+            </div>
           </div>
         </div>
         <div id="calendarMenu" class="calendarMenuContainer">
           <hr class="bgHR" />
-          <a class="menuEntry" :class="{active: currentClubsMenu == 1}" @click="currentClubsMenu = 1">Your Clubs</a>
-          <a class="menuEntry" :class="{active: currentClubsMenu == 2}" @click="currentClubsMenu = 2">Suggested Clubs</a>
-          <a class="menuEntry" :class="{active: currentClubsMenu == 3}" @click="currentClubsMenu = 3">Club Search</a>
+          <a
+            class="menuEntry"
+            :class="{ active: currentClubsMenu == 1 }"
+            @click="currentClubsMenu = 1"
+            >Your Clubs</a
+          >
+          <a
+            class="menuEntry"
+            :class="{ active: currentClubsMenu == 2 }"
+            @click="currentClubsMenu = 2"
+            >Suggested Clubs</a
+          >
+          <a
+            class="menuEntry"
+            :class="{ active: currentClubsMenu == 3 }"
+            @click="currentClubsMenu = 3"
+            >Club Search</a
+          >
           <!-- <RouterLink class="menuEntry" to="showcase"> Weekly Showcase </RouterLink> -->
         </div>
       </section>
@@ -270,7 +300,6 @@ const allClubs = ref([])
 const events = ref([])
 const clubSearch = ref('')
 
-
 const { days } = calendar()
 
 // Side Bar Allocation
@@ -328,7 +357,6 @@ async function getAllClubs() {
     if (error) throw error
 
     allClubs.value = data
-
   } catch (error) {
     errorMessages.value = error.message
     console.error('Error fetching data:', error)
@@ -337,7 +365,6 @@ async function getAllClubs() {
     loadingClubs.value = false
   }
 }
-
 
 async function getClubTags(clubsID) {
   try {
@@ -357,11 +384,12 @@ async function getClubTags(clubsID) {
   }
 }
 
-async function getEventsData() {
+async function getFollowingClubsEvent() {
   try {
     loadingEvents.value = true
 
-    let { data, error } = await supabase.rpc('geteventsdata')
+    let studentid = studentUserID.value
+    let { data, error } = await supabase.rpc('getfollowingclubsevents', { studentid })
 
     if (error) throw error
 
@@ -379,12 +407,12 @@ onMounted(() => {
   getUsersClubs()
   getSuggestedClubs()
   getClubTags(clubsID)
-  getEventsData()
+  getFollowingClubsEvent()
   getAllClubs()
 })
 
 const searchedClubs = computed(() => {
-  return allClubs.value.filter(club => {
+  return allClubs.value.filter((club) => {
     return club.name.toLowerCase().includes(clubSearch.value.toLowerCase())
   })
 })
@@ -414,7 +442,7 @@ function dateKey(date) {
 
 function eventsForDate(date) {
   const calendarDate = dateKey(date)
-  return events.value.filter(event => dateKey(event.eventDate) === calendarDate)
+  return events.value.filter((event) => dateKey(event.eventDate) === calendarDate)
 }
 
 // const currentDate = ref(new Date())
@@ -474,7 +502,7 @@ const isToday = (day) => {
   padding-top: 12px;
 }
 
-.calendarMenuContainer a.active{
+.calendarMenuContainer a.active {
   color: var(--color-brandText);
   border-bottom: 2px solid var(--color-brandText);
 }
@@ -621,7 +649,7 @@ const isToday = (day) => {
 
 .dayGrid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(0,1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
 }
 
 .isToday {
@@ -646,7 +674,7 @@ const isToday = (day) => {
   margin-top: 4px;
 }
 
-.eventCard{
+.eventCard {
   display: flex;
   flex-direction: row;
   overflow-x: hidden;
