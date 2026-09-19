@@ -121,7 +121,7 @@
 
         </div>
         <hr class="fgHR">
-        <div id="saveCancelButtons" class="buttonContainer">
+        <div id="saveCancelButtons" class="buttonRow">
           <BaseButton>Publish</BaseButton>
           <BaseButton>Save</BaseButton>
           <BaseButton variant="secondary">Cancel</BaseButton>

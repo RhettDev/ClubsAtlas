@@ -19,7 +19,7 @@ import HeaderBar from '@/components/HeaderGeneric.vue'
         </p>
       </div>
 
-      <div class="cta-buttons">
+      <div class="buttonRow">
         <!-- RouterLink navigates without a full page reload -->
         <RouterLink to="/signup">
           <BaseButton variant="primary">Get started for free</BaseButton>
@@ -27,7 +27,7 @@ import HeaderBar from '@/components/HeaderGeneric.vue'
         <RouterLink to="/login">
           <BaseButton variant="secondary">Login</BaseButton>
         </RouterLink>
-        <RouterLink to="/admin">
+        <RouterLink to="/admin"> <!-- Remove before demonstration and use Admin login details-->
           <BaseButton variant="secondary">AdminView</BaseButton>
         </RouterLink>
       </div>
@@ -51,8 +51,9 @@ import HeaderBar from '@/components/HeaderGeneric.vue'
 .subhero {
   display: grid;
   grid-template-rows: repeat(auto-fit, minmax(10px, 1fr));
-  gap: 1rem;
+  gap: 32px;
   color: var(--color-text-1);
+  margin: 32px;
 }
 
 .subtitle {

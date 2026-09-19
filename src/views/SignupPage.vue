@@ -155,7 +155,7 @@
       </div>
 
       <!-- Navigation -->
-      <div class="stepNavBtns">
+      <div class="buttonRow">
         <BaseButton variant="secondary" :disabled="currentStep === 1" @click="prev">
           Back
         </BaseButton>
@@ -347,7 +347,7 @@ function handleSignup() {
   max-width: 100%;
   height: auto;
   gap: 16px;
-  padding: 0 32px;
+  padding: 16px 32px;
 }
 
 .formTitle {
@@ -395,13 +395,6 @@ function handleSignup() {
 
 .stepPip {
   display: flex;
-}
-
-.stepNavBtns {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
 }
 
 /* ── Interests grid ── */
