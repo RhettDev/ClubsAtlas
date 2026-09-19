@@ -129,21 +129,24 @@
               v-for="event in eventsForDate(day.date)"
               :key="event.id || `${event.date}-${event.title}`"
               class="eventCard"
-              @click="openEventCard()"
+              :style="{backgroundColor: event.clubHex}"
+              @click="openEventCard(event.id)"
             >
               {{ convertTo12Hour(event.startsAt) }}
               {{ event.acronym }}
               <p>&nbsp;-&nbsp;</p>
               {{ event.eventTitle }}
               <EventCardPop
-                v-model="showPop"
+                :model-value="openEventId === event.id"
+                @update:model-value="closeEventCard"
+                :clubName="event.clubName"
                 :eventTitle="event.eventTitle"
                 :eventDate="event.eventDate"
                 :eventLocation="event.eventLocation"
                 :eventStart="event.startsAt"
                 :eventEnd="event.endsAt"
                 :eventDescription="event.eventDescription"
-                :eventImage="event.endsAt"
+                :eventImage="event.imageURL"
                 :eventLink="event.ticketLink"
               />
             </div>
@@ -289,6 +292,7 @@ import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
 import ClubListEntry from '@/components/ClubListEntry.vue'
 import { calendar } from '@/composables/calender'
+import { convertTo12Hour } from '@/composables/miscFunctions'
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
@@ -310,7 +314,7 @@ const suggestedClubs = ref([])
 const allClubs = ref([])
 const events = ref([])
 const clubSearch = ref('')
-const showPop = ref(false)
+const openEventId = ref(null)
 
 const { days } = calendar()
 
@@ -473,24 +477,12 @@ const isToday = (day) => {
   )
 }
 
-function convertTo12Hour(timeStr) {
-  const [hours, minutes, seconds] = timeStr.split(':')
-  const date = new Date()
-  date.setHours(hours, minutes, seconds)
-
-  return new Intl.DateTimeFormat('en-US', {
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true,
-  })
-    .format(date)
-    .replace(' ', '')
-    .replace(':00', '')
-    .toLowerCase()
+function openEventCard(eventId) {
+  openEventId.value = eventId
 }
 
-function openEventCard() {
-  showPop.value = true
+function closeEventCard() {
+  openEventId.value = null
 }
 </script>
 
@@ -717,5 +709,9 @@ function openEventCard() {
   white-space: nowrap;
   width: 100%;
   padding: 4px 8px;
+  color: var(--ca-text-dark-1);
+}
+.eventCard p {
+  color: var(--ca-text-dark-1);
 }
 </style>
