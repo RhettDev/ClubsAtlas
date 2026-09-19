@@ -5,7 +5,9 @@
         <v-icon class="menuButton" name="pr-bars" fill="var(--color-text-1)" scale="1.6" @click="$emit('click', $event)"/>
       </div>
 
-      <BaseButton @click="goToToday">Today</BaseButton>
+      <div class="desktopView">
+        <BaseButton @click="goToToday">Today</BaseButton>
+      </div>
       <v-icon class="chevControl" name="pr-chevron-left" fill="var(--color-text-1)" scale="1.5" @click="shiftPeriod(-1)"/>
       <v-icon class="chevControl" name="pr-chevron-right" fill="var(--color-text-1)" scale="1.5" @click="shiftPeriod(1)"/>
       <span class="displayLabel">{{ displayLabel }}</span>
