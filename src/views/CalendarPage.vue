@@ -62,7 +62,6 @@
         <hr class="bgHR" />
         <div class="searchContainer">
           <input class="formField" v-model="clubSearch" type="text" placeholder="Search..." />
-          <v-icon name="pr-filter" fill="var(--color-text-1)" scale="1.5" />
         </div>
         <div id="clubSearch" class="clubsContainer">
           <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
@@ -191,7 +190,6 @@
           <hr class="bgHR" />
           <div class="searchContainer">
             <input class="formField" v-model="clubSearch" type="text" placeholder="Search..." />
-            <v-icon name="pr-filter" fill="var(--color-text-1)" scale="1.5" />
           </div>
           <div id="suggestedClubsData" class="clubsContainer">
             <div v-if="loadingClubs" class="backendLoadingMsg">Loading Clubs...</div>
@@ -538,7 +536,7 @@ const isToday = (day) => {
   border-radius: 16px;
   padding: 10px 20px;
   z-index: 90;
-  top: 8%;
+  top: 6%;
   left: 1%;
   flex-direction: column;
   gap: 16px;
