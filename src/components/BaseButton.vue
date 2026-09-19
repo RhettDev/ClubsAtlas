@@ -54,7 +54,7 @@ defineEmits(['click'])
     background 0.2s,
     opacity 0.2s,
     transform 0.1s;
-  margin: 8px;
+  /* margin: 8px; */
 }
 
 .btn:active:not(:disabled) {

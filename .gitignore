@@ -289,3 +289,6 @@ src/assets/clubs/banners/WASMSocialClubInc_Banner.jpg
 src/assets/clubs/logos/CurtinAusAsianSociety_Logo.jpg
 src/assets/clubs/logos/CurtinInnovationSociety_Logo.jpg
 src/assets/clubs/logos/WASMSocialClubInc_Logo.jpg
+backend/automation/clubsListcopy.txt
+src/assets/clubs/banners/CurtinInnovationSociety_Banner.jpg
+backend/automation/clubProfileScrap.py
