@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div v-if="modelValue" class="overlay" @click.self="close">
-      <div id="container" class="container">
+      <div id="container" class="container mobileContainer">
         <div v-if="eventImage" class="eventImageContainer">
           <img :src="eventImage" alt="Event image" />
         </div>
@@ -124,5 +124,11 @@ function formatDescription(value) {
 .mobileCotent {
   flex-direction: column;
   align-items: start;
+}
+
+@media screen and (max-width: 688px) {
+  .mobileContainer{
+    width: 90%;
+  }
 }
 </style>

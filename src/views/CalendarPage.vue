@@ -277,6 +277,29 @@
             }"
           >
             {{ day.date.getDate() }}
+            <div
+              v-for="event in eventsForDate(day.date)"
+              :key="event.id || `${event.date}-${event.title}`"
+              class="eventCard mobileCard"
+              :style="{backgroundColor: event.clubHex}"
+              @click="openEventCard(event.id)"
+            >
+              <!-- {{ convertTo12Hour(event.startsAt) }} -->
+              {{ event.acronym }}
+              <EventCardPop
+                :model-value="openEventId === event.id"
+                @update:model-value="closeEventCard"
+                :clubName="event.clubName"
+                :eventTitle="event.eventTitle"
+                :eventDate="event.eventDate"
+                :eventLocation="event.eventLocation"
+                :eventStart="event.startsAt"
+                :eventEnd="event.endsAt"
+                :eventDescription="event.eventDescription"
+                :eventImage="event.imageURL"
+                :eventLink="event.ticketLink"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -713,5 +736,8 @@ function closeEventCard() {
 }
 .eventCard p {
   color: var(--ca-text-dark-1);
+}
+.mobileCard{
+  justify-content: center;
 }
 </style>

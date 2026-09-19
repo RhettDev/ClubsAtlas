@@ -2,7 +2,7 @@
   <li>
     <div class="clubRow" @click="emit('toggle')" :class="{ open: isOpen }">
       <div class="clubLogoName">
-        <img class="clubLogo" :src="club.logoURL">
+        <img class="clubLogo" :src="club.logoURL" :style="{borderColor: club.hexCode}">
         <span class="clubName">{{ club.name }}</span>
       </div>
       <v-icon
@@ -180,5 +180,10 @@ function handleConfirmed() {
 
 .checkboxCustom {
   margin: 0 8px;
+}
+
+.clubLogo {
+  border: 2px solid;
+  border-color: var(--color-brandText);
 }
 </style>
