@@ -58,7 +58,7 @@
       <!-- Desktop View -->
       <section id="eventsList" class="bCenterAdmin">
         <div id="PageTitle" class="pageHeader">
-          <h1 class="title">Upcoming Events</h1>
+          <h1 class="title">Events</h1>
           <hr class="fgHR">
         </div>
         <div 
@@ -118,15 +118,14 @@ import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
 import { errorMessages } from 'vue/compiler-sfc'
 import BaseButton from '@/components/BaseButton.vue'
+import { useClubData } from '@/composables/useClubData'
 import { convertTo12Hour, convertToFullDate, hasValue, shortenDescription } from '@/composables/miscFunctions'
 const { profile } = useAuth()
-const loadingData = ref(true)
 const loadingEvents = ref(true)
 
-const clubUserID = ref(profile.value.id)
 const clubTempID = ref(profile.value.clubID)
-const clubDetails = ref(null)
 const clubEvents = ref([])
+const { clubDetails } = useClubData()
 
 const sortedClubEvents = computed(() =>
   [...clubEvents.value].sort(
@@ -135,27 +134,7 @@ const sortedClubEvents = computed(() =>
   ),
 )
 
-console.log(clubUserID)
 console.log(clubTempID)
-
-async function getClubDetails(){
-  try {
-    loadingData.value = true
-
-    let clubid = clubTempID.value
-    let { data, error } = await supabase.rpc('getspecificclubdata', { clubid })
-
-    if (error) throw error
-
-    clubDetails.value = Array.isArray(data) ? data[0] ?? null : data
-  } catch (error) {
-    errorMessages.value = error.message
-    console.error('Error fetching data:', error)
-    console.log('Error type:', typeof error)
-  } finally {
-    loadingData.value = false
-  }
-}
 
 async function getClubEvents(){
   try {
@@ -189,7 +168,6 @@ async function getClubEvents(){
 // events."ticketLink"
 
 onMounted(() => {
-  getClubDetails()
   getClubEvents()
 })
 

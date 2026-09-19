@@ -1,6 +1,6 @@
 <template>
   <main id="adminMain">
-    <HeaderClubs @click="onHeaderMenuClick"></HeaderClubs>
+    <HeaderClubs v-if="clubDetails" @click="onHeaderMenuClick" :club="clubDetails" />
     <!-- Mobiel Naviation -->
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
     <div id="navDropDown" class="dropDownMenu">
@@ -128,7 +128,7 @@
         </div>
       </section>
 
-      <section id="analyitcsBar" class="bRight">
+      <section id="analyitcsBar" class="bRightAdmin">
         <!-- Empty -->
       </section>
     </div>
@@ -151,6 +151,9 @@ import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
 import FormField from '@/components/FormField.vue'
 import BaseButton from '@/components/BaseButton.vue'
+import { useClubData } from '@/composables/useClubData'
+
+const { clubDetails } = useClubData()
 const onHeaderMenuClick = (event) =>{
   console.log(event)
   let navDD = document.getElementById("navDropDown");
@@ -195,11 +198,6 @@ const onHeaderMenuClick = (event) =>{
 .bLeft a.active {
   color: var(--color-brandText);
   border-bottom: 2px solid var(--color-brandText);
-}
-
-.bRight {
-  flex: 0.7;
-  box-shadow: -2px 0px var(--color-background-2);
 }
 
 .menuEntry{
