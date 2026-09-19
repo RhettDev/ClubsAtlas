@@ -4,9 +4,9 @@
       'btn',
       `btn--${variant}`,
       `btn--${size}`,
-      { 'btn--loading': loading, 'btn--block': block },
+      { 'btn--block': block },
     ]"
-    :disabled="disabled || loading"
+    :disabled="disabled"
     @click="$emit('click', $event)"
   >
     <slot />

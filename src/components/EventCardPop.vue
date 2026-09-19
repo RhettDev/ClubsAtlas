@@ -20,7 +20,7 @@
           </div>
           <div id="tags" class="contentRow"></div>
         </div>
-        <p id="description" class="descriptionContainer">{{ formatDescription(eventDescription) }}</p>
+        <p id="description" class="eventDescriptionContainer">{{ formatDescription(eventDescription) }}</p>
         <div id="bottomRow" class="contentRow spaced">
           <a :href="eventLink" target="_blank" rel="noopener noreferrer">
             <BaseButton variant="primary">Event Link</BaseButton>
@@ -34,7 +34,7 @@
 
 <script setup>
 import BaseButton from './BaseButton.vue'
-import { convertTo12Hour, convertToFullDate } from '@/composables/miscFunctions'
+import { convertTo12Hour, convertToFullDate, hasValue, formatDescription } from '@/composables/miscFunctions'
 
 defineProps({
   modelValue: { type: Boolean, default: false },
@@ -54,14 +54,6 @@ const emit = defineEmits(['update:modelValue', 'confirm', 'cancel'])
 
 function close() {
   emit('update:modelValue', false)
-}
-
-function hasValue(value) {
-  return value != null && String(value).trim().toLowerCase() !== 'null'
-}
-
-function formatDescription(value) {
-  return String(value ?? '').replace(/\\n/g, '\n')
 }
 
 // function handleAddToFollowing() {
@@ -84,26 +76,10 @@ function formatDescription(value) {
   overflow: hidden;
 }
 
-.contentRow {
-  display: flex;
-  flex-direction: row;
-}
-
-.spaced {
-  justify-content: space-between;
-}
-
 .eventDetails {
   display: flex;
   flex-direction: column;
   gap: 6px;
-}
-
-.descriptionContainer{
-  min-height: 0;
-  max-height: 30vh;
-  overflow-y: auto;
-  white-space: pre-line;
 }
 
 .eventImageContainer {

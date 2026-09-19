@@ -133,20 +133,6 @@ function handleConfirmed() {
   border-bottom: 1px solid var(--color-brandText);
 }
 
-.clubLogoName{
-  display: flex;
-  flex-direction: row;
-  gap: 6px;
-  align-items: center;
-  
-}
-
-.clubLogoName img{
-  width: 44px;
-  height: 44px;
-  border-radius: 32px;
-}
-
 .chevron {
   transition: transform 0.15s ease;
 }
@@ -180,10 +166,5 @@ function handleConfirmed() {
 
 .checkboxCustom {
   margin: 0 8px;
-}
-
-.clubLogo {
-  border: 2px solid;
-  border-color: var(--color-brandText);
 }
 </style>

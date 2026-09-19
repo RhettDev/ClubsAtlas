@@ -1,12 +1,12 @@
 <template>
   <section class="header clubHeader">
-    <div class="clubLogo">
-      <v-btn class="mobileText menuButton" icon @click="$emit('click', $event)">
-        <v-icon class="mobileText" name="pr-bars" fill="var(--color-text-1)" scale="1.5" />
-      </v-btn>
-      <img class="logo" src="../assets/logos/clubCECLogo.svg" alt="Curtin Engineers Club Logo" />
-      <h2 class="desktopText">Curtin Engineers Club (CEC)</h2>
-      <h2 class="mobileText">CEC</h2>
+    <div class="clubLogoName">
+      <div class="mobileText menuButton">
+        <v-icon class="menuButton" name="pr-bars" fill="var(--color-text-1)" scale="1.6" @click="$emit('click')"/>
+      </div>
+      <img class="clubLogo" :src="club.logoURL" :style="{borderColor: club.hexCode}" alt="clubLogo" />
+      <h2 class="desktopText">{{club.name}}</h2>
+      <h2 class="mobileText">{{club.acronym}}</h2>
       <!-- <slot name="clubName" class="clubLogoText"></slot> -->
     </div>
     <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
@@ -14,7 +14,12 @@
 </template>
 
 <script setup>
+
 defineEmits(['click'])
+
+const props = defineProps({
+  club: { type: Object, required: true },
+})
 </script>
 
 <style scope>
@@ -36,16 +41,11 @@ defineEmits(['click'])
   padding: 16px 8px;
 }
 
-.clubLogo {
+.clubDetails {
   display: flex;
   flex-direction: row;
   gap: 8px;
   align-items: center;
-}
-
-.clubLogoText {
-  font-weight: 200;
-  color: var(--color-text-1);
 }
 
 .menuButton {
