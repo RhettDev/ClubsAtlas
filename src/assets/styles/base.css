@@ -125,6 +125,10 @@ p {
   color: var(--color-text-1);
 }
 
+.brandText {
+  color: var(--color-brandText);
+}
+
 bcenter.header.clubHeader {
   justify-content: space-between;
   padding: 16px 8px;
@@ -147,7 +151,6 @@ bcenter.header.clubHeader {
 
 .title {
   font-size: 2.5em;
-  margin-top: 0.67em;
   margin-bottom: 0.67em;
   margin-left: 0;
   margin-right: 0;
@@ -236,6 +239,11 @@ bcenter.header.clubHeader {
   overflow: hidden;
 }
 
+.bRightAdmin {
+  flex: 0.7;
+  box-shadow: -2px 0px var(--color-background-2);
+}
+
 .hero {
   width: 100%;
   display: flex;
@@ -269,12 +277,6 @@ bcenter.header.clubHeader {
   text-align: left;
   margin-bottom: 4px;
   overflow: visible;
-}
-
-.buttonContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: start;
 }
 
 .clubEntry {
@@ -351,18 +353,79 @@ bcenter.header.clubHeader {
   align-items: end;
 }
 
-.buttonContainer {
+.buttonCol {
   display: flex;
   flex-direction: column;
   align-items: start;
-}
-
-.buttonContainer button {
-  margin: 0 8px;
+  gap: 16px;
+  padding: 16px 8px;
 }
 
 .fieldsContainer {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.buttonRow{
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.clubLogo {
+  border: 2px solid;
+  border-color: var(--color-brandText);
+}
+.clubLogoName{
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+}
+
+.clubLogoName img{
+  width: 44px;
+  height: 44px;
+  border-radius: 32px;
+}
+
+.backdrop {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+.backdrop.show {
+  display: block;
+}
+
+.contentRow {
+  display: flex;
+  flex-direction: row;
+}
+
+.spaced {
+  justify-content: space-between;
+}
+
+.vertCentered {
+  align-items: center;
+}
+
+.textHR {
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+}
+
+.eventDescriptionContainer{
+  min-height: 0;
+  max-height: 30vh;
+  overflow-y: auto;
+  white-space: pre-line;
 }

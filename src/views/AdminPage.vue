@@ -1,6 +1,10 @@
 <template>
   <main id="adminMain">
-    <HeaderClubs @click="onHeaderMenuClick"></HeaderClubs>
+    <HeaderClubs
+      v-if="clubDetails"
+      @click="onHeaderMenuClick"
+      :club="clubDetails"
+    ></HeaderClubs>
     <!-- Mobiel Naviation -->
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
     <div id="navDropDown" class="dropDownMenu">
@@ -52,19 +56,46 @@
       </section>
 
       <!-- Desktop View -->
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
+      <section id="eventsList" class="bCenterAdmin">
+        <div id="PageTitle" class="pageHeader">
+          <h1 class="title">Upcoming Events</h1>
+          <hr class="fgHR">
+        </div>
+        <div 
+          v-for="event in sortedClubEvents"
+          :key="event.id"
+        >
+          <div id="adminEventCard" class="adminEventContainer">
+            <div id="eventName" class="contentRow spaced vertCentered">
+              <h2 style="font-weight: normal">{{ event.eventTitle }}</h2>
+              <BaseButton>View Details</BaseButton>
+            </div>
+            <div id="eventContent" class="eventDetails">
+              <div id="dateTimeRow" class="contentRow">
+                <div>{{ convertToFullDate(event.eventDate) }} {{ convertTo12Hour(event.startsAt) }} - {{ convertTo12Hour(event.endsAt) }}</div>
+              </div>
+              <div id="location" v-if="hasValue(event.eventLocation)">
+                <p>{{ event.eventLocation }}</p>
+              </div>
+            </div>
+            <p id="description" class="eventDescriptionContainer">{{ shortenDescription(event.eventDescription) }}</p>
+            <div id="publishedNote" class="textHR">
+              <p class="brandText">Published</p>
+              <hr class="fgHR">
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section id="analyitcsBar" class="bRight">
-        <h2>analytics panel</h2>
+      <section id="analyitcsBar" class="bRightAdmin">
+        <p>analytics panel</p>
       </section>
     </div>
 
     <!-- Mobile View -->
     <div class="hero mobileView">
       <section id="analyitcsBar" class="bLeft">
-        <h2>analytics panel</h2>
+        <p>analytics panel</p>
       </section>
 
       <section id="eventsList" class="bCenter">
@@ -82,9 +113,87 @@
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
+import { computed, onMounted, ref } from 'vue'
+import { supabase } from '../../backend/supabase'
+import { useAuth } from '@/composables/useAuth'
+import { errorMessages } from 'vue/compiler-sfc'
+import BaseButton from '@/components/BaseButton.vue'
+import { convertTo12Hour, convertToFullDate, hasValue, shortenDescription } from '@/composables/miscFunctions'
+const { profile } = useAuth()
+const loadingData = ref(true)
+const loadingEvents = ref(true)
 
-const onHeaderMenuClick = (event) =>{
-  console.log(event)
+const clubUserID = ref(profile.value.id)
+const clubTempID = ref(profile.value.clubID)
+const clubDetails = ref(null)
+const clubEvents = ref([])
+
+const sortedClubEvents = computed(() =>
+  [...clubEvents.value].sort(
+    (firstEvent, secondEvent) =>
+      new Date(secondEvent.eventDate) - new Date(firstEvent.eventDate),
+  ),
+)
+
+console.log(clubUserID)
+console.log(clubTempID)
+
+async function getClubDetails(){
+  try {
+    loadingData.value = true
+
+    let clubid = clubTempID.value
+    let { data, error } = await supabase.rpc('getspecificclubdata', { clubid })
+
+    if (error) throw error
+
+    clubDetails.value = Array.isArray(data) ? data[0] ?? null : data
+  } catch (error) {
+    errorMessages.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingData.value = false
+  }
+}
+
+async function getClubEvents(){
+  try {
+    loadingEvents.value = true
+
+    let clubid = clubTempID.value
+    let { data, error } = await supabase.rpc('getspecificclubsevents', { clubid })
+
+    if (error) throw error
+
+    clubEvents.value = data
+  } catch (error) {
+    errorMessages.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingEvents.value = false
+  }
+}
+
+// events.id,
+// events."clubID",
+// events."eventTitle",
+// events."eventDescription",
+// events."eventLocation",
+// events."eventDate",
+// events."startsAt",
+// events."endsAt",
+// events."imageURL",
+// events."isGeneralMeeting",
+// events."ticketLink"
+
+onMounted(() => {
+  getClubDetails()
+  getClubEvents()
+})
+
+const onHeaderMenuClick = () =>{
   let navDD = document.getElementById("navDropDown");
     if (navDD.style.display === "flex"){ // Check if menu is open, then close it 
         navDD.style.display = "none";
@@ -95,7 +204,6 @@ const onHeaderMenuClick = (event) =>{
         document.getElementById('navBackdrop').classList.add('show');
     }
 }
-
 </script>
 
 <style scoped>
@@ -187,16 +295,26 @@ const onHeaderMenuClick = (event) =>{
   .hero {flex-direction: column;}
 }
 
-.backdrop {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1;
+.adminEventContainer{
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  background-color: var(--color-background-2);
+  padding: 20px;
+  color: var(--color-text-1);
+  gap: 16px;
+  text-align: left;
 }
-.backdrop.show { display: block; }
+
+.eventDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--color-text-2)
+}
+
+#location p{
+  color: var(--color-text-2)
+}
 
 </style>

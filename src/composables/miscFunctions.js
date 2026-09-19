@@ -28,3 +28,20 @@ export function convertToFullDate(dateStr) {
 
     return `${dayNumber}${suffix} of ${monthName}`
 }
+
+export function hasValue(value) {
+  return value != null && String(value).trim().toLowerCase() !== 'null'
+}
+
+export function formatDescription(value) {
+  return String(value ?? '').replace(/\\n/g, '\n')
+}
+
+export function shortenDescription(value) {
+    const description = formatDescription(value)
+    const lines = description.split('\n')
+
+    if (lines.length <= 3) return description
+
+    return `${lines.slice(0, 3).join('\n')}...`
+}
