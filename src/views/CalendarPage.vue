@@ -130,11 +130,23 @@
               v-for="event in eventsForDate(day.date)"
               :key="event.id || `${event.date}-${event.title}`"
               class="eventCard"
+              @click="openEventCard()"
             >
-              {{ event.startTime }}
-              <!-- {{ event.acryonum }} -->
-              <p>-</p>
+              {{ convertTo12Hour(event.startsAt) }}
+              {{ event.acronym }}
+              <p>&nbsp;-&nbsp;</p>
               {{ event.eventTitle }}
+              <EventCardPop
+                v-model="showPop"
+                :eventTitle="event.eventTitle"
+                :eventDate="event.eventDate"
+                :eventLocation="event.eventLocation"
+                :eventStart="event.startsAt"
+                :eventEnd="event.endsAt"
+                :eventDescription="event.eventDescription"
+                :eventImage="event.endsAt"
+                :eventLink="event.ticketLink"
+              />
             </div>
           </div>
         </div>
@@ -283,6 +295,7 @@ import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
 import { errorMessages } from 'vue/compiler-sfc'
+import EventCardPop from '@/components/EventCardPop.vue'
 
 const usersClubs = ref([])
 // const studentUser = ref([])
@@ -299,6 +312,7 @@ const suggestedClubs = ref([])
 const allClubs = ref([])
 const events = ref([])
 const clubSearch = ref('')
+const showPop = ref(false)
 
 const { days } = calendar()
 
@@ -459,6 +473,26 @@ const isToday = (day) => {
     today.getMonth() === day.date.getMonth() &&
     today.getFullYear() === day.date.getFullYear()
   )
+}
+
+function convertTo12Hour(timeStr) {
+  const [hours, minutes, seconds] = timeStr.split(':')
+  const date = new Date()
+  date.setHours(hours, minutes, seconds)
+
+  return new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  })
+    .format(date)
+    .replace(' ', '')
+    .replace(':00', '')
+    .toLowerCase()
+}
+
+function openEventCard() {
+  showPop.value = true
 }
 </script>
 
