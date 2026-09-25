@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div v-if="modelValue" class="overlay" @click.self="close">
-      <div id="container" class="container mobileContainer">
+      <div id="container" class="popUpContainer eventWidth mobileContainer">
         <div v-if="eventImage" class="eventImageContainer">
           <img :src="eventImage" alt="Event image" />
         </div>
@@ -13,14 +13,19 @@
             <v-icon name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
           </div>
           <div id="dateTimeRow" class="contentRow">
-            <div>{{ convertToFullDate(eventDate) }} {{ convertTo12Hour(eventStart) }} - {{ convertTo12Hour(eventEnd) }}</div>
+            <div>
+              {{ convertToFullDate(eventDate) }} {{ convertTo12Hour(eventStart) }} -
+              {{ convertTo12Hour(eventEnd) }}
+            </div>
           </div>
           <div id="location" v-if="hasValue(eventLocation)">
             <p>{{ eventLocation }}</p>
           </div>
           <div id="tags" class="contentRow"></div>
         </div>
-        <p id="description" class="eventDescriptionContainer">{{ formatDescription(eventDescription) }}</p>
+        <p id="description" class="descriptionContainer">
+          {{ formatDescription(eventDescription) }}
+        </p>
         <div id="bottomRow" class="contentRow spaced">
           <a :href="eventLink" target="_blank" rel="noopener noreferrer">
             <BaseButton variant="primary">Event Link</BaseButton>
@@ -34,7 +39,12 @@
 
 <script setup>
 import BaseButton from './BaseButton.vue'
-import { convertTo12Hour, convertToFullDate, hasValue, formatDescription } from '@/composables/miscFunctions'
+import {
+  convertTo12Hour,
+  convertToFullDate,
+  hasValue,
+  formatDescription,
+} from '@/composables/miscFunctions'
 
 defineProps({
   modelValue: { type: Boolean, default: false },
@@ -55,25 +65,11 @@ const emit = defineEmits(['update:modelValue', 'confirm', 'cancel'])
 function close() {
   emit('update:modelValue', false)
 }
-
-// function handleAddToFollowing() {
-//   emit('confirm')
-//   emit('update:modelValue', false)
-// }
 </script>
 
 <style scope>
-.container {
-  display: flex;
-  flex-direction: column;
-  border-radius: 32px;
-  background-color: var(--color-background-2);
+.eventWidth {
   width: 40%;
-  padding: 20px;
-  color: var(--color-text-1);
-  gap: 20px;
-  max-height: 90vh;
-  overflow: hidden;
 }
 
 .eventDetails {
@@ -103,7 +99,7 @@ function close() {
 }
 
 @media screen and (max-width: 688px) {
-  .mobileContainer{
+  .mobileContainer {
     width: 90%;
   }
 }

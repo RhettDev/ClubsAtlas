@@ -2,7 +2,7 @@
   <li>
     <div class="clubRow" @click="emit('toggle')" :class="{ open: isOpen }">
       <div class="clubLogoName">
-        <img class="clubLogo" :src="club.logoURL" :style="{borderColor: club.hexCode}">
+        <img class="clubLogo" :src="club.logoURL" :style="{ borderColor: club.hexCode }" />
         <span class="clubName">{{ club.name }}</span>
       </div>
       <v-icon
@@ -28,15 +28,39 @@
         <p>Toggle General Meeting</p>
         <input type="checkbox" id="generalMeeting" v-model="gmCheck" class="checkboxCustom" />
       </div>
-      <div v-if="visibleOptions.viewProfile" class="dropdownOption" id="viewProfile">
+      <div
+        v-if="visibleOptions.viewProfile"
+        class="dropdownOption"
+        id="viewProfile"
+        @click="openClubProfile(club.id)"
+      >
         <p>View Club Profile</p>
         <v-icon name="pr-info-circle" fill="var(--color-text-1)" scale="1.3" />
+        <ClubProfilePop
+          :model-value="openClubID === club.id"
+          @update:model-value="closeClubProfile"
+          :clubID="club.id"
+          :clubName="club.name"
+          :clubLogo="club.logoURL"
+          :clubBanner="club.bannerURL"
+          :clubDescription="club.description"
+        />
       </div>
-      <div v-if="visibleOptions.addClub" class="dropdownOption" @click="askAddClub(club.name)" id="addClub">
+      <div
+        v-if="visibleOptions.addClub"
+        class="dropdownOption"
+        @click="askAddClub(club.name)"
+        id="addClub"
+      >
         <p>Add Club To Calendar</p>
         <v-icon name="pr-plus" fill="var(--color-text-1)" scale="1.3" />
       </div>
-      <div v-if="visibleOptions.deleteClub" class="dropdownOption" @click="askDeleteClub(club.name)" id="deleteClub">
+      <div
+        v-if="visibleOptions.deleteClub"
+        class="dropdownOption"
+        @click="askDeleteClub(club.name)"
+        id="deleteClub"
+      >
         <p>Remove Club From Calendar</p>
         <v-icon name="pr-trash" fill="var(--color-text-1)" scale="1.3" />
       </div>
@@ -57,26 +81,28 @@
 import { ref } from 'vue'
 // import { supabase } from '../../backend/supabase'
 import ConfirmationPop from './ConfirmationPop.vue'
+import ClubProfilePop from './ClubProfilePop.vue'
 const props = defineProps({
   club: { type: Object, required: true },
   isOpen: { type: Boolean, default: false },
   visibleOptions: {
     type: Object,
-    default: () =>({
+    default: () => ({
       clubDisplay: true,
       toggleGM: true,
       viewProfile: true,
       addClub: false,
       deleteClub: true,
-      tags: false
-    })
-  }
+      tags: false,
+    }),
+  },
 })
 
 const toggleDisplayCheck = ref(true)
 const gmCheck = ref(false)
 const showConfirm = ref(false)
 const dialogConfig = ref({ title: '', message: '', danger: false })
+const openClubID = ref(null)
 
 const emit = defineEmits(['toggle', 'selectOption'])
 
@@ -109,10 +135,17 @@ function askDeleteClub(clubName) {
   showConfirm.value = true
 }
 
-
 function handleConfirmed() {
   console.log('removing club:', props.club.id)
   // removeClub()
+}
+
+function openClubProfile(clubID) {
+  openClubID.value = clubID
+}
+
+function closeClubProfile() {
+  openClubID.value = null
 }
 </script>
 

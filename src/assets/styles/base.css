@@ -108,7 +108,6 @@ main {
 
 .calendarMain {
   height: 100vh;
-
 }
 
 .fgHR {
@@ -321,7 +320,7 @@ bcenter.header.clubHeader {
   justify-content: left;
 }
 
-.dateTimeContainer{
+.dateTimeContainer {
   display: flex;
   flex-direction: row;
   align-items: end;
@@ -334,21 +333,21 @@ bcenter.header.clubHeader {
   flex-direction: column;
   width: max-content;
 }
-.buttonLabelContainer button{
+.buttonLabelContainer button {
   margin: 0;
 }
 
-.fieldButtonContainer{
+.fieldButtonContainer {
   display: flex;
   flex-direction: row;
   align-items: end;
 }
 
-.fieldButtonContainer button{
+.fieldButtonContainer button {
   margin: 0 8px;
 }
 
-.fieldButtonContainer FormField{
+.fieldButtonContainer FormField {
   width: max-content;
   align-items: end;
 }
@@ -367,7 +366,7 @@ bcenter.header.clubHeader {
   gap: 16px;
 }
 
-.buttonRow{
+.buttonRow {
   display: flex;
   flex-direction: row;
   gap: 16px;
@@ -377,14 +376,14 @@ bcenter.header.clubHeader {
   border: 2px solid;
   border-color: var(--color-brandText);
 }
-.clubLogoName{
+.clubLogoName {
   display: flex;
   flex-direction: row;
   gap: 6px;
   align-items: center;
 }
 
-.clubLogoName img{
+.clubLogoName img {
   width: 44px;
   height: 44px;
   border-radius: 32px;
@@ -423,9 +422,128 @@ bcenter.header.clubHeader {
   text-align: start;
 }
 
-.eventDescriptionContainer{
+.descriptionContainer {
   min-height: 0;
   max-height: 30vh;
   overflow-y: auto;
   white-space: pre-line;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popUpContainer {
+  display: flex;
+  flex-direction: column;
+  border-radius: 32px;
+  background-color: var(--color-background-2);
+  padding: 20px;
+  color: var(--color-text-1);
+  gap: 20px;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.tagContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 7px;
+}
+
+.tag {
+  border-radius: 12px;
+  width: min-content;
+  padding: 2px 8px;
+}
+
+.buslaw {
+  background-color: var(--ca-tag-buslaw);
+  color: var(--ca-text-dark-1);
+}
+
+.health {
+  background-color: var(--ca-tag-health);
+  color: var(--ca-text-light-1);
+}
+
+.humani {
+  background-color: var(--ca-tag-humani);
+  color: var(--ca-text-light-1);
+}
+
+.scieng {
+  background-color: var(--ca-tag-scieng);
+  color: var(--ca-text-dark-1);
+}
+
+.specin {
+  background-color: var(--ca-tag-specin);
+  color: var(--ca-text-light-1);
+}
+
+.politi {
+  background-color: var(--ca-tag-politi);
+  color: var(--ca-text-light-1);
+}
+
+.faithb {
+  background-color: var(--ca-tag-faithb);
+  color: var(--ca-text-dark-1);
+}
+
+.intern {
+  background-color: var(--ca-tag-intern);
+  color: var(--ca-text-light-1);
+}
+
+.academ {
+  background-color: var(--ca-tag-academ);
+  color: var(--ca-text-light-1);
+}
+
+.party {
+  background-color: var(--ca-tag-party-);
+  color: var(--ca-text-light-1);
+}
+
+.sport {
+  background-color: var(--ca-tag-sport-);
+  color: var(--ca-text-light-1);
+}
+
+.trivia {
+  background-color: var(--ca-tag-trivia);
+  color: var(--ca-text-light-1);
+}
+
+.networ {
+  background-color: var(--ca-tag-networ);
+  color: var(--ca-text-light-1);
+}
+
+.profes {
+  background-color: var(--ca-tag-profes);
+  color: var(--ca-text-light-1);
+}
+
+.eigthteenplus {
+  background-color: var(--ca-tag-18plus);
+  color: var(--ca-text-light-1);
+}
+
+.genmet {
+  background-color: var(--ca-tag-genmet);
+  color: var(--ca-text-light-1);
+}
+
+.wasm {
+  background-color: var(--ca-tag-wasm--);
+  color: var(--ca-text-light-1);
 }
