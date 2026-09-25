@@ -73,6 +73,8 @@ function handleCancel() {
 .dialogButtonContainer {
   display: flex;
   flex-direction: row;
+  padding: 8px 16px;
+  gap: 8px;
 }
 
 @media screen and (max-width: 688px) {
