@@ -29,12 +29,25 @@
             <p>Add Club to Profile</p>
             <v-icon name="pr-plus" fill="var(--color-text-1)" scale="1.5"></v-icon>
           </div>
+          <div id="dbLinks" v-for="link in socialLinks" :key="link.platform">
+            <a href="link">test</a>
+          </div>
           <div id="linksContainer" class="logoContainer">
             <!-- v-for all links associated with the club -->
+            <img src="..\assets\logos\tidyHQLogo.png" class="colourInvert" />
+            <!-- TidyHQ -->
             <v-icon name="pr-facebook" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <!-- IG -->
             <v-icon name="pr-instagram" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <!-- FB -->
             <v-icon name="pr-linkedin" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <!-- LinkedIn -->
             <v-icon name="pr-globe" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <!-- Website -->
+            <v-icon name="pr-github" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <!-- GitHub -->
+            <v-icon name="pr-discord" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <!-- Discord -->
           </div>
         </div>
         <!-- <div id="showcaseEvent"></div> -->
@@ -44,9 +57,15 @@
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue'
 import { formatDescription } from '@/composables/miscFunctions'
+import { supabase } from '../../backend/supabase'
 
-defineProps({
+const loadingSocials = ref(true)
+const socialLinks = ref([])
+// const clubid = ref(null)
+
+const props = defineProps({
   modelValue: { type: Boolean, default: false },
   clubID: { type: Number, default: 0 },
   clubName: { type: String, default: 'Error! Missing Club Name Data.' },
@@ -68,6 +87,30 @@ function close() {
 function addClub(clubID) {
   console.log('Adding Club ', clubID, 'to your profile')
 }
+
+async function getClubSocials() {
+  try {
+    loadingSocials.value = true
+
+    let clubid = props.clubID
+    let { data, error } = await supabase.rpc('getclubssocials', { clubid })
+
+    if (error) throw error
+
+    socialLinks.value = data
+    console.log(socialLinks.value)
+  } catch (error) {
+    loadingSocials.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingSocials.value = false
+  }
+}
+
+onMounted(() => {
+  getClubSocials()
+})
 </script>
 
 <style scope>
@@ -88,6 +131,16 @@ function addClub(clubID) {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.logoContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.logoContainer img {
+  height: 32px;
 }
 
 .mobileCotent {

@@ -80,6 +80,10 @@
     --color-brandText-2: var(--ca-text-blue-light);
     --color-text-invert: var(--ca-text-light-1);
   }
+
+  .colourInvert {
+    filter: invert();
+  }
 }
 
 @font-face {
