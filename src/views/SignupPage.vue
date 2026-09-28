@@ -182,7 +182,7 @@ import { RouterLink, useRouter } from 'vue-router'
 
 const currentStep = ref(1)
 const totalSteps = 4
-const maxInterests = 4
+const maxInterests = 3
 // const submitting = ref(false)
 // const showPassword = ref(false)
 
@@ -197,20 +197,19 @@ const selectedClubType = ref(null)
 const selectedInterests = ref([])
 const selectedClubs = ref([])
 
-const { filterClubs, finalClubs, getClubsFilter, loadingClubs } = clubRecommendations({
+const signupFilters = {
   degree: selectedDegree,
   faith: selectedFaith,
   nationality: selectedNation,
   type: selectedClubType,
-  intA: computed(() => selectedInterests.value[0]),
-  intB: computed(() => selectedInterests.value[1]),
-  intC: computed(() => selectedInterests.value[2]),
-  intD: computed(() => selectedInterests.value[3]),
-})
+  interests: selectedInterests,
+}
+
+const { finalClubs, loadingClubs, getClubsFilter, findClubs } = clubRecommendations(signupFilters)
 
 const givenClubs = computed(() =>
   finalClubs.value.map((club) => ({
-    id: club.clubID ?? club.clubid ?? club.id,
+    id: club.id,
     logo: club.logoURL,
     label: club.name,
   })),
@@ -222,17 +221,17 @@ onMounted(async () => {
 
 // Data
 const interests = [
-  { id: 'music', icon: '⚙️', label: 'Music' },
-  { id: 'games', icon: '📣', label: 'Games' },
-  { id: 'activism', icon: '🧭', label: 'Activism' },
-  { id: 'adventure', icon: '🧩', label: 'Adventure' },
-  { id: 'sports', icon: '🧩', label: 'Sports' },
-  { id: 'crafts', icon: '🎨', label: 'Crafts' },
-  { id: 'digitalmedia', icon: '⚙️', label: 'Digital Media' }, // photography, movies,
-  { id: 'popculture', icon: '💹', label: 'Pop Culture' },
-  { id: 'fooddrink', icon: '💹', label: 'Food and Drink' },
-  { id: 'robotics', icon: '💹', label: 'Robotics' },
-  { id: 'workshops', icon: '💹', label: 'Workshops' },
+  { id: 'Music', icon: '⚙️', label: 'Music' },
+  { id: 'Games', icon: '📣', label: 'Games' },
+  { id: 'Activism', icon: '🧭', label: 'Activism' },
+  { id: 'Adventure', icon: '🧩', label: 'Adventure' },
+  { id: 'Sport', icon: '🧩', label: 'Sports' },
+  { id: 'Crafts', icon: '🎨', label: 'Crafts' },
+  { id: 'DigitalMedia', icon: '⚙️', label: 'Digital Media' }, // photography, movies,
+  { id: 'PopCulture', icon: '💹', label: 'Pop Culture' },
+  { id: 'FoodDrink', icon: '💹', label: 'Food and Drink' },
+  { id: 'Robotics', icon: '💹', label: 'Robotics' },
+  { id: 'Workshops', icon: '💹', label: 'Workshops' },
 ]
 
 const clubType = [
@@ -254,8 +253,9 @@ const optionsDegree = ref([
   'Education',
   'Allied Health',
 ])
-const optionsFaith = ref(['Christianity', 'Muslim', 'Hindu', 'Islam', 'Sikh', 'None'])
+const optionsFaith = ref(['Not Interested', 'Christianity', 'Muslim', 'Hindu', 'Sikh'])
 const optionsNation = ref([
+  'Not Interested',
   'African',
   'Chinese',
   'European',
@@ -269,7 +269,6 @@ const optionsNation = ref([
   'South Asian',
   'Thai',
   'Vietnamese',
-  'None',
 ])
 
 function toggleInterest(id) {
@@ -301,12 +300,16 @@ function toggleClubListing(id) {
 //     if (!form.value.degree.trim()) e.degree = 'Required.'
 //   }
 //   if (step === 2) {
-//     if (form.value.interests.length === 0)
-//       e.interests = 'Please select at least one interest.'
+//     if (form.value.interests.length != 3)
+//       e.interests = 'Please select 3 interests.'
 //   }
 //   if (step === 3) {
-//     if (form.value.clubType.length === 0)
-//       e.clubType = 'Please select at least one club type.'
+//     if (form.value.clubType.length != 0)
+//       e.clubType = 'Please select 1 club type.'
+//   }
+//   if (step === 3) {
+//     if (form.value.selectedClubs.length === 0)
+//       e.selectedClubs = 'Please select at least one club.'
 //   }
 //   errors.value = e
 //   return Object.keys(e).length === 0
@@ -315,7 +318,7 @@ function toggleClubListing(id) {
 async function next() {
   if (currentStep.value === 2 && selectedInterests.value.length > maxInterests) return
   // if (!validate(currentStep.value)) return
-  if (currentStep.value === 3) await filterClubs()
+  if (currentStep.value === 3) await findClubs(signupFilters)
   currentStep.value = currentStep.value + 1
 }
 
