@@ -140,8 +140,14 @@
                 @click="toggleClubListing(item.id)"
               >
                 <div class="clubName">
-                  <span class="tagIcon">{{ item.icon }}</span>
-                  <span class="tagLabel">{{ item.label }}</span>
+                  <div class="clubLogoName">
+                    <img
+                      class="clubLogo"
+                      :src="item.logoURL"
+                      :style="{ borderColor: item.hexCode }"
+                    />
+                    <span class="clubName">{{ item.name }}</span>
+                  </div>
                 </div>
               </button>
             </div>
@@ -210,8 +216,9 @@ const { finalClubs, loadingClubs, getClubsFilter, findClubs } = clubRecommendati
 const givenClubs = computed(() =>
   finalClubs.value.map((club) => ({
     id: club.id,
-    logo: club.logoURL,
-    label: club.name,
+    logoURL: club.logoURL,
+    name: club.name,
+    hexCode: club.hexCode,
   })),
 )
 

@@ -78,14 +78,12 @@ export function clubRecommendations(givenFilters) {
     const club = shortList[Math.floor(Math.random() * shortList.length)] ?? null
 
     if (club && club.clubID != null) {
-      console.log(club)
       recommendedClubs.value.push(club)
       recommendedIDs.value.push(club.clubID)
     }
   }
 
   function addRandomClub(eligible, excludedClubs, filterField, value) {
-    console.log('test')
     const shortList = eligible.filter(
       (club) =>
         !excludedClubs.value.includes(club) && // ensures clubs is already not in the list
@@ -94,7 +92,6 @@ export function clubRecommendations(givenFilters) {
     const club = shortList[Math.floor(Math.random() * shortList.length)] ?? null
 
     if (club && club.clubID != null) {
-      console.log(club)
       recommendedClubs.value.push(club)
       recommendedIDs.value.push(club.clubID)
     }
