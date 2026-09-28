@@ -81,7 +81,7 @@
                 :class="{ selected: selectedInterests.includes(item.id) }"
                 @click="toggleInterest(item.id)"
               >
-                <span class="tagIcon">{{ item.icon }}</span>
+                <v-icon :name="item.icon" fill="var(--color-text-1)" scale="1.5"></v-icon>
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
             </div>
@@ -114,7 +114,7 @@
                 :class="{ selected: selectedClubType === item.id }"
                 @click="toggleClubType(item.id)"
               >
-                <span class="tagIcon">{{ item.icon }}</span>
+                <v-icon :name="item.icon" fill="var(--color-text-1)" scale="1.5"></v-icon>
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
             </div>
@@ -228,24 +228,24 @@ onMounted(async () => {
 
 // Data
 const interests = [
-  { id: 'Music', icon: '⚙️', label: 'Music' },
-  { id: 'Games', icon: '📣', label: 'Games' },
-  { id: 'Activism', icon: '🧭', label: 'Activism' },
-  { id: 'Adventure', icon: '🧩', label: 'Adventure' },
-  { id: 'Sport', icon: '🧩', label: 'Sports' },
-  { id: 'Crafts', icon: '🎨', label: 'Crafts' },
-  { id: 'DigitalMedia', icon: '⚙️', label: 'Digital Media' }, // photography, movies,
-  { id: 'PopCulture', icon: '💹', label: 'Pop Culture' },
-  { id: 'FoodDrink', icon: '💹', label: 'Food and Drink' },
-  { id: 'Robotics', icon: '💹', label: 'Robotics' },
-  { id: 'Workshops', icon: '💹', label: 'Workshops' },
+  { id: 'Music', icon: 'ri-music-line', label: 'Music' },
+  { id: 'Games', icon: 'ri-gamepad-line', label: 'Games' },
+  { id: 'Activism', icon: 'ri-team-line', label: 'Activism' },
+  { id: 'Adventure', icon: 'ri-globe-line', label: 'Adventure' },
+  { id: 'Sport', icon: 'ri-basketball-line', label: 'Sports' },
+  { id: 'Crafts', icon: 'ri-brush-line', label: 'Crafts' },
+  { id: 'DigitalMedia', icon: 'ri-camera-line', label: 'Digital Media' }, // photography, movies,
+  { id: 'PopCulture', icon: 'ri-game-line', label: 'Pop Culture' },
+  { id: 'FoodDrink', icon: 'ri-cup-line', label: 'Food and Drink' },
+  { id: 'Robotics', icon: 'ri-robot-line', label: 'Robotics' },
+  { id: 'Workshops', icon: 'ri-account-pin-box-line', label: 'Workshops' },
 ]
 
 const clubType = [
-  { id: 'PartyVibes', icon: '🎨', label: 'Party Vibes' },
-  { id: 'ChillSocialising', icon: '⚙️', label: 'Chill Socialising' },
-  { id: 'ProjectWork', icon: '📊', label: 'Project Work' },
-  { id: 'SocialStudy', icon: '📣', label: 'Social Study' },
+  { id: 'PartyVibes', icon: 'pr-sun', label: 'Party Vibes' },
+  { id: 'ChillSocialising', icon: 'pr-palette', label: 'Chill Socialising' },
+  { id: 'ProjectWork', icon: 'pr-qrcode', label: 'Project Work' },
+  { id: 'SocialStudy', icon: 'pr-users', label: 'Social Study' },
 ]
 
 const optionsDegree = ref([

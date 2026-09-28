@@ -9,7 +9,10 @@ import { OhVueIcon, addIcons } from 'oh-vue-icons'
 import * as PrIcons from 'oh-vue-icons/icons/pr'
 const Pr = Object.values({ ...PrIcons })
 
-addIcons(...Pr)
+import * as RiIcons from 'oh-vue-icons/icons/ri'
+const Ri = Object.values({ ...RiIcons })
+
+addIcons(...Pr, ...Ri)
 
 const app = createApp(App)
 
