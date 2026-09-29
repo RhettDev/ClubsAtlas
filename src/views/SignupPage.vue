@@ -53,9 +53,18 @@
               <DropDown v-model="selectedDegree" :options="optionsDegree"> </DropDown>
             </div>
             <div class="checkText">
-              <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
+              <input type="checkbox" id="checkbox" v-model="termsChecked" class="checkboxCustom" />
               <p>I agree to the <a class="brandText">Terms and Conditions</a></p>
             </div>
+            <div id="validateMessage" v-if="validiateErrors" class="validationError">
+              <p>{{ validiateErrors.name }}</p>
+              <p>{{ validiateErrors.email }}</p>
+              <p>{{ validiateErrors.password }}</p>
+              <p>{{ validiateErrors.passwordConfirm }}</p>
+              <p>{{ validiateErrors.degree }}</p>
+              <p>{{ validiateErrors.terms }}</p>
+            </div>
+
             <div class="formTitle formSubtitle">
               <p>Already have an account?</p>
               <RouterLink class="brandText" to="/login"> Log in here!</RouterLink>
@@ -67,7 +76,7 @@
           <div v-else-if="currentStep === 2" key="step2" class="form">
             <div class="formTitle">
               <h2>Who are <span class="brandText">you?</span></h2>
-              <p>Select up to four of your interests and hobbies</p>
+              <p>Select three of your interests and hobbies</p>
             </div>
             <hr class="fgHR" />
             <div class="interestList">
@@ -84,6 +93,9 @@
                 <v-icon :name="item.icon" fill="var(--color-text-1)" scale="1.5"></v-icon>
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
+            </div>
+            <div id="validateMessage" v-if="validiateErrors" class="validationError">
+              {{ validiateErrors.interests }}
             </div>
             <hr class="fgHR" />
             <div class="formTitleWide">
@@ -117,6 +129,9 @@
                 <v-icon :name="item.icon" fill="var(--color-text-1)" scale="1.5"></v-icon>
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
+            <div id="validateMessage" v-if="validiateErrors" class="validationError">
+              {{ validiateErrors.clubType }}
+            </div>
             </div>
             <hr class="fgHR" />
           </div>
@@ -155,6 +170,9 @@
             <p v-else-if="givenClubs.length === 0">
               Error finding clubs for you, please try again.
             </p>
+            <div id="validateMessage" v-if="validiateErrors" class="validationError">
+              {{ validiateErrors.selectedClubs }}
+            </div>
             <hr class="fgHR" />
           </div>
         </Transition>
@@ -202,6 +220,15 @@ const selectedNation = ref(null)
 const selectedClubType = ref(null)
 const selectedInterests = ref([])
 const selectedClubs = ref([])
+const validiateErrors = ref(null)
+const termsChecked = ref(false)
+
+const userForm = {
+  fullName: fullName,
+  email: email,
+  password: password,
+  passwordConfirm: passwordConfirm,
+}
 
 const signupFilters = {
   degree: selectedDegree,
@@ -297,34 +324,35 @@ function toggleClubListing(id) {
   else selectedClubs.value.splice(idx, 1)
 }
 
-// function validate(step) {
-//   const e = {}
-//   if (step === 1) {
-//     if (!form.value.name.trim()) e.name = 'Required.'
-//     if (!form.value.email.includes('@')) e.email = 'Enter a valid email.'
-//     if (form.value.password.length < 8) e.password = 'Password must be at least 8 characters.'
-//     if (form.value.passwordConfirm != form.value.password) e.password = 'Passwords must match.'
-//     if (!form.value.degree.trim()) e.degree = 'Required.'
-//   }
-//   if (step === 2) {
-//     if (form.value.interests.length != 3)
-//       e.interests = 'Please select 3 interests.'
-//   }
-//   if (step === 3) {
-//     if (form.value.clubType.length != 0)
-//       e.clubType = 'Please select 1 club type.'
-//   }
-//   if (step === 3) {
-//     if (form.value.selectedClubs.length === 0)
-//       e.selectedClubs = 'Please select at least one club.'
-//   }
-//   errors.value = e
-//   return Object.keys(e).length === 0
-// }
+function validate(step) {
+  const e = {}
+  if (step === 1) {
+    if (!userForm.fullName.value.trim()) e.name = 'Please enter your full name.'
+    if (!userForm.email.value.includes('@')) e.email = 'Enter a valid email.'
+    if (userForm.password.value.length < 8) e.password = 'Password must be at least 8 characters.'
+    if (userForm.passwordConfirm.value != userForm.password.value) e.passwordConfirm = 'Passwords must match.'
+    if (!signupFilters.degree.value) e.degree = 'Please select Degree from List'
+    if (!termsChecked.value) e.terms = 'Please Read and Agree to Terms and Conditions'
+  }
+  if (step === 2) {
+    if (signupFilters.interests.value.length != 3)
+      e.interests = 'Please select 3 interests.'
+  }
+  if (step === 3) {
+    if (!signupFilters.type.value)
+      e.clubType = 'Please select 1 club type.'
+  }
+  if (step === 4) {
+    if (selectedClubs.value.length === 0)
+      e.selectedClubs = 'Please select at least one club.'
+  }
+  validiateErrors.value = e
+  return Object.keys(e).length === 0
+}
 
 async function next() {
   if (currentStep.value === 2 && selectedInterests.value.length > maxInterests) return
-  // if (!validate(currentStep.value)) return
+  if (!validate(currentStep.value)) return
   if (currentStep.value === 3) await findClubs(signupFilters)
   currentStep.value = currentStep.value + 1
 }

@@ -456,6 +456,13 @@ bcenter.header.clubHeader {
   overflow: hidden;
 }
 
+.validationError p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ca-tag-18plus);
+}
+
 .tagContainer {
   display: flex;
   flex-direction: row;
