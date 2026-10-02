@@ -55,6 +55,7 @@ export function clubRecommendations(givenFilters) {
   function preFilterList(eligible, filterValue, filterField, empty = false) {
     const value = unref(filterValue)
     if (normaliseValue(value) === normaliseValue('Not Interested')) empty = true
+    if (normaliseValue(value) === normaliseValue('None Selected')) empty = true
 
     if (empty) {
       // Filter out all options.
@@ -71,7 +72,7 @@ export function clubRecommendations(givenFilters) {
     })
   }
 
-  function addRandomClubFromList(eligible, excludedClubs) {
+  function addRandomClubFromList(eligible, excludedClubs, round) {
     const shortList = eligible.filter(
       (club) => !excludedClubs.value.includes(club), // ensures clubs is already not in the list
     )
@@ -80,6 +81,7 @@ export function clubRecommendations(givenFilters) {
     if (club && club.clubID != null) {
       recommendedClubs.value.push(club)
       recommendedIDs.value.push(club.clubID)
+      console.log("Chosen Club,",club.clubID,"chosen in round",round)
     }
   }
 
@@ -94,6 +96,7 @@ export function clubRecommendations(givenFilters) {
     if (club && club.clubID != null) {
       recommendedClubs.value.push(club)
       recommendedIDs.value.push(club.clubID)
+      console.log("Chosen Club,",club.clubID,"chosen in round",filterField)
     }
   }
 
@@ -139,18 +142,18 @@ export function clubRecommendations(givenFilters) {
           normaliseValue(club.type) === normaliseValue(type),
       ),
     )
-    addRandomClubFromList(degreeTypeEligible, recommendedClubs)
+    addRandomClubFromList(degreeTypeEligible, recommendedClubs, "DTI")
 
     // Degree and Interests
     const degreeOnlyEligible = filterByInterests(
       baseEligible.filter((club) => normaliseValue(club.degree) === normaliseValue(degree)),
     )
-    addRandomClubFromList(degreeOnlyEligible, recommendedClubs)
+    addRandomClubFromList(degreeOnlyEligible, recommendedClubs, "DI")
 
     // Add two degree based clubs if neither of the two filters above trigger
     if (recommendedIDs.value.length < 2) {
-      addRandomClub(baseEligible, recommendedClubs, 'degree', degree)
-      addRandomClub(baseEligible, recommendedClubs, 'degree', degree)
+      addRandomClub(baseEligible, recommendedClubs, 'degree', degree, "SupportingDegree")
+      addRandomClub(baseEligible, recommendedClubs, 'degree', degree, "SupportingDegree")
     }
 
     // No Degree ClubType and Interests
@@ -158,15 +161,19 @@ export function clubRecommendations(givenFilters) {
     const typeOnlyEligible = filterByInterests(
       noDegreeEligible.filter((club) => normaliseValue(club.type) === normaliseValue(type)),
     )
-    addRandomClubFromList(typeOnlyEligible, recommendedClubs)
+    addRandomClubFromList(typeOnlyEligible, recommendedClubs, "NDTI")
 
     // No Degree Interests
     const noneEligible = filterByInterests(noDegreeEligible)
-    addRandomClubFromList(noneEligible, recommendedClubs)
+    addRandomClubFromList(noneEligible, recommendedClubs, "NDI")
 
     // Add Faith and Nationality Clubs that match user
-    addRandomClub(clubsList.value, recommendedClubs, 'faith', faith)
-    addRandomClub(clubsList.value, recommendedClubs, 'nationality', nationality)
+    if(faith){
+      addRandomClub(clubsList.value, recommendedClubs, 'faith', faith)
+    }
+    if(nationality){
+      addRandomClub(clubsList.value, recommendedClubs, 'nationality', nationality)
+    }
 
     console.log([...recommendedIDs.value])
     return getRecommendedClubsData()

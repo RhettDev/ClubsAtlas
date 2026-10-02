@@ -9,7 +9,7 @@
         <div id="topRow" class="contentRow spaced vertCentered">
           <div id="titleClubName" class="contentRow vertCentered">
             <div v-if="clubLogo" class="clubLogoName">
-              <img :src="clubLogo" alt="Club Logo" />
+              <img class="clubLogo" :src="clubLogo" :style="{ borderColor: clubHexCode }" />
             </div>
             <h2>{{ clubName }}</h2>
           </div>
@@ -73,6 +73,7 @@ const props = defineProps({
   clubBanner: { type: String, default: 'Error! Missing Club Name Data.' },
   // clubSocials: { type: String, default: 'Error! Missing Club Name Data.' },
   clubDescription: { type: String, default: 'Error! Missing Club Name Data.' },
+  clubHexCode: { type: String, default: '#000000.' },
   addToFollowing: { type: String, default: 'Add to Calendar.' },
   removeFromFollowing: { type: String, default: 'Remove from Calendar.' },
   danger: { type: Boolean, default: false },

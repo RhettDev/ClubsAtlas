@@ -44,6 +44,7 @@
           :clubLogo="club.logoURL"
           :clubBanner="club.bannerURL"
           :clubDescription="club.description"
+          :clubHexCode="club.hexCode"
         />
       </div>
       <div
