@@ -1,13 +1,7 @@
-<script setup lang="ts">
-import BaseButton from '@/components/BaseButton.vue'
-import FooterBar from '@/components/FooterBar.vue'
-import HeaderBar from '@/components/HeaderGeneric.vue'
-</script>
-
 <template>
   <main id="landing">
     <HeaderBar></HeaderBar>
-    <!-- Hero Section -->
+    <!-- Hero Section: Generic Landing page with login/signup buttons-->
     <section class="hero">
       <div class="subhero">
         <p class="subtitle">MAP THE EVENTSCAPE OF UNI</p>
@@ -27,15 +21,19 @@ import HeaderBar from '@/components/HeaderGeneric.vue'
         <RouterLink to="/login">
           <BaseButton variant="secondary">Login</BaseButton>
         </RouterLink>
-        <RouterLink to="/admin"> <!-- Remove before demonstration and use Admin login details-->
-          <BaseButton variant="secondary">AdminView</BaseButton>
-        </RouterLink>
       </div>
     </section>
 
     <FooterBar></FooterBar>
   </main>
 </template>
+
+<script setup lang="ts">
+import BaseButton from '@/components/BaseButton.vue'
+import FooterBar from '@/components/FooterBar.vue'
+import HeaderBar from '@/components/HeaderGeneric.vue'
+</script>
+
 
 <style scoped>
 .hero {

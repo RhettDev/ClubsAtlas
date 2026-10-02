@@ -3,20 +3,6 @@
     <HeaderBar></HeaderBar>
 
     <div class="hero">
-      <!-- Step Tracker -->
-      <div class="stepTracker">
-        <div
-          v-for="n in totalSteps"
-          :key="n"
-          class="stepPip"
-          :class="{
-            'is-done': n < currentStep,
-            'is-active': n === currentStep,
-          }"
-          @click="n < currentStep && goTo(n)"
-        ></div>
-      </div>
-
       <!-- Step Panels -->
       <div class="stepView">
         <Transition>
@@ -27,6 +13,7 @@
               <p>Create your account and discover the world of University clubs and events!</p>
             </div>
             <hr class="fgHR" />
+            <!-- User details taken: Name, Email, Password, Degree -->
             <div class="fieldContainer">
               <v-icon name="pr-user" fill="var(--color-text-1)" scale="1.5" />
               <input v-model="fullName" type="text" class="formField" placeholder="Full Name" />
@@ -56,6 +43,7 @@
               <input type="checkbox" id="checkbox" v-model="termsChecked" class="checkboxCustom" />
               <p>I agree to the <a class="brandText">Terms and Conditions</a></p>
             </div>
+            <!-- Field Validation Messages, only shown when validate function runs -->
             <div id="validateMessage" v-if="validiateErrors" class="validationError">
               <p>{{ validiateErrors.name }}</p>
               <p>{{ validiateErrors.email }}</p>
@@ -79,6 +67,7 @@
               <p>Select three of your interests and hobbies</p>
             </div>
             <hr class="fgHR" />
+            <!-- List all interests and ensure no more than three are selected -->
             <div class="interestList">
               <button
                 v-for="item in interests"
@@ -94,6 +83,7 @@
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
             </div>
+            <!-- Validation message if exactly three are not selected -->
             <div id="validateMessage" v-if="validiateErrors" class="validationError">
               {{ validiateErrors.interests }}
             </div>
@@ -101,6 +91,7 @@
             <div class="formTitleWide">
               <h2>Apart of <span class="brandText">specific</span> a faith or nationality?</h2>
             </div>
+            <!-- Drop down menu for restricitve options with one choice available -->
             <div class="dropDownContainer">
               <DropDown v-model="selectedFaith" :options="optionsFaith"> </DropDown>
               <DropDown v-model="selectedNation" :options="optionsNation"> </DropDown>
@@ -145,6 +136,7 @@
               <p>Based on your answers these are suggested clubs for you!</p>
             </div>
             <hr class="fgHR" />
+            <!-- List the four options and ensure one is selected -->
             <div class="clubTypeList">
               <button
                 v-for="item in givenClubs"
@@ -178,14 +170,17 @@
         </Transition>
       </div>
 
-      <!-- Navigation -->
+      <!-- Step Navigation with  -->
       <div class="buttonRow">
+        <!-- allow the user to move back in sign up process -->
         <BaseButton variant="secondary" :disabled="currentStep === 1" @click="prev">
           Back
         </BaseButton>
+        <!-- Allow forward steps -->
         <BaseButton v-if="currentStep < totalSteps" variant="primary" @click="next">
           Continue
         </BaseButton>
+        <!-- Complete Signup process -->
         <RouterLink v-else to="/calendar">
           <BaseButton variant="primary" @click="handleSignup">Get Your Calendar!</BaseButton>
         </RouterLink>
@@ -429,10 +424,6 @@ function handleSignup() {
   width: 100%;
   min-height: 300px;
   position: relative;
-}
-
-.stepPip {
-  display: flex;
 }
 
 /* ── Interests grid ── */
