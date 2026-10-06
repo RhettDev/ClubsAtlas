@@ -11,12 +11,13 @@
             <div class="formTitle">
               <h2>Welcome to <span class="brandText">ClubsAtlas</span></h2>
               <p>Create your account and discover the world of University clubs and events!</p>
+              <p class="subP">This is a demo, you're data wont be retained after this session so feel free to give fake data!</p>
             </div>
             <hr class="fgHR" />
             <!-- User details taken: Name, Email, Password, Degree -->
             <div class="fieldContainer">
               <v-icon name="pr-user" fill="var(--color-text-1)" scale="1.5" />
-              <input v-model="fullName" type="text" class="formField" placeholder="Full Name" />
+              <input v-model="firstName" type="text" class="formField" placeholder="First Name" />
             </div>
             <div class="fieldContainer">
               <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
@@ -196,8 +197,10 @@ import FooterBar from '@/components/FooterBar.vue'
 import HeaderBar from '@/components/HeaderGeneric.vue'
 import DropDown from '@/components/DropDown.vue'
 import { clubRecommendations } from '@/composables/clubRecommend.js'
+import { demoSessionData } from '@/composables/sessionStore'
+
 import { computed, onMounted, ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { RouterLink } from 'vue-router'
 
 const currentStep = ref(1)
 const totalSteps = 4
@@ -205,7 +208,7 @@ const maxInterests = 3
 // const submitting = ref(false)
 // const showPassword = ref(false)
 
-const fullName = ref('')
+const firstName = ref('')
 const email = ref('')
 const password = ref('')
 const passwordConfirm = ref('')
@@ -219,7 +222,7 @@ const validiateErrors = ref(null)
 const termsChecked = ref(false)
 
 const userForm = {
-  fullName: fullName,
+  firstName: firstName,
   email: email,
   password: password,
   passwordConfirm: passwordConfirm,
@@ -234,6 +237,33 @@ const signupFilters = {
 }
 
 const { finalClubs, loadingClubs, getClubsFilter, findClubs } = clubRecommendations(signupFilters)
+
+// Copy Signup data to demoSessionData
+const { demoUserClubs, demoUserDetails, demoUserFilters, startDemoSession } = demoSessionData()
+
+function syncData(){
+  demoUserClubs.value = [...selectedClubs.value]
+
+  demoUserDetails.value = {
+    firstName: firstName.value,
+    email: email.value,
+    degree: selectedDegree.value,
+  }
+
+  demoUserFilters.value = {
+    degree: selectedDegree.value,
+    faith: selectedFaith.value,
+    nationality: selectedNation.value,
+    type: selectedClubType.value,
+    interests: [...selectedInterests.value],
+  }
+
+  console.log(demoUserClubs.value)
+  console.log(demoUserDetails.value)
+  console.log(demoUserFilters.value)
+}
+
+
 
 const givenClubs = computed(() =>
   finalClubs.value.map((club) => ({
@@ -322,12 +352,11 @@ function toggleClubListing(id) {
 function validate(step) {
   const e = {}
   if (step === 1) {
-    if (!userForm.fullName.value.trim()) e.name = 'Please enter your full name.'
+    if (!userForm.firstName.value.trim()) e.name = 'Please enter your first name.'
     if (!userForm.email.value.includes('@')) e.email = 'Enter a valid email.'
     if (userForm.password.value.length < 8) e.password = 'Password must be at least 8 characters.'
     if (userForm.passwordConfirm.value != userForm.password.value) e.passwordConfirm = 'Passwords must match.'
     if (!signupFilters.degree.value) e.degree = 'Please select Degree from List'
-    if (!termsChecked.value) e.terms = 'Please Read and Agree to Terms and Conditions'
   }
   if (step === 2) {
     if (signupFilters.interests.value.length != 3)
@@ -357,8 +386,10 @@ function prev() {
 }
 
 function handleSignup() {
-  console.log('Signing up:', fullName.value, email.value, selectedDegree.value)
-  useRouter.push('/')
+  console.log('Signing up:', firstName.value, email.value, selectedDegree.value)
+  syncData()
+  startDemoSession()
+  // useRouter.push('/')
 }
 </script>
 

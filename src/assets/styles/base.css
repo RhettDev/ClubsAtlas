@@ -162,6 +162,11 @@ bcenter.header.clubHeader {
   font-weight: 300;
 }
 
+.subP{
+  font-style: italic;
+  color: var(--ca-brand-grey-3);
+}
+
 .formField {
   font-weight: 300;
   background-color: var(--color-background-1);

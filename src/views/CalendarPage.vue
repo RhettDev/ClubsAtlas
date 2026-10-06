@@ -319,7 +319,7 @@ import { convertTo12Hour } from '@/composables/miscFunctions'
 import { ref, onMounted, computed } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
-import { errorMessages } from 'vue/compiler-sfc'
+import { demoSessionData } from '@/composables/sessionStore'
 import EventCardPop from '@/components/EventCardPop.vue'
 
 const usersClubs = ref([])
@@ -327,8 +327,8 @@ const usersClubs = ref([])
 const loadingClubs = ref(true)
 const loadingEvents = ref(true)
 const errorMessage = ref(null)
-const { profile } = useAuth()
-const studentUserID = ref(profile.value.id)
+const { isLoggedIn, loading: authLoading, profile } = useAuth()
+const studentUserID = ref(null)
 const clubsID = ref(1)
 const loadingCTags = ref(true)
 const currentClubsMenu = ref(1)
@@ -338,8 +338,31 @@ const allClubs = ref([])
 const events = ref([])
 const clubSearch = ref('')
 const openEventId = ref(null)
+const { isDemoSession, demoUserClubs } = demoSessionData()
 
 const { days } = calendar()
+
+const calendarMode = computed(() => {
+  if (authLoading.value) return 'loading'
+  if (isLoggedIn.value) return 'authenticated'
+  if (isDemoSession.value) return 'demo'
+  return 'none'
+})
+
+function dataSelection(mode){
+  if(mode.value == 'loading'){
+    console.log("loading")
+  }
+  else if(mode.value == 'authenticated'){
+    studentUserID.value = profile.value.id
+    getUsersClubs()
+    getFollowingClubsEvent()
+  }
+  else if(mode.value == 'demo'){
+    getDemoClubs()
+    getDemoClubEvents()
+  }
+}
 
 // Side Bar Allocation
 // Your Clubs: 1 (Default)
@@ -350,6 +373,7 @@ function toggleDropdown(id) {
   openClubId.value = openClubId.value === id ? null : id
 }
 
+// AUTH: Get all club data for clubs a student user is following, requires user ID
 async function getUsersClubs() {
   try {
     loadingClubs.value = true
@@ -361,7 +385,7 @@ async function getUsersClubs() {
 
     usersClubs.value = data
   } catch (error) {
-    errorMessages.value = error.message
+    errorMessage.value = error.message
     console.error('Error fetching data:', error)
     console.log('Error type:', typeof error)
   } finally {
@@ -369,60 +393,7 @@ async function getUsersClubs() {
   }
 }
 
-async function getSuggestedClubs() {
-  try {
-    loadingClubs.value = true
-
-    let { data, error } = await supabase.rpc('getfourclubsdata')
-
-    if (error) throw error
-
-    suggestedClubs.value = data
-  } catch (error) {
-    errorMessages.value = error.message
-    console.error('Error fetching data:', error)
-    console.log('Error type:', typeof error)
-  } finally {
-    loadingClubs.value = false
-  }
-}
-
-async function getAllClubs() {
-  try {
-    loadingClubs.value = true
-
-    let { data, error } = await supabase.rpc('getallclubsdata')
-
-    if (error) throw error
-
-    allClubs.value = data
-  } catch (error) {
-    errorMessages.value = error.message
-    console.error('Error fetching data:', error)
-    console.log('Error type:', typeof error)
-  } finally {
-    loadingClubs.value = false
-  }
-}
-
-async function getClubTags(clubsID) {
-  try {
-    loadingCTags.value = true
-    let clubid = clubsID.value
-
-    let { data, error } = await supabase.rpc('getclubstags', { clubid })
-
-    if (error) throw error
-    else console.log(data)
-  } catch (error) {
-    errorMessages.value = error.message
-    console.error('Error fetching data:', error)
-    console.log('Error type:', typeof error)
-  } finally {
-    loadingCTags.value = false
-  }
-}
-
+// AUTH: Get the event data for every club a user is following
 async function getFollowingClubsEvent() {
   try {
     loadingEvents.value = true
@@ -434,7 +405,7 @@ async function getFollowingClubsEvent() {
 
     events.value = data
   } catch (error) {
-    errorMessages.value = error.message
+    errorMessage.value = error.message
     console.error('Error fetching data:', error)
     console.log('Error type:', typeof error)
   } finally {
@@ -442,12 +413,108 @@ async function getFollowingClubsEvent() {
   }
 }
 
+// DEMO: Get club data for a list of demo-selected club IDs.
+async function getDemoClubs() {
+  try {
+    loadingClubs.value = true
+
+    let recommendedids = demoUserClubs.value
+    let { data, error } = await supabase.rpc('getfilteredclubs', { recommendedids })
+
+    if (error) throw error
+
+    usersClubs.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingClubs.value = false
+  }
+}
+
+// DEMO: Get events for a list of demo-selected club IDs.
+async function getDemoClubEvents() {
+  try {
+    loadingEvents.value = true
+
+    let recommendedids = demoUserClubs.value
+    let { data, error } = await supabase.rpc('getclubeventsfromids', { recommendedids })
+
+    if (error) throw error
+
+    events.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingEvents.value = false
+  }
+}
+
+// BOTH: Get all club data of four random clubs
+async function getSuggestedClubs() {
+  try {
+    loadingClubs.value = true
+
+    let { data, error } = await supabase.rpc('getfourclubsdata')
+
+    if (error) throw error
+
+    suggestedClubs.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingClubs.value = false
+  }
+}
+
+// BOTH: Get all club data for every club in the database
+async function getAllClubs() {
+  try {
+    loadingClubs.value = true
+
+    let { data, error } = await supabase.rpc('getallclubsdata')
+
+    if (error) throw error
+
+    allClubs.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingClubs.value = false
+  }
+}
+
+// BOTH: Get the tags for a specific club
+async function getClubTags(clubsID) {
+  try {
+    loadingCTags.value = true
+    let clubid = clubsID.value
+
+    let { data, error } = await supabase.rpc('getclubstags', { clubid })
+
+    if (error) throw error
+    else console.log(data)
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingCTags.value = false
+  }
+}
+
 onMounted(() => {
-  getUsersClubs()
   getSuggestedClubs()
   getClubTags(clubsID)
-  getFollowingClubsEvent()
   getAllClubs()
+  dataSelection(calendarMode)
 })
 
 const searchedClubs = computed(() => {

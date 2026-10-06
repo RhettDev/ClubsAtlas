@@ -114,6 +114,7 @@ import HeaderBar from '@/components/HeaderGeneric.vue'
 import { useAuth } from '@/composables/useAuth'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { demoSessionData } from '@/composables/sessionStore'
 
 // Variables
 const email = ref('') // ref() makes a value reactive
@@ -125,6 +126,7 @@ const checked = ref(false)
 const errorMsg = ref('')
 const submitting = ref(false)
 const { login, userType } = useAuth()
+const { clearDemoSession } = demoSessionData()
 
 // Functions
 
@@ -135,8 +137,10 @@ async function handleLogin() {
   try {
     await login(email.value, password.value)
     if (userType.value === 'student') {
+      clearDemoSession()
       router.push('/calendar')
     } else if (userType.value === 'club') {
+      clearDemoSession()
       router.push('/admin')
     } else {
       console.error('Error fetching userType')

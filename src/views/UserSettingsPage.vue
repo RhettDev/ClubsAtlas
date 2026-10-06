@@ -37,7 +37,7 @@
         <div class="buttonContainer" id="signOut">
           <p class="fieldLabel">Sign Out of Your Account</p>
           <RouterLink to="/">
-            <BaseButton>Sign Out</BaseButton>
+            <BaseButton @click="signOut">Sign Out</BaseButton>
           </RouterLink>
         </div>
 
@@ -70,6 +70,8 @@ import HeaderStudent from '@/components/HeaderStudent.vue'
 import FormField from '@/components/FormField.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import DropDown from '@/components/DropDown.vue'
+import { supabase } from '../../backend/supabase'
+
 
 const languageList = [
   'English',
@@ -94,6 +96,12 @@ const languageList = [
   'Ukrainian',
 ]
 const timeOptions = ['AM/PM', '24-Hour']
+
+async function signOut(){
+  const { error } = await supabase.auth.signOut({ scope: 'local' })
+  console.error(error)
+}
+
 </script>
 
 <style scope>
