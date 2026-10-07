@@ -11,7 +11,10 @@
             <div class="formTitle">
               <h2>Welcome to <span class="brandText">ClubsAtlas</span></h2>
               <p>Create your account and discover the world of University clubs and events!</p>
-              <p class="subP">This is a demo, you're data wont be retained after this session so feel free to give fake data!</p>
+              <p class="subP">
+                This is a demo, you're data wont be retained after this session so feel free to give
+                fake data!
+              </p>
             </div>
             <hr class="fgHR" />
             <!-- User details taken: Name, Email, Password, Degree -->
@@ -121,9 +124,9 @@
                 <v-icon :name="item.icon" fill="var(--color-text-1)" scale="1.5"></v-icon>
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
-            <div id="validateMessage" v-if="validiateErrors" class="validationError">
-              {{ validiateErrors.clubType }}
-            </div>
+              <div id="validateMessage" v-if="validiateErrors" class="validationError">
+                {{ validiateErrors.clubType }}
+              </div>
             </div>
             <hr class="fgHR" />
           </div>
@@ -241,7 +244,7 @@ const { finalClubs, loadingClubs, getClubsFilter, findClubs } = clubRecommendati
 // Copy Signup data to demoSessionData
 const { demoUserClubs, demoUserDetails, demoUserFilters, startDemoSession } = demoSessionData()
 
-function syncData(){
+function syncData() {
   demoUserClubs.value = [...selectedClubs.value]
 
   demoUserDetails.value = {
@@ -262,8 +265,6 @@ function syncData(){
   console.log(demoUserDetails.value)
   console.log(demoUserFilters.value)
 }
-
-
 
 const givenClubs = computed(() =>
   finalClubs.value.map((club) => ({
@@ -355,20 +356,18 @@ function validate(step) {
     if (!userForm.firstName.value.trim()) e.name = 'Please enter your first name.'
     if (!userForm.email.value.includes('@')) e.email = 'Enter a valid email.'
     if (userForm.password.value.length < 8) e.password = 'Password must be at least 8 characters.'
-    if (userForm.passwordConfirm.value != userForm.password.value) e.passwordConfirm = 'Passwords must match.'
+    if (userForm.passwordConfirm.value != userForm.password.value)
+      e.passwordConfirm = 'Passwords must match.'
     if (!signupFilters.degree.value) e.degree = 'Please select Degree from List'
   }
   if (step === 2) {
-    if (signupFilters.interests.value.length != 3)
-      e.interests = 'Please select 3 interests.'
+    if (signupFilters.interests.value.length != 3) e.interests = 'Please select 3 interests.'
   }
   if (step === 3) {
-    if (!signupFilters.type.value)
-      e.clubType = 'Please select 1 club type.'
+    if (!signupFilters.type.value) e.clubType = 'Please select 1 club type.'
   }
   if (step === 4) {
-    if (selectedClubs.value.length === 0)
-      e.selectedClubs = 'Please select at least one club.'
+    if (selectedClubs.value.length === 0) e.selectedClubs = 'Please select at least one club.'
   }
   validiateErrors.value = e
   return Object.keys(e).length === 0

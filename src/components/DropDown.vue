@@ -95,15 +95,17 @@ onUnmounted(() => {
   text-align: start;
   width: 100%;
   position: absolute;
-  top: 100%;
+  bottom: 100%;
   left: 0;
   z-index: 100;
   border-radius: 16px;
   border: 2px solid var(--ca-brand-blue-1);
   background: var(--color-background-1);
   padding: 10px 14px;
-  height: max-content;
-  overflow: scroll;
+  box-sizing: border-box;
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .option {
