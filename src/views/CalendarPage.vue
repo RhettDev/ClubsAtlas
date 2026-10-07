@@ -148,6 +148,7 @@
                 :eventDescription="event.eventDescription"
                 :eventImage="event.imageURL"
                 :eventLink="event.ticketLink"
+                :eventTags="eventTags"
               />
             </div>
           </div>
@@ -290,6 +291,7 @@
                 :model-value="openEventId === event.id"
                 @update:model-value="closeEventCard"
                 :clubName="event.clubName"
+                :eventID="event.id"
                 :eventTitle="event.eventTitle"
                 :eventDate="event.eventDate"
                 :eventLocation="event.eventLocation"
@@ -298,6 +300,7 @@
                 :eventDescription="event.eventDescription"
                 :eventImage="event.imageURL"
                 :eventLink="event.ticketLink"
+                :eventTags="eventTags"
               />
             </div>
           </div>
@@ -330,7 +333,7 @@ const errorMessage = ref(null)
 const { isLoggedIn, loading: authLoading, profile } = useAuth()
 const studentUserID = ref(null)
 const clubsID = ref(1)
-const loadingCTags = ref(true)
+const loadingTags = ref(true)
 const currentClubsMenu = ref(1)
 const openClubId = ref(null)
 const suggestedClubs = ref([])
@@ -339,6 +342,8 @@ const events = ref([])
 const clubSearch = ref('')
 const openEventId = ref(null)
 const { isDemoSession, demoUserClubs } = demoSessionData()
+const authClubIDs = ref([])
+const eventTags = ref([])
 
 const { days } = calendar()
 
@@ -384,6 +389,7 @@ async function getUsersClubs() {
     if (error) throw error
 
     usersClubs.value = data
+    captureIDs()
   } catch (error) {
     errorMessage.value = error.message
     console.error('Error fetching data:', error)
@@ -391,6 +397,11 @@ async function getUsersClubs() {
   } finally {
     loadingClubs.value = false
   }
+}
+
+function captureIDs() {
+  authClubIDs.value = usersClubs.value.map((club) => club.id)
+  console.log(authClubIDs.value)
 }
 
 // AUTH: Get the event data for every club a user is following
@@ -494,7 +505,7 @@ async function getAllClubs() {
 // BOTH: Get the tags for a specific club
 async function getClubTags(clubsID) {
   try {
-    loadingCTags.value = true
+    loadingTags.value = true
     let clubid = clubsID.value
 
     let { data, error } = await supabase.rpc('getclubstags', { clubid })
@@ -506,7 +517,27 @@ async function getClubTags(clubsID) {
     console.error('Error fetching data:', error)
     console.log('Error type:', typeof error)
   } finally {
-    loadingCTags.value = false
+    loadingTags.value = false
+  }
+}
+// BOTH: Get the tags for a specific event
+async function getEventTags(eventid) {
+  try {
+    loadingTags.value = true
+    console.log("prequery: ", eventid)
+
+    let { data, error } = await supabase.rpc('geteventstags', { eventid })
+
+    if (error) throw error
+
+    eventTags.value = data
+    console.log("Tags: ", data)
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingTags.value = false
   }
 }
 
@@ -567,8 +598,9 @@ const isToday = (day) => {
   )
 }
 
-function openEventCard(eventId) {
-  openEventId.value = eventId
+function openEventCard(eventID) {
+  getEventTags(eventID)
+  openEventId.value = eventID
 }
 
 function closeEventCard() {

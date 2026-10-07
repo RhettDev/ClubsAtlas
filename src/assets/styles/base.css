@@ -550,6 +550,11 @@ bcenter.header.clubHeader {
   color: var(--ca-text-light-1);
 }
 
+.relax {
+  background-color: var(--ca-tag-relaxi);
+  color: var(--ca-text-light-1);
+}
+
 .eigthteenplus {
   background-color: var(--ca-tag-18plus);
   color: var(--ca-text-light-1);
@@ -560,7 +565,3 @@ bcenter.header.clubHeader {
   color: var(--ca-text-light-1);
 }
 
-.wasm {
-  background-color: var(--ca-tag-wasm--);
-  color: var(--ca-text-light-1);
-}

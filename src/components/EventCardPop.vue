@@ -26,6 +26,11 @@
         <p id="description" class="descriptionContainer">
           {{ formatDescription(eventDescription) }}
         </p>
+        <div id="tagsContainer" class="tagContainer">
+          <div v-for="tag in eventTags" :key="tag" :class="tag.tagSlug" id="tagItem" class="tag">
+            {{ tag.tagName }}
+          </div>
+        </div>
         <div id="bottomRow" class="contentRow spaced">
           <a :href="eventLink" target="_blank" rel="noopener noreferrer">
             <BaseButton variant="primary">Event Link</BaseButton>
@@ -45,10 +50,12 @@ import {
   hasValue,
   formatDescription,
 } from '@/composables/miscFunctions'
+// import { ref } from 'vue'
 
 defineProps({
   modelValue: { type: Boolean, default: false },
   clubName: { type: String, default: 'Error! Missing Club Name Data.' },
+  eventID: { type: Number, default: 0 },
   eventTitle: { type: String, default: 'Error! Missing Event Title Data' },
   eventDate: { type: String, default: 'Error! Missing Event Data' },
   eventLocation: { type: String, default: '' },
@@ -57,14 +64,17 @@ defineProps({
   eventDescription: { type: String, default: 'Error! Missing Event Data' },
   eventImage: { type: String, default: '' },
   eventLink: { type: String, default: 'Error! Missing Event Data' },
+  eventTags: { type: Array, default: () => [] },
   danger: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['update:modelValue', 'confirm', 'cancel'])
+// const eventTags = ref([])
 
 function close() {
   emit('update:modelValue', false)
 }
+
 </script>
 
 <style scope>

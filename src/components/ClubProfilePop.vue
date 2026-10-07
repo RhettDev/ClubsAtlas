@@ -20,9 +20,9 @@
           {{ formatDescription(clubDescription) }}
         </p>
         <div id="tagsContainer" class="tagContainer">
-          <div class="tag scieng">SciEng</div>
-          <div class="tag party">Party</div>
-          <div class="tag networ">Networking</div>
+          <div v-for="tag in clubTags" :key="tag" :class="tag.tagSlug" id="tagItem" class="tag">
+            {{ tag.tagName }}
+          </div>
         </div>
         <div id="bottomRow" class="contentRow spaced">
           <div id="addToClub" class="contentRow vertCentered" @click="addClub(clubID)">
@@ -63,6 +63,9 @@ import { supabase } from '../../backend/supabase'
 
 const loadingSocials = ref(true)
 const socialLinks = ref([])
+const loadingTags = ref(true)
+const errorMessage = ref(null)
+const clubTags = ref([])
 // const clubid = ref(null)
 
 const props = defineProps({
@@ -89,6 +92,26 @@ function addClub(clubID) {
   console.log('Adding Club ', clubID, 'to your profile')
 }
 
+async function getClubTags() {
+  try {
+    loadingTags.value = true
+
+    let clubid = props.clubID
+    let { data, error } = await supabase.rpc('getclubstags', { clubid })
+
+    if (error) throw error
+
+    clubTags.value = data
+    console.log("Tags: ",data)
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingTags.value = false
+  }
+}
+
 async function getClubSocials() {
   try {
     loadingSocials.value = true
@@ -111,6 +134,7 @@ async function getClubSocials() {
 
 onMounted(() => {
   getClubSocials()
+  getClubTags()
 })
 </script>
 
