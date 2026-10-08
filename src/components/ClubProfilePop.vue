@@ -13,7 +13,7 @@
             </div>
             <h2>{{ clubName }}</h2>
           </div>
-          <v-icon name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
+          <v-icon class="pointer" name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
         </div>
 
         <p id="description" class="descriptionContainer">
@@ -102,7 +102,6 @@ async function getClubTags() {
     if (error) throw error
 
     clubTags.value = data
-    console.log("Tags: ",data)
   } catch (error) {
     errorMessage.value = error.message
     console.error('Error fetching data:', error)
@@ -122,7 +121,6 @@ async function getClubSocials() {
     if (error) throw error
 
     socialLinks.value = data
-    console.log(socialLinks.value)
   } catch (error) {
     loadingSocials.value = error.message
     console.error('Error fetching data:', error)

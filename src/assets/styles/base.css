@@ -187,6 +187,11 @@ bcenter.header.clubHeader {
   accent-color: var(--ca-brand-blue-2);
 }
 
+.pointer {
+  cursor: pointer;
+}
+
+
 .menuEntry {
   display: flex;
   padding: 4px 0;

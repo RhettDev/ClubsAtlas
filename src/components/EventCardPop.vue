@@ -10,7 +10,7 @@
             <div id="titleClubName" class="contentRow">
               <h2>{{ eventTitle }} - {{ clubName }}</h2>
             </div>
-            <v-icon name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
+            <v-icon class="pointer" name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
           </div>
           <div id="dateTimeRow" class="contentRow">
             <div>
