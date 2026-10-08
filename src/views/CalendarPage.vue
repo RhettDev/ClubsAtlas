@@ -319,7 +319,7 @@ import HeaderStudent from '@/components/HeaderStudent.vue'
 import ClubListEntry from '@/components/ClubListEntry.vue'
 import { calendar } from '@/composables/calender'
 import { convertTo12Hour } from '@/composables/miscFunctions'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
 import { demoSessionData } from '@/composables/sessionStore'
@@ -368,6 +368,15 @@ function dataSelection(mode){
     getDemoClubEvents()
   }
 }
+
+watch(
+  demoUserClubs,
+  async () => {
+    if (calendarMode.value !== 'demo') return
+    await Promise.all([getDemoClubs(), getDemoClubEvents()])
+  },
+  { deep: true },
+)
 
 // Side Bar Allocation
 // Your Clubs: 1 (Default)
@@ -429,7 +438,12 @@ async function getDemoClubs() {
   try {
     loadingClubs.value = true
 
-    let recommendedids = demoUserClubs.value
+    let recommendedids = [...(demoUserClubs.value ?? [])]
+    if (recommendedids.length === 0) {
+      usersClubs.value = []
+      return
+    }
+
     let { data, error } = await supabase.rpc('getfilteredclubs', { recommendedids })
 
     if (error) throw error
@@ -449,7 +463,12 @@ async function getDemoClubEvents() {
   try {
     loadingEvents.value = true
 
-    let recommendedids = demoUserClubs.value
+    let recommendedids = [...(demoUserClubs.value ?? [])]
+    if (recommendedids.length === 0) {
+      events.value = []
+      return
+    }
+
     let { data, error } = await supabase.rpc('getclubeventsfromids', { recommendedids })
 
     if (error) throw error
@@ -524,14 +543,12 @@ async function getClubTags(clubsID) {
 async function getEventTags(eventid) {
   try {
     loadingTags.value = true
-    console.log("prequery: ", eventid)
 
     let { data, error } = await supabase.rpc('geteventstags', { eventid })
 
     if (error) throw error
 
     eventTags.value = data
-    console.log("Tags: ", data)
   } catch (error) {
     errorMessage.value = error.message
     console.error('Error fetching data:', error)
