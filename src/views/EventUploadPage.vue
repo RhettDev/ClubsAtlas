@@ -26,8 +26,8 @@
       </RouterLink>
     </div>
 
-    <div class="hero desktopView">
-      <section id="sideBar" class="bLeft">
+    <div class="hero ">
+      <section id="sideBar" class="bLeft desktopView">
         <RouterLink variant="primary" class="menuEntry" to="/admin">
           <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
           Dashboard
@@ -101,6 +101,12 @@
             </FormField>
           </div>
           <FormField
+            v-model="eventLocation"
+            label="Location"
+            placeholder="Where will the event be held?"
+            width="halfWidth">
+          </FormField>
+          <FormField
             v-model="paragraph"
             label="Event Description"
             placeholder="Description of the event and details guests will need. Include times, links and location!"
@@ -113,10 +119,10 @@
             placeholder="Link to ticket page or social media post"
             width="halfWidth">
           </FormField>
-          <!-- Tags -->
+          <!-- Preview -->
           <div id="previewEventContainer" class="buttonLabelContainer">
-            <label class="fieldLabel">Preview Event</label>
-            <BaseButton>Public Event</BaseButton>
+            <label class="fieldLabel">Preview Public Event</label>
+            <BaseButton>Preview</BaseButton>
           </div>
 
         </div>
@@ -132,14 +138,6 @@
         <!-- Empty -->
       </section>
     </div>
-    
-    <div class="hero mobileView">
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
-      </section>
-      
-    </div>
-
     <FooterBar></FooterBar>
   </main>
 </template>

@@ -26,8 +26,8 @@
       </RouterLink>
     </div>
 
-    <div class="hero desktopView">
-      <section id="sideBar" class="bLeft">
+    <div class="hero ">
+      <section id="sideBar" class="bLeft desktopView">
         <RouterLink variant="primary" class="menuEntry" to="/admin">
           <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
           Dashboard
@@ -50,21 +50,92 @@
         </RouterLink>
       </section>
 
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
+      <section id="eventsList" class="bCenterAdmin">
+        <div id="PageTitle" class="pageHeader">
+          <h1 class="title">General Meeting Details</h1>
+          <hr class="fgHR">
+        </div>
+        <div class="checkText">
+          <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
+          <p>Make General Meetings Viewable</p>
+        </div>
+        <hr class="fgHR">
+        <div id="inputFields" class="fieldsContainer">
+          <FormField
+            v-model="eventLocation"
+            label="Location"
+            placeholder="Where will the meeting be held?"
+            width="halfWidth">
+          </FormField>
+          <div id="eventDate" class="dateTimeContainer">
+            <FormField
+              v-model="eventDate"
+              label="Starting Date"
+              placeholder="Date"
+              width="quartWidth">
+            </FormField>
+          </div>
+          <div id="frequencyContainer" class="buttonLabelContainer">
+            <label class="fieldLabel">Frequency?</label>
+            <div class="checkText">
+              <input type="checkbox" id="checkboxW" v-model="frequencyCheck" class="checkboxCustom" />
+              <p>Weekly</p>
+            </div>
+            <div class="checkText">
+              <input type="checkbox" id="checkboxF" v-model="frequencyCheck" class="checkboxCustom" />
+              <p>Fortnightly</p>
+            </div>
+            <div class="checkText">
+              <input type="checkbox" id="checkboxM" v-model="frequencyCheck" class="checkboxCustom" />
+              <p>Monthly</p>
+            </div>
+
+          </div>
+          <div id="eventStartEnd" class="dateTimeContainer">
+            <FormField
+              v-model="eventStartTime"
+              label="Meeting Time"
+              placeholder="Start"
+              width="quartWidth">
+            </FormField>
+            <FormField
+              v-model="eventEndTime"
+              label=""
+              placeholder="End"
+              width="quartWidth">
+            </FormField>
+          </div>
+          <FormField
+            v-model="paragraph"
+            label="Meeting Description"
+            placeholder="Description of the meeting and details members will need. Include times, links and location!"
+            width="fullWidth">
+          </FormField>
+          <FormField
+            v-model="link"
+            label="Associated Link"
+            placeholder="Link to social media post or meeting minutes"
+            width="halfWidth">
+          </FormField>
+          <!-- Preview -->
+          <div id="previewEventContainer" class="buttonLabelContainer">
+            <label class="fieldLabel">Preview Meeting Event</label>
+            <BaseButton>Preview</BaseButton>
+          </div>
+        </div>
+        <hr class="fgHR">
+        <div id="saveCancelButtons" class="buttonRow">
+          <BaseButton>Publish</BaseButton>
+          <BaseButton>Save</BaseButton>
+          <BaseButton variant="secondary">Cancel</BaseButton>
+        </div>
       </section>
 
-      <section id="analyitcsBar" class="bRight">
+      <section id="analyitcsBar" class="bRightAdmin">
         <!-- Empty -->
       </section>
     </div>
-    
-    <div class="hero mobileView">
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
-      </section>
-      
-    </div>
+
 
     <FooterBar></FooterBar>
   </main>
@@ -72,10 +143,12 @@
 
 
 <script setup>
-// import BaseButton from '@/components/BaseButton.vue'
+import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
+import FormField from '@/components/FormField.vue'
 import { useClubData } from '@/composables/useClubData'
+
 
 const { clubDetails } = useClubData()
 
@@ -124,14 +197,6 @@ const onHeaderMenuClick = (event) =>{
   border-bottom: 2px solid var(--color-brandText);
 }
 
-.bRight {
-  flex: 0.7;
-}
-
-.bCenter {
-  flex: 2;
-  box-shadow: 2px 0px var(--color-background-2);
-}
 
 .menuEntry{
   display: flex;
@@ -183,18 +248,6 @@ const onHeaderMenuClick = (event) =>{
   .mobileView { display: block; }
   .hero {flex-direction: column;}
 }
-
-.backdrop {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1;
-}
-.backdrop.show { display: block; }
 
 
 </style>

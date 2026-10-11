@@ -26,8 +26,8 @@
       </RouterLink>
     </div>
 
-    <div class="hero desktopView">
-      <section id="sideBar" class="bLeft">
+    <div class="hero ">
+      <section id="sideBar" class="bLeft desktopView">
         <RouterLink variant="primary" class="menuEntry" to="/admin">
           <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
           Dashboard
@@ -95,15 +95,7 @@
             width="halfWidth"
             :model-value="clubDetails.hexCode">
           </FormField>
-          <!-- Club Description -->
-          <FormField
-            label="Club Description"
-            placeholder="Description of the club, its events and who the club is aimed towards!"
-            width="fullWidth"
-            height="descHeight"
-            :model-value="clubDetails.description">
-          </FormField>
-    
+          <!-- Club Description -->    
           <div class="fieldContainer">
             <label class="fieldLabel">
               Club Description
@@ -191,14 +183,6 @@
         <!-- Empty -->
       </section>
     </div>
-    
-    <div class="hero mobileView">
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
-      </section>
-      
-    </div>
-
     <FooterBar></FooterBar>
   </main>
 </template>
@@ -317,6 +301,7 @@ const onHeaderMenuClick = (event) =>{
   .desktopView { display: none; }
   .mobileView { display: block; }
   .hero {flex-direction: column;}
+  .twoColContainer{ flex-direction: column; align-items: start;}
 }
 
 .backdrop {
