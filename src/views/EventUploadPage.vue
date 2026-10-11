@@ -60,7 +60,7 @@
             v-model="eventLink"
             label="Create Event from TidyHQ?"
             placeholder="TidyHQ Public Event Link"
-            variant="halfWidth">
+            width="halfWidth">
           </FormField>
           <BaseButton>Submit</BaseButton>
         </div>
@@ -70,20 +70,20 @@
             v-model="eventTitle"
             label="Title"
             placeholder="Title of Event"
-            variant="halfWidth">
+            width="halfWidth">
           </FormField>
           <div id="eventStart" class="dateTimeContainer">
             <FormField
               v-model="eventDate"
               label="Start Time"
               placeholder="Date"
-              variant="quartWidth">
+              width="quartWidth">
             </FormField>
             <FormField
               v-model="eventStartTime"
               label=""
               placeholder="Time"
-              variant="quartWidth">
+              width="quartWidth">
             </FormField>
           </div>
           <div id="eventEnd" class="dateTimeContainer">
@@ -91,27 +91,27 @@
               v-model="eventDate"
               label="End Time"
               placeholder="Date"
-              variant="quartWidth">
+              width="quartWidth">
             </FormField>
             <FormField
               v-model="eventStartTime"
               label=""
               placeholder="Time"
-              variant="quartWidth">
+              width="quartWidth">
             </FormField>
           </div>
           <FormField
             v-model="paragraph"
             label="Event Description"
             placeholder="Description of the event and details guests will need. Include times, links and location!"
-            variant="fullWidth">
+            width="fullWidth">
           </FormField>
           <!-- image upload -->
           <FormField
             v-model="link"
             label="External Link"
             placeholder="Link to ticket page or social media post"
-            variant="halfWidth">
+            width="halfWidth">
           </FormField>
           <!-- Tags -->
           <div id="previewEventContainer" class="buttonLabelContainer">

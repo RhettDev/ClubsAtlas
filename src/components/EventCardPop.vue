@@ -7,7 +7,10 @@
         </div>
         <div id="eventDetails" class="eventDetails">
           <div id="topRow" class="contentRow spaced">
-            <div id="titleClubName" class="contentRow">
+            <div v-if="!clubName" id="title" class="contentRow">
+              <h2>{{ eventTitle }}</h2>
+            </div>
+            <div v-else id="titleClubName" class="contentRow">
               <h2>{{ eventTitle }} - {{ clubName }}</h2>
             </div>
             <v-icon class="pointer" name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
@@ -54,7 +57,7 @@ import {
 
 defineProps({
   modelValue: { type: Boolean, default: false },
-  clubName: { type: String, default: 'Error! Missing Club Name Data.' },
+  clubName: { type: String, default: null },
   eventID: { type: Number, default: 0 },
   eventTitle: { type: String, default: 'Error! Missing Event Title Data' },
   eventDate: { type: String, default: 'Error! Missing Event Data' },

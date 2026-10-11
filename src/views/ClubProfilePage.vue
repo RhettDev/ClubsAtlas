@@ -50,11 +50,144 @@
         </RouterLink>
       </section>
 
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
+      <section id="eventsList" class="bCenterAdmin">
+        <div id="PageTitle" class="pageHeader">
+          <h1 class="title">Update Club Profile</h1>
+          <hr class="fgHR">
+        </div>
+        <div id="inputFields" class="fieldsContainer">
+          <!-- Club Banner Preview -->
+          <div id="bannerField" class="bannerLabelContainer">
+            <label class="fieldLabel">Current Club Banner</label>
+            <img :src="clubDetails.bannerURL">
+          </div>
+          <!-- Club Banner Browse -->
+          <div id="bannerField" class="buttonLabelContainer">
+            <label class="fieldLabel">Upload Club Banner</label>
+            <BaseButton>Browse Device</BaseButton>
+            <label class="fieldSubLabel">Recommended Size 1980x500px</label>
+          </div>
+          <!-- Club Logo Preview-->
+          <div id="bannerField" class="logoLabelContainer">
+            <label class="fieldLabel">Upload Club Logo</label>
+            <img :src="clubDetails.logoURL">
+          </div>
+          <!-- Club Logo Browse -->
+          <div id="bannerField" class="buttonLabelContainer">
+            <label class="fieldLabel">Current Club Banner</label>
+            <BaseButton>Browse Device</BaseButton>
+            <label class="fieldSubLabel">Recommended Size 200x200px</label>
+          </div>
+
+          <!-- Club Acronym -->
+          <FormField
+            v-model="clubAcronym"
+            label="Club Acroynum"
+            placeholder="Desired acronym for public view"
+            width="halfWidth"
+            :model-value="clubDetails.acronym">
+          </FormField>
+          <!-- Club Colour -->
+          <FormField
+            v-model="clubColour"
+            label="Club Colour"
+            placeholder="Hex code for the clubs signature colour"
+            width="halfWidth"
+            :model-value="clubDetails.hexCode">
+          </FormField>
+          <!-- Club Description -->
+          <FormField
+            label="Club Description"
+            placeholder="Description of the club, its events and who the club is aimed towards!"
+            width="fullWidth"
+            height="descHeight"
+            :model-value="clubDetails.description">
+          </FormField>
+    
+          <div class="fieldContainer">
+            <label class="fieldLabel">
+              Club Description
+            </label>
+            <textarea 
+              class="formField"
+              id="descriptionField"
+              v-model="description" 
+              rows="4" 
+              placeholder="Description of the club, its events and who the club is aimed towards!">
+            </textarea>
+          </div>
+          <!-- Club Contact Email -->
+          <FormField
+            v-model="clubEmail"
+            label="ContactEmail"
+            placeholder="club@domain.com"
+            width="halfWidth">
+          </FormField>
+          <!-- Socials Row 1 -->
+          <div class="twoColContainer">
+            <!-- Facebook (FB) -->
+            <FormField
+              v-model="clubFB"
+              label="Facebook"
+              placeholder="Link to Club Facebook"
+              width="halfWidth">
+            </FormField>
+            <!-- Instagram (IG) -->
+            <FormField
+              v-model="clubIG"
+              label="Instagram"
+              placeholder="Link to Club Instagram"
+              width="halfWidth">
+            </FormField>
+          </div>
+          <!-- Socials Row 2 -->
+          <div class="twoColContainer">
+            <!-- LinkedIn (LI) -->
+            <FormField
+              v-model="clubLi"
+              label="LinkedIn"
+              placeholder="Link to Club LinkedIn"
+              width="halfWidth">
+            </FormField>
+            <!-- LinkTree (LT) -->
+            <FormField
+              v-model="clubLT"
+              label="LinkTree"
+              placeholder="Link to Club LinkTree"
+              width="halfWidth">
+            </FormField>
+          </div>
+          <!-- Socials Row 3 -->
+          <div class="twoColContainer">
+            <!-- Website (Web) -->
+            <FormField
+              v-model="clubWeb"
+              label="Website"
+              placeholder="Link to Club Website"
+              width="halfWidth">
+            </FormField>
+            <!-- Discord (DC) -->
+            <FormField
+              v-model="clubDC"
+              label="Discord"
+              placeholder="Link to Club Discord"
+              width="halfWidth">
+            </FormField>
+          </div>
+          <!-- Tags -->
+          <div id="previewEventContainer" class="buttonLabelContainer">
+            <label class="fieldLabel">Preview Club Profile</label>
+            <BaseButton>Public View</BaseButton>
+          </div>
+        </div>
+        <hr class="fgHR">
+        <div id="saveCancelButtons" class="buttonRow">
+          <BaseButton>Save</BaseButton>
+          <BaseButton variant="secondary">Cancel</BaseButton>
+        </div>
       </section>
 
-      <section id="analyitcsBar" class="bRight">
+      <section id="analyitcsBar" class="bRightAdmin">
         <!-- Empty -->
       </section>
     </div>
@@ -75,6 +208,8 @@
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
+import FormField from '@/components/FormField.vue'
+import BaseButton from '@/components/BaseButton.vue'
 import { useClubData } from '@/composables/useClubData'
 
 const { clubDetails } = useClubData()
@@ -195,6 +330,12 @@ const onHeaderMenuClick = (event) =>{
     z-index: 1;
 }
 .backdrop.show { display: block; }
+
+.fieldContainer{
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
 
 
 </style>

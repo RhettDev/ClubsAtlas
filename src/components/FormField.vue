@@ -2,7 +2,8 @@
   <div 
     :class="[
       'fieldContainer', 
-      `fieldContainer--${variant}`
+      `fieldContainer--${width}`,
+      `fieldContainer--${height}`
       ]">
     <label v-if="showLabel" class="fieldLabel" :for="fieldID">
       {{ label }}
@@ -20,17 +21,22 @@
 
 <script setup>
 defineProps({
-  variant: {
+  width: {
     type: String,
-    default: 'primary',
+    default: 'halfWidth',
     validator: (v) => ['halfWidth', 'fullWidth', 'mobile'].includes(v),
+  },
+  height: {
+    type: String,
+    default: 'halfWidth',
+    validator: (v) => ['singleLine', 'descHeight'].includes(v),
   },
   label: { type: String, default: ''},
   showLabel: { type: Boolean, default: true }, 
   placeholder: { type: String, default: 'Enter Field Data' },
   disabled: { type: Boolean, default: false },
   modelValue: { type: String, default: '' },
-  type: { type: String, default: 'text' }
+  type: { type: String, default: 'text' },
 })
 
 defineEmits(['update:modelValue'])
@@ -51,12 +57,12 @@ defineEmits(['update:modelValue'])
 }
 
 .fieldContainer--halfWidth{
-  width: 40%;
+  width: 50%;
   min-width: 250px;
 }
 
 .fieldContainer--quartWidth{
-  width: 30%;
+  width: 40%;
   min-width: 60px;
 }
 
@@ -64,15 +70,16 @@ defineEmits(['update:modelValue'])
   flex-direction: column;
 }
 
-.fieldLabel{
-  color: var(--color-text-2);
-  text-align: left;
-  margin-bottom: 4px;
-}
-
 .formField:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.fieldContainer--singleLine{
+  height: 1lh;
+}
+.fieldContainer--descHeight{
+  height: 4lh;
 }
 
 </style>

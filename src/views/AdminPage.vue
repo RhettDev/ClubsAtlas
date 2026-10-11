@@ -58,7 +58,7 @@
       <!-- Desktop View -->
       <section id="eventsList" class="bCenterAdmin">
         <div id="PageTitle" class="pageHeader">
-          <h1 class="title">Events</h1>
+          <h1 class="title">Past Events</h1>
           <hr class="fgHR">
         </div>
         <div 
@@ -68,8 +68,22 @@
           <div id="adminEventCard" class="adminEventContainer">
             <div id="eventName" class="contentRow spaced vertCentered">
               <h2 style="font-weight: normal">{{ event.eventTitle }}</h2>
-              <BaseButton>View Details</BaseButton>
+              <BaseButton @click="openEventCard(event.id)" >View Details</BaseButton>
             </div>
+            <EventCardPop
+                :model-value="openEventId === event.id"
+                @update:model-value="closeEventCard"
+                :eventID="event.id"
+                :eventTitle="event.eventTitle"
+                :eventDate="event.eventDate"
+                :eventLocation="event.eventLocation"
+                :eventStart="event.startsAt"
+                :eventEnd="event.endsAt"
+                :eventDescription="event.eventDescription"
+                :eventImage="event.imageURL"
+                :eventLink="event.ticketLink"
+                :eventTags="eventTags"
+              />
             <div id="eventContent" class="eventDetails">
               <div id="dateTimeRow" class="contentRow">
                 <div>{{ convertToFullDate(event.eventDate) }} {{ convertTo12Hour(event.startsAt) }} - {{ convertTo12Hour(event.endsAt) }}</div>
@@ -88,14 +102,12 @@
       </section>
 
       <section id="analyitcsBar" class="bRightAdmin">
-        <p>analytics panel</p>
       </section>
     </div>
 
     <!-- Mobile View -->
     <div class="hero mobileView">
       <section id="analyitcsBar" class="bLeft">
-        <p>analytics panel</p>
       </section>
 
       <section id="eventsList" class="bCenter">
@@ -120,12 +132,17 @@ import { errorMessages } from 'vue/compiler-sfc'
 import BaseButton from '@/components/BaseButton.vue'
 import { useClubData } from '@/composables/useClubData'
 import { convertTo12Hour, convertToFullDate, hasValue, shortenDescription } from '@/composables/miscFunctions'
+import EventCardPop from '@/components/EventCardPop.vue'
 const { profile } = useAuth()
 const loadingEvents = ref(true)
 
 const clubTempID = ref(profile.value.clubID)
 const clubEvents = ref([])
 const { clubDetails } = useClubData()
+const loadingTags = ref(true)
+const errorMessage = ref(null)
+const eventTags = ref([])
+const openEventId = ref(null)
 
 const sortedClubEvents = computed(() =>
   [...clubEvents.value].sort(
@@ -153,6 +170,33 @@ async function getClubEvents(){
   } finally {
     loadingEvents.value = false
   }
+}
+
+async function getEventTags(eventid) {
+  try {
+    loadingTags.value = true
+
+    let { data, error } = await supabase.rpc('geteventstags', { eventid })
+
+    if (error) throw error
+
+    eventTags.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingTags.value = false
+  }
+}
+
+function openEventCard(eventID) {
+  getEventTags(eventID)
+  openEventId.value = eventID
+}
+
+function closeEventCard() {
+  openEventId.value = null
 }
 
 // events.id,
