@@ -143,6 +143,7 @@ bcenter.header.clubHeader {
 
 .logo {
   height: 32px;
+  width: 32px;
   margin: 0px 8px;
 }
 
@@ -341,6 +342,46 @@ bcenter.header.clubHeader {
   gap: 8px;
   width: 40%;
 }
+.twoColContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  gap: 16px;
+  width: 100%;
+}
+
+.fieldLabel{
+  color: var(--color-text-2);
+  text-align: left;
+  margin-bottom: 4px;
+}
+
+.fieldSubLabel{
+  color: var(--color-text-2);
+  text-align: left;
+  margin: 4px 0;
+  font-size: smaller;
+  font-style: italic;
+}
+
+.bannerLabelContainer{
+  display: flex;
+  flex-direction: column;
+  
+}
+.bannerLabelContainer img{
+  width: 100%;
+}
+
+.logoLabelContainer{
+  display: flex;
+  flex-direction: column;
+}
+.logoLabelContainer img{
+  margin: 0;
+  width: 48px;
+  height: 48px
+}
 
 .buttonLabelContainer {
   display: flex;
@@ -349,6 +390,7 @@ bcenter.header.clubHeader {
 }
 .buttonLabelContainer button {
   margin: 0;
+  width: max-content;
 }
 
 .fieldButtonContainer {
