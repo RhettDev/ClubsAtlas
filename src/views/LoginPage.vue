@@ -214,9 +214,4 @@ function panelSwap() {
   align-items: center;
 }
 
-.checkText {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
 </style>

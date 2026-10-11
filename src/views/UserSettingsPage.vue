@@ -1,9 +1,14 @@
 <template>
   <main id="userSettings" class="body">
-    <HeaderStudent @click="onHeaderMenuClick"></HeaderStudent>
+    <HeaderGeneric></HeaderGeneric>
     <div class="hero desktopView">
       <section id="emptyLeft" class="bLeft">
-        <!-- Empty -->
+        <div>
+          <RouterLink to="/calendar" class="contentRow vertCentered">
+            <v-icon name="pr-chevron-left" fill="var(--color-text-1)" scale="2" />
+            <h2>Back</h2>
+          </RouterLink>
+        </div>
       </section>
 
       <section id="Content" class="bCenterAdmin">
@@ -30,11 +35,11 @@
           >
           </FormField>
         </div>
-        <div class="buttonContainer" id="resetPassword">
+        <div class="buttonLabelContainer" id="resetPassword">
           <p class="fieldLabel">Send Password Reset Email</p>
           <BaseButton>Reset Password</BaseButton>
         </div>
-        <div class="buttonContainer" id="signOut">
+        <div class="buttonLabelContainer" id="signOut">
           <p class="fieldLabel">Sign Out of Your Account</p>
           <RouterLink to="/">
             <BaseButton @click="signOut">Sign Out</BaseButton>
@@ -66,10 +71,11 @@
 
 <script setup>
 import FooterBar from '@/components/FooterBar.vue'
-import HeaderStudent from '@/components/HeaderStudent.vue'
 import FormField from '@/components/FormField.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import DropDown from '@/components/DropDown.vue'
+import HeaderGeneric from '@/components/HeaderGeneric.vue'
+import { RouterLink } from 'vue-router'
 import { supabase } from '../../backend/supabase'
 
 
