@@ -113,7 +113,8 @@
             v-model="clubEmail"
             label="ContactEmail"
             placeholder="club@domain.com"
-            width="halfWidth">
+            width="halfWidth"
+            :model-value="clubSocials.email">
           </FormField>
           <!-- Socials Row 1 -->
           <div class="twoColContainer">
@@ -122,14 +123,16 @@
               v-model="clubFB"
               label="Facebook"
               placeholder="Link to Club Facebook"
-              width="halfWidth">
+              width="halfWidth"
+              :model-value="clubSocials.facebook">
             </FormField>
             <!-- Instagram (IG) -->
             <FormField
               v-model="clubIG"
               label="Instagram"
               placeholder="Link to Club Instagram"
-              width="halfWidth">
+              width="halfWidth"
+              :model-value="clubSocials.instagram">
             </FormField>
           </div>
           <!-- Socials Row 2 -->
@@ -139,14 +142,16 @@
               v-model="clubLi"
               label="LinkedIn"
               placeholder="Link to Club LinkedIn"
-              width="halfWidth">
+              width="halfWidth"
+              :model-value="clubSocials.linkedin">
             </FormField>
             <!-- LinkTree (LT) -->
             <FormField
               v-model="clubLT"
               label="LinkTree"
               placeholder="Link to Club LinkTree"
-              width="halfWidth">
+              width="halfWidth"
+              :model-value="clubSocials.linktree">
             </FormField>
           </div>
           <!-- Socials Row 3 -->
@@ -156,14 +161,16 @@
               v-model="clubWeb"
               label="Website"
               placeholder="Link to Club Website"
-              width="halfWidth">
+              width="halfWidth"
+              :model-value="clubSocials.website">
             </FormField>
             <!-- Discord (DC) -->
             <FormField
               v-model="clubDC"
               label="Discord"
               placeholder="Link to Club Discord"
-              width="halfWidth">
+              width="halfWidth"
+              :model-value="clubSocials.discord">
             </FormField>
           </div>
           <!-- Tags -->
@@ -174,8 +181,12 @@
         </div>
         <hr class="fgHR">
         <div id="saveCancelButtons" class="buttonRow">
-          <BaseButton>Save</BaseButton>
-          <BaseButton variant="secondary">Cancel</BaseButton>
+          <RouterLink to="/admin">
+            <BaseButton>Save</BaseButton>
+          </RouterLink>
+          <RouterLink to="/admin">
+            <BaseButton variant="secondary">Cancel</BaseButton>
+          </RouterLink>
         </div>
       </section>
 
@@ -196,7 +207,10 @@ import FormField from '@/components/FormField.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import { useClubData } from '@/composables/useClubData'
 
-const { clubDetails } = useClubData()
+const { clubDetails, clubSocials } = useClubData()
+// const load
+
+console.log(clubSocials.value)
 
 const onHeaderMenuClick = (event) =>{
   console.log(event)

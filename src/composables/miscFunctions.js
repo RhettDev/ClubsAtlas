@@ -1,7 +1,7 @@
 export function convertTo12Hour(timeStr) {
-    const [hours, minutes, seconds] = timeStr.split(':')
+    const [hours, minutes] = timeStr.split(':')
     const date = new Date()
-    date.setHours(hours, minutes, seconds)
+    date.setHours(hours, minutes)
 
     return new Intl.DateTimeFormat('en-UK', {
         hour: 'numeric',
@@ -44,4 +44,11 @@ export function shortenDescription(value) {
     if (lines.length <= 3) return description
 
     return `${lines.slice(0, 3).join('\n')}...`
+}
+
+export function setDarkMode(){
+    document.documentElement.dataset.theme = 'dark'
+}
+export function setLightMode(){
+    document.documentElement.dataset.theme = 'light'
 }

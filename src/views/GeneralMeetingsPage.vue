@@ -89,7 +89,6 @@
               <input type="checkbox" id="checkboxM" v-model="frequencyCheck" class="checkboxCustom" />
               <p>Monthly</p>
             </div>
-
           </div>
           <div id="eventStartEnd" class="dateTimeContainer">
             <FormField

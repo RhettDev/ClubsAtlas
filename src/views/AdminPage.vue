@@ -31,8 +31,8 @@
     </div>
 
     <!-- Desktop Navigation -->
-    <div class="hero desktopView">
-      <section id="sideBar" class="bLeft ">
+    <div class="hero ">
+      <section id="sideBar" class="bLeft desktopView">
         <RouterLink variant="primary" class="menuEntry active" to="/admin">
           <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
           Dashboard
@@ -92,7 +92,7 @@
                 <p>{{ event.eventLocation }}</p>
               </div>
             </div>
-            <p id="description" class="eventDescriptionContainer">{{ shortenDescription(event.eventDescription) }}</p>
+            <p id="description" class="eventDescriptionContainer desktopView">{{ shortenDescription(event.eventDescription) }}</p>
             <div id="publishedNote" class="textHR">
               <p class="brandText">Published</p>
               <hr class="fgHR">
@@ -104,18 +104,6 @@
       <section id="analyitcsBar" class="bRightAdmin">
       </section>
     </div>
-
-    <!-- Mobile View -->
-    <div class="hero mobileView">
-      <section id="analyitcsBar" class="bLeft">
-      </section>
-
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
-      </section>
-      
-    </div>
-
     <FooterBar></FooterBar>
   </main>
 </template>
@@ -150,8 +138,6 @@ const sortedClubEvents = computed(() =>
       new Date(secondEvent.eventDate) - new Date(firstEvent.eventDate),
   ),
 )
-
-console.log(clubTempID)
 
 async function getClubEvents(){
   try {

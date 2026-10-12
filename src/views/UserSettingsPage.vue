@@ -30,7 +30,7 @@
           <FormField
             v-model="changeEmail"
             label="Change Email"
-            placeholder="example@emai.com"
+            placeholder="example@email.com"
             variant="halfWidth"
           >
           </FormField>
@@ -51,15 +51,22 @@
           <h1 class="title">Prefernces</h1>
           <hr class="fgHR" />
         </div>
-
-        <div class="buttonContainer" id="language">
-          <p class="fieldLabel">Language</p>
-          <DropDown v-model="language" :options="languageList"></DropDown>
+        <div id="themeContainer" class="buttonLabelContainer">
+          <label class="fieldLabel">App Theme</label>
+          <form>
+            <label class="fieldLabel">
+              <input type="radio" name="theme" value="light" class="checkboxCustom" @click="setLightMode"> Light Mode
+            </label>
+            <label class="fieldLabel">
+              <input type="radio" name="theme" value="dark" class="checkboxCustom" checked @click="setDarkMode"> Dark Mode
+            </label>
+          </form>
         </div>
         <div class="buttonContainer" id="timeFormat">
           <p class="fieldLabel">Preferred Time Format</p>
           <DropDown v-model="timeFormat" :options="timeOptions"></DropDown>
         </div>
+
       </section>
       <section id="emptyRight" class="bRight">
         <!-- Empty -->
@@ -77,36 +84,15 @@ import DropDown from '@/components/DropDown.vue'
 import HeaderGeneric from '@/components/HeaderGeneric.vue'
 import { RouterLink } from 'vue-router'
 import { supabase } from '../../backend/supabase'
+import { setDarkMode, setLightMode } from '@/composables/miscFunctions'
 
-
-const languageList = [
-  'English',
-  'Mandarin Chinese (Simplified)',
-  'Spanish',
-  'Hindi',
-  'Arabic',
-  'French',
-  'Portuguese (Brazilian + European)',
-  'Russian',
-  'Bengali',
-  'Japanese',
-  'German',
-  'Korean',
-  'Italian',
-  'Turkish',
-  'Vietnamese',
-  'Indonesian',
-  'Thai',
-  'Polish',
-  'Dutch',
-  'Ukrainian',
-]
 const timeOptions = ['AM/PM', '24-Hour']
 
 async function signOut(){
   const { error } = await supabase.auth.signOut({ scope: 'local' })
   console.error(error)
 }
+
 
 </script>
 
