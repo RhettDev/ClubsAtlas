@@ -5,11 +5,10 @@
       `fieldContainer--${width}`,
       `fieldContainer--${height}`
       ]">
-    <label v-if="showLabel" class="fieldLabel" :for="fieldID">
+    <label v-if="showLabel" class="fieldLabel">
       {{ label }}
     </label>
     <input 
-      :id="fieldID"
       :type="type"
       :placeholder="placeholder"
       :disabled="disabled"

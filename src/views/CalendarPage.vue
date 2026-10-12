@@ -6,8 +6,6 @@
     <div id="navDropDown" class="dropDownMenu">
       <div id="yourClubs" v-if="currentClubsMenu === 1" key="yourClubs" class="dropDownClubsMenu">
         <h3 class="menuEntry">Today</h3>
-        <a class="menuEntry active">Month View</a>
-        <h3 class="menuEntry">Week View</h3>
         <hr class="bgHR" />
         <h3 class="menuEntry">Your Clubs</h3>
         <div id="clubsData" class="clubsContainer">
@@ -707,7 +705,7 @@ function closeEventCard() {
   gap: 16px;
   font-size: large;
   width: 90%;
-  height: calc(100vh - 10% - 20px);
+  height: calc(100vh - 20% - 20px);
   overflow-y: auto;
 }
 

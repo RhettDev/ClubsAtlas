@@ -38,7 +38,6 @@
           <a :href="eventLink" target="_blank" rel="noopener noreferrer">
             <BaseButton variant="primary">Event Link</BaseButton>
           </a>
-          <v-icon name="pr-map" fill="var(--color-text-1)" scale="1.5"></v-icon>
         </div>
       </div>
     </div>
