@@ -26,7 +26,7 @@ def scrape(link, clubID):
 
     tempDate = tempTimeALL[0]
     dateObject = datetime.strptime(tempDate, "%a, %d %b %Y")
-    tempDate = dateObject.strftime("%d_%b_%Y")
+    tempDate = dateObject.strftime("%Y-%m-%d")
     
     if len(tempTimeALL) == 3:
         tempStarts = tempTimeALL[1]

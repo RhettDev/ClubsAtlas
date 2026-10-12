@@ -1,7 +1,6 @@
 <template>
   <main class="auth-page">
     <HeaderBar></HeaderBar>
-
     <div class="hero">
       <!-- Step Panels -->
       <div class="stepView">
@@ -17,20 +16,20 @@
               </p>
             </div>
             <hr class="fgHR" />
-            <!-- User details taken: Name, Email, Password, Degree -->
-            <div class="fieldContainer">
+            <!-- User Details -->
+            <div class="fieldContainer"> <!-- User Name-->
               <v-icon name="pr-user" fill="var(--color-text-1)" scale="1.5" />
               <input v-model="firstName" type="text" class="formField" placeholder="First Name" />
             </div>
-            <div class="fieldContainer">
+            <div class="fieldContainer"> <!-- User Email-->
               <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
               <input v-model="email" type="email" class="formField" placeholder="Email Address" />
             </div>
-            <div class="fieldContainer">
+            <div class="fieldContainer"> <!-- Password-->
               <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
               <input v-model="password" type="password" class="formField" placeholder="Password" />
             </div>
-            <div class="fieldContainer">
+            <div class="fieldContainer"> <!-- Reneter Password to Confirm-->
               <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
               <input
                 v-model="passwordConfirm"
@@ -39,11 +38,11 @@
                 placeholder="Confirm Password"
               />
             </div>
-            <div class="fieldContainer">
+            <div class="fieldContainer"> <!-- User Degree-->
               <v-icon name="pr-briefcase" fill="var(--color-text-1)" scale="1.5" />
               <DropDown v-model="selectedDegree" :options="optionsDegree"> </DropDown>
             </div>
-            <div class="checkText">
+            <div class="checkText"> <!-- Terms and Conditions-->
               <input type="checkbox" id="checkbox" v-model="termsChecked" class="checkboxCustom" />
               <p>I agree to the <a class="brandText">Terms and Conditions</a></p>
             </div>
@@ -57,6 +56,7 @@
               <p>{{ validiateErrors.terms }}</p>
             </div>
 
+            <!-- Router to Login Page -->
             <div class="formTitle formSubtitle">
               <p>Already have an account?</p>
               <RouterLink class="brandText" to="/login"> Log in here!</RouterLink>
@@ -113,6 +113,7 @@
               <p>Create your account and discover the world of University clubs and events!</p>
             </div>
             <hr class="fgHR" />
+            <!-- List of Club Types, Must chose only one -->
             <div class="clubTypeList">
               <button
                 v-for="item in clubType"
@@ -124,6 +125,7 @@
                 <v-icon :name="item.icon" fill="var(--color-text-1)" scale="1.5"></v-icon>
                 <span class="tagLabel">{{ item.label }}</span>
               </button>
+            <!-- Validation message if exactly one is not selected -->
               <div id="validateMessage" v-if="validiateErrors" class="validationError">
                 {{ validiateErrors.clubType }}
               </div>
@@ -140,7 +142,7 @@
               <p>Based on your answers these are suggested clubs for you!</p>
             </div>
             <hr class="fgHR" />
-            <!-- List the four options and ensure one is selected -->
+            <!-- List the recommended clubs  -->
             <div class="clubTypeList">
               <button
                 v-for="item in givenClubs"
@@ -162,10 +164,12 @@
                 </div>
               </button>
             </div>
+            <!-- Loading Checks to avoid missing content whilst waiting for recommended clubs -->
             <p v-if="loadingClubs">Loading clubs...</p>
             <p v-else-if="givenClubs.length === 0">
               Error finding clubs for you, please try again.
             </p>
+            <!-- Validation message if minimum one is not selected -->
             <div id="validateMessage" v-if="validiateErrors" class="validationError">
               {{ validiateErrors.selectedClubs }}
             </div>
@@ -195,6 +199,7 @@
 </template>
 
 <script setup>
+// Imports --------------------------------------------------
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderBar from '@/components/HeaderGeneric.vue'
@@ -205,12 +210,10 @@ import { demoSessionData } from '@/composables/sessionStore'
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
+// Variables --------------------------------------------------
 const currentStep = ref(1)
 const totalSteps = 4
 const maxInterests = 3
-// const submitting = ref(false)
-// const showPassword = ref(false)
-
 const firstName = ref('')
 const email = ref('')
 const password = ref('')
@@ -224,6 +227,7 @@ const selectedClubs = ref([])
 const validiateErrors = ref(null)
 const termsChecked = ref(false)
 
+//  User details
 const userForm = {
   firstName: firstName,
   email: email,
@@ -231,6 +235,7 @@ const userForm = {
   passwordConfirm: passwordConfirm,
 }
 
+// User interests and chosen club type
 const signupFilters = {
   degree: selectedDegree,
   faith: selectedFaith,
@@ -238,33 +243,9 @@ const signupFilters = {
   type: selectedClubType,
   interests: selectedInterests,
 }
-
 const { finalClubs, loadingClubs, getClubsFilter, findClubs } = clubRecommendations(signupFilters)
-
 // Copy Signup data to demoSessionData
 const { demoUserClubs, demoUserDetails, demoUserFilters, startDemoSession } = demoSessionData()
-
-function syncData() {
-  demoUserClubs.value = [...selectedClubs.value]
-
-  demoUserDetails.value = {
-    firstName: firstName.value,
-    email: email.value,
-    degree: selectedDegree.value,
-  }
-
-  demoUserFilters.value = {
-    degree: selectedDegree.value,
-    faith: selectedFaith.value,
-    nationality: selectedNation.value,
-    type: selectedClubType.value,
-    interests: [...selectedInterests.value],
-  }
-
-  console.log(demoUserClubs.value)
-  console.log(demoUserDetails.value)
-  console.log(demoUserFilters.value)
-}
 
 const givenClubs = computed(() =>
   finalClubs.value.map((club) => ({
@@ -279,7 +260,7 @@ onMounted(async () => {
   await getClubsFilter()
 })
 
-// Data
+// Data --------------------------------------------------
 const interests = [
   { id: 'Music', icon: 'ri-music-line', label: 'Music' },
   { id: 'Games', icon: 'ri-gamepad-line', label: 'Games' },
@@ -287,7 +268,7 @@ const interests = [
   { id: 'Adventure', icon: 'ri-globe-line', label: 'Adventure' },
   { id: 'Sport', icon: 'ri-basketball-line', label: 'Sports' },
   { id: 'Crafts', icon: 'ri-brush-line', label: 'Crafts' },
-  { id: 'DigitalMedia', icon: 'ri-camera-line', label: 'Digital Media' }, // photography, movies,
+  { id: 'DigitalMedia', icon: 'ri-camera-line', label: 'Digital Media' }, 
   { id: 'PopCulture', icon: 'ri-game-line', label: 'Pop Culture' },
   { id: 'FoodDrink', icon: 'ri-cup-line', label: 'Food and Drink' },
   { id: 'Robotics', icon: 'ri-robot-line', label: 'Robotics' },
@@ -331,6 +312,32 @@ const optionsNation = ref([
   'Vietnamese',
 ])
 
+// Functions --------------------------------------------------
+
+// Function to push data to sessionStore, maintaining demo user data
+function syncData() {
+  demoUserClubs.value = [...selectedClubs.value]
+
+  demoUserDetails.value = {
+    firstName: firstName.value,
+    email: email.value,
+    degree: selectedDegree.value,
+  }
+
+  demoUserFilters.value = {
+    degree: selectedDegree.value,
+    faith: selectedFaith.value,
+    nationality: selectedNation.value,
+    type: selectedClubType.value,
+    interests: [...selectedInterests.value],
+  }
+
+  console.log(demoUserClubs.value)
+  console.log(demoUserDetails.value)
+  console.log(demoUserFilters.value)
+}
+
+// Function to keep track of how many interests the user has selected and switch interest buttons from inactive to active
 function toggleInterest(id) {
   const idx = selectedInterests.value.indexOf(id)
   if (idx === -1) {
@@ -340,19 +347,28 @@ function toggleInterest(id) {
   }
 }
 
+// Toggle which listed clubtype is selected, tracking it with selectedClubType
 function toggleClubType(id) {
   selectedClubType.value = id
 }
 
+// Function to track which clubs the user selected, switching button from inactive to active
 function toggleClubListing(id) {
   const idx = selectedClubs.value.indexOf(id)
-  if (idx === -1) selectedClubs.value.push(id)
-  else selectedClubs.value.splice(idx, 1)
+  if (idx === -1) {
+    selectedClubs.value.push(id)
+  }
+  else {
+    selectedClubs.value.splice(idx, 1)
+  }
 }
 
+// Validation Function to ensure all steps in the signup process have the required data to continue
+// only basic validation implemented, no need for thorough validation as it wont be sent to the database
+// Validation only implemented for demostration processes
 function validate(step) {
   const e = {}
-  if (step === 1) {
+  if (step === 1) { // Ensure user details are given (basic)
     if (!userForm.firstName.value.trim()) e.name = 'Please enter your first name.'
     if (!userForm.email.value.includes('@')) e.email = 'Enter a valid email.'
     if (userForm.password.value.length < 8) e.password = 'Password must be at least 8 characters.'
@@ -360,13 +376,13 @@ function validate(step) {
       e.passwordConfirm = 'Passwords must match.'
     if (!signupFilters.degree.value) e.degree = 'Please select Degree from List'
   }
-  if (step === 2) {
+  if (step === 2) { // Ensure the user selects three interests
     if (signupFilters.interests.value.length != 3) e.interests = 'Please select 3 interests.'
   }
-  if (step === 3) {
+  if (step === 3) { // Ensure the user has selected a club type
     if (!signupFilters.type.value) e.clubType = 'Please select 1 club type.'
   }
-  if (step === 4) {
+  if (step === 4) { // Ensure the user has selected at least one club
     if (selectedClubs.value.length === 0) e.selectedClubs = 'Please select at least one club.'
   }
   validiateErrors.value = e
