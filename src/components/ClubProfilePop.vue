@@ -13,44 +13,58 @@
             </div>
             <h2>{{ clubName }}</h2>
           </div>
-          <v-icon name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
+          <v-icon class="pointer" name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
         </div>
 
         <p id="description" class="descriptionContainer">
           {{ formatDescription(clubDescription) }}
         </p>
         <div id="tagsContainer" class="tagContainer">
-          <div class="tag scieng">SciEng</div>
-          <div class="tag party">Party</div>
-          <div class="tag networ">Networking</div>
+          <div v-for="tag in clubTags" :key="tag" :class="tag.tagSlug" id="tagItem" class="tag">
+            {{ tag.tagName }}
+          </div>
         </div>
         <div id="bottomRow" class="contentRow spaced">
           <div id="addToClub" class="contentRow vertCentered" @click="addClub(clubID)">
             <p>Add Club to Profile</p>
             <v-icon name="pr-plus" fill="var(--color-text-1)" scale="1.5"></v-icon>
           </div>
-          <div id="dbLinks" v-for="link in socialLinks" :key="link.platform">
-            <a href="link">test</a>
-          </div>
-          <div id="linksContainer" class="logoContainer">
-            <!-- v-for all links associated with the club -->
-            <img src="..\assets\logos\tidyHQLogo.png" class="colourInvert" />
+          <p v-if="loadingSocials">Loading social links...</p>
+          <div v-else id="linksContainer" class="logoContainer">
             <!-- TidyHQ -->
-            <v-icon name="pr-facebook" fill="var(--color-text-1)" scale="1.5"></v-icon>
-            <!-- IG -->
-            <v-icon name="pr-instagram" fill="var(--color-text-1)" scale="1.5"></v-icon>
-            <!-- FB -->
-            <v-icon name="pr-linkedin" fill="var(--color-text-1)" scale="1.5"></v-icon>
-            <!-- LinkedIn -->
-            <v-icon name="pr-globe" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <a v-if="clubsSocials.tidyhq" :href="clubsSocials.tidyhq" target="_blank" rel="noopener noreferrer">
+              <img src="..\assets\logos\tidyHQLogo.png" class="colourInvert" />
+            </a>
+            <!-- Facebook -->
+            <a v-if="clubsSocials.facebook" :href="clubsSocials.facebook" target="_blank" rel="noopener noreferrer">
+              <v-icon name="pr-facebook" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </a>
+            <!-- Instagram -->
+            <a v-if="clubsSocials.instagram" :href="clubsSocials.instagram" target="_blank" rel="noopener noreferrer">
+              <v-icon  name="pr-instagram" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </a>
+            <!-- Linkedin -->
+            <a v-if="clubsSocials.linkedin" :href="clubsSocials.linkedin" target="_blank" rel="noopener noreferrer">
+              <v-icon name="pr-linkedin" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </a>
+            <!-- LinkTree -->
+            <a v-if="clubsSocials.linktree" :href="clubsSocials.linktree" target="_blank" rel="noopener noreferrer">
+              <v-icon name="pr-link" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </a>
             <!-- Website -->
-            <v-icon name="pr-github" fill="var(--color-text-1)" scale="1.5"></v-icon>
-            <!-- GitHub -->
-            <v-icon name="pr-discord" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <a v-if="clubsSocials.website" :href="clubsSocials.website" target="_blank" rel="noopener noreferrer">
+              <v-icon name="pr-globe" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </a>
             <!-- Discord -->
+            <a v-if="clubsSocials.discord" :href="clubsSocials.discord" target="_blank" rel="noopener noreferrer">
+              <v-icon name="pr-discord" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </a>
+            <!-- Email -->
+            <a v-if="clubsSocials.email"  :href="clubsSocials.email" target="_blank" rel="noopener noreferrer">
+              <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </a>
           </div>
         </div>
-        <!-- <div id="showcaseEvent"></div> -->
       </div>
     </div>
   </Teleport>
@@ -62,7 +76,10 @@ import { formatDescription } from '@/composables/miscFunctions'
 import { supabase } from '../../backend/supabase'
 
 const loadingSocials = ref(true)
-const socialLinks = ref([])
+const loadingTags = ref(true)
+const errorMessage = ref(null)
+const clubTags = ref([])
+const clubsSocials = ref([])
 // const clubid = ref(null)
 
 const props = defineProps({
@@ -71,7 +88,6 @@ const props = defineProps({
   clubName: { type: String, default: 'Error! Missing Club Name Data.' },
   clubLogo: { type: String, default: 'Error! Missing Club Name Data.' },
   clubBanner: { type: String, default: 'Error! Missing Club Name Data.' },
-  // clubSocials: { type: String, default: 'Error! Missing Club Name Data.' },
   clubDescription: { type: String, default: 'Error! Missing Club Name Data.' },
   clubHexCode: { type: String, default: '#000000.' },
   addToFollowing: { type: String, default: 'Add to Calendar.' },
@@ -89,19 +105,37 @@ function addClub(clubID) {
   console.log('Adding Club ', clubID, 'to your profile')
 }
 
+async function getClubTags() {
+  try {
+    loadingTags.value = true
+
+    let clubid = props.clubID
+    let { data, error } = await supabase.rpc('getclubstags', { clubid })
+
+    if (error) throw error
+
+    clubTags.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingTags.value = false
+  }
+}
+
+
 async function getClubSocials() {
   try {
     loadingSocials.value = true
 
     let clubid = props.clubID
-    let { data, error } = await supabase.rpc('getclubssocials', { clubid })
+    let { data, error } = await supabase.rpc('getclubsocials', { clubid })
 
     if (error) throw error
 
-    socialLinks.value = data
-    console.log(socialLinks.value)
+    clubsSocials.value = data?.[0] ?? {}
   } catch (error) {
-    loadingSocials.value = error.message
     console.error('Error fetching data:', error)
     console.log('Error type:', typeof error)
   } finally {
@@ -111,6 +145,7 @@ async function getClubSocials() {
 
 onMounted(() => {
   getClubSocials()
+  getClubTags()
 })
 </script>
 

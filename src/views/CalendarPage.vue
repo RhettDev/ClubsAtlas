@@ -6,8 +6,6 @@
     <div id="navDropDown" class="dropDownMenu">
       <div id="yourClubs" v-if="currentClubsMenu === 1" key="yourClubs" class="dropDownClubsMenu">
         <h3 class="menuEntry">Today</h3>
-        <a class="menuEntry active">Month View</a>
-        <h3 class="menuEntry">Week View</h3>
         <hr class="bgHR" />
         <h3 class="menuEntry">Your Clubs</h3>
         <div id="clubsData" class="clubsContainer">
@@ -148,6 +146,7 @@
                 :eventDescription="event.eventDescription"
                 :eventImage="event.imageURL"
                 :eventLink="event.ticketLink"
+                :eventTags="eventTags"
               />
             </div>
           </div>
@@ -290,6 +289,7 @@
                 :model-value="openEventId === event.id"
                 @update:model-value="closeEventCard"
                 :clubName="event.clubName"
+                :eventID="event.id"
                 :eventTitle="event.eventTitle"
                 :eventDate="event.eventDate"
                 :eventLocation="event.eventLocation"
@@ -298,6 +298,7 @@
                 :eventDescription="event.eventDescription"
                 :eventImage="event.imageURL"
                 :eventLink="event.ticketLink"
+                :eventTags="eventTags"
               />
             </div>
           </div>
@@ -316,7 +317,7 @@ import HeaderStudent from '@/components/HeaderStudent.vue'
 import ClubListEntry from '@/components/ClubListEntry.vue'
 import { calendar } from '@/composables/calender'
 import { convertTo12Hour } from '@/composables/miscFunctions'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
 import { demoSessionData } from '@/composables/sessionStore'
@@ -330,7 +331,7 @@ const errorMessage = ref(null)
 const { isLoggedIn, loading: authLoading, profile } = useAuth()
 const studentUserID = ref(null)
 const clubsID = ref(1)
-const loadingCTags = ref(true)
+const loadingTags = ref(true)
 const currentClubsMenu = ref(1)
 const openClubId = ref(null)
 const suggestedClubs = ref([])
@@ -339,6 +340,8 @@ const events = ref([])
 const clubSearch = ref('')
 const openEventId = ref(null)
 const { isDemoSession, demoUserClubs } = demoSessionData()
+const authClubIDs = ref([])
+const eventTags = ref([])
 
 const { days } = calendar()
 
@@ -364,6 +367,15 @@ function dataSelection(mode){
   }
 }
 
+watch(
+  demoUserClubs,
+  async () => {
+    if (calendarMode.value !== 'demo') return
+    await Promise.all([getDemoClubs(), getDemoClubEvents()])
+  },
+  { deep: true },
+)
+
 // Side Bar Allocation
 // Your Clubs: 1 (Default)
 // Suggested Clubs: 2
@@ -384,6 +396,7 @@ async function getUsersClubs() {
     if (error) throw error
 
     usersClubs.value = data
+    captureIDs()
   } catch (error) {
     errorMessage.value = error.message
     console.error('Error fetching data:', error)
@@ -391,6 +404,11 @@ async function getUsersClubs() {
   } finally {
     loadingClubs.value = false
   }
+}
+
+function captureIDs() {
+  authClubIDs.value = usersClubs.value.map((club) => club.id)
+  console.log(authClubIDs.value)
 }
 
 // AUTH: Get the event data for every club a user is following
@@ -418,7 +436,12 @@ async function getDemoClubs() {
   try {
     loadingClubs.value = true
 
-    let recommendedids = demoUserClubs.value
+    let recommendedids = [...(demoUserClubs.value ?? [])]
+    if (recommendedids.length === 0) {
+      usersClubs.value = []
+      return
+    }
+
     let { data, error } = await supabase.rpc('getfilteredclubs', { recommendedids })
 
     if (error) throw error
@@ -438,7 +461,12 @@ async function getDemoClubEvents() {
   try {
     loadingEvents.value = true
 
-    let recommendedids = demoUserClubs.value
+    let recommendedids = [...(demoUserClubs.value ?? [])]
+    if (recommendedids.length === 0) {
+      events.value = []
+      return
+    }
+
     let { data, error } = await supabase.rpc('getclubeventsfromids', { recommendedids })
 
     if (error) throw error
@@ -494,7 +522,7 @@ async function getAllClubs() {
 // BOTH: Get the tags for a specific club
 async function getClubTags(clubsID) {
   try {
-    loadingCTags.value = true
+    loadingTags.value = true
     let clubid = clubsID.value
 
     let { data, error } = await supabase.rpc('getclubstags', { clubid })
@@ -506,7 +534,25 @@ async function getClubTags(clubsID) {
     console.error('Error fetching data:', error)
     console.log('Error type:', typeof error)
   } finally {
-    loadingCTags.value = false
+    loadingTags.value = false
+  }
+}
+// BOTH: Get the tags for a specific event
+async function getEventTags(eventid) {
+  try {
+    loadingTags.value = true
+
+    let { data, error } = await supabase.rpc('geteventstags', { eventid })
+
+    if (error) throw error
+
+    eventTags.value = data
+  } catch (error) {
+    errorMessage.value = error.message
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  } finally {
+    loadingTags.value = false
   }
 }
 
@@ -567,8 +613,9 @@ const isToday = (day) => {
   )
 }
 
-function openEventCard(eventId) {
-  openEventId.value = eventId
+function openEventCard(eventID) {
+  getEventTags(eventID)
+  openEventId.value = eventID
 }
 
 function closeEventCard() {
@@ -658,7 +705,7 @@ function closeEventCard() {
   gap: 16px;
   font-size: large;
   width: 90%;
-  height: calc(100vh - 10% - 20px);
+  height: calc(100vh - 20% - 20px);
   overflow-y: auto;
 }
 

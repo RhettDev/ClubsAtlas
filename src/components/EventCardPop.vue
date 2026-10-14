@@ -7,10 +7,13 @@
         </div>
         <div id="eventDetails" class="eventDetails">
           <div id="topRow" class="contentRow spaced">
-            <div id="titleClubName" class="contentRow">
+            <div v-if="!clubName" id="title" class="contentRow">
+              <h2>{{ eventTitle }}</h2>
+            </div>
+            <div v-else id="titleClubName" class="contentRow">
               <h2>{{ eventTitle }} - {{ clubName }}</h2>
             </div>
-            <v-icon name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
+            <v-icon class="pointer" name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
           </div>
           <div id="dateTimeRow" class="contentRow">
             <div>
@@ -26,11 +29,15 @@
         <p id="description" class="descriptionContainer">
           {{ formatDescription(eventDescription) }}
         </p>
+        <div id="tagsContainer" class="tagContainer">
+          <div v-for="tag in eventTags" :key="tag" :class="tag.tagSlug" id="tagItem" class="tag">
+            {{ tag.tagName }}
+          </div>
+        </div>
         <div id="bottomRow" class="contentRow spaced">
           <a :href="eventLink" target="_blank" rel="noopener noreferrer">
             <BaseButton variant="primary">Event Link</BaseButton>
           </a>
-          <v-icon name="pr-map" fill="var(--color-text-1)" scale="1.5"></v-icon>
         </div>
       </div>
     </div>
@@ -45,10 +52,12 @@ import {
   hasValue,
   formatDescription,
 } from '@/composables/miscFunctions'
+// import { ref } from 'vue'
 
 defineProps({
   modelValue: { type: Boolean, default: false },
-  clubName: { type: String, default: 'Error! Missing Club Name Data.' },
+  clubName: { type: String, default: null },
+  eventID: { type: Number, default: 0 },
   eventTitle: { type: String, default: 'Error! Missing Event Title Data' },
   eventDate: { type: String, default: 'Error! Missing Event Data' },
   eventLocation: { type: String, default: '' },
@@ -57,14 +66,17 @@ defineProps({
   eventDescription: { type: String, default: 'Error! Missing Event Data' },
   eventImage: { type: String, default: '' },
   eventLink: { type: String, default: 'Error! Missing Event Data' },
+  eventTags: { type: Array, default: () => [] },
   danger: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['update:modelValue', 'confirm', 'cancel'])
+// const eventTags = ref([])
 
 function close() {
   emit('update:modelValue', false)
 }
+
 </script>
 
 <style scope>

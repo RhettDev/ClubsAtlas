@@ -1,18 +1,13 @@
 <template>
   <section class="footer">
-    <div class="footerGroup fLeft"></div>
-    <div class="footerGroup fCenter" id="links">
-      <p>Terms - Privacy - </p>
-      <a href="mailto:rhett.bauchop@gmail.com">Contact</a>
-    </div>
     <div class="footerCopy fRight">
-      <a href="https://github.com/RhettDev/ClubsAtlas" rel="noopener noreferrer">@2026 ClubsAtlas · Rhett Bauchop</a>
+      <a href="https://github.com/RhettDev/ClubsAtlas" rel="noopener noreferrer">@2026 ClubsAtlas ·&nbsp;</a>
+      <a href="mailto:rhett.bauchop@gmail.com">Rhett Bauchop</a>
     </div>
   </section>
 </template>
 
 <style scoped>
-/* FOOTER CLASSES */
 .footer {
   display: flex;
   width: 100%;

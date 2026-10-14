@@ -50,7 +50,7 @@
       <div
         v-if="visibleOptions.addClub"
         class="dropdownOption"
-        @click="askAddClub(club.name)"
+        @click="askAddClub(club.id)"
         id="addClub"
       >
         <p>Add Club To Calendar</p>
@@ -66,7 +66,7 @@
         <v-icon name="pr-trash" fill="var(--color-text-1)" scale="1.3" />
       </div>
       <ConfirmationPop
-        v-model="showConfirm"
+        v-model="showConfirmRemove"
         :title="dialogConfig.title"
         :message="dialogConfig.message"
         :confirmBtn="dialogConfig.confirmBtn"
@@ -79,10 +79,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted} from 'vue'
 // import { supabase } from '../../backend/supabase'
 import ConfirmationPop from './ConfirmationPop.vue'
 import ClubProfilePop from './ClubProfilePop.vue'
+import { supabase } from '../../backend/supabase.js'
+import { demoSessionData } from '@/composables/sessionStore.js'
+import { useAuth } from '@/composables/useAuth.js'
+
 const props = defineProps({
   club: { type: Object, required: true },
   isOpen: { type: Boolean, default: false },
@@ -101,29 +105,66 @@ const props = defineProps({
 
 const toggleDisplayCheck = ref(true)
 const gmCheck = ref(false)
-const showConfirm = ref(false)
+const showConfirmRemove = ref(false)
 const dialogConfig = ref({ title: '', message: '', danger: false })
 const openClubID = ref(null)
+const studentUserID = ref(null)
+const { isDemoSession, dropFollowingClub, addFollowClub, demoUserClubs } = demoSessionData()
+const { profile } = useAuth()
 
 const emit = defineEmits(['toggle', 'selectOption'])
 
-// async function removeClub() {
-//   let removedclubid = props.club.id
-//   let temp = ref(1)
-//   let studentid = temp.value
-//   try {
-//     const res = await supabase.rpc('dropfollowingclub', { studentid, removedclubid })
+const calendarMode = isDemoSession.value
 
-//     // const res = await fetch(`/api/student/${studentid.value}/following/${removedclubid.value}`, {
-//     //   method: 'DELETE',
-//     // })
+function dataSelection(mode){
+  if(mode.value == null){
+    console.log("loading")
+  }
+  else if(mode.value == false){
+    studentUserID.value = profile.value.id
+    // removeClub()
+    // addClub()
+  }
+}
 
-//     if (!res.ok) throw new Error('Failed to remove Club from Calendar')
-//   } catch (error) {
-//     console.error('Error fetching data:', error)
-//     console.log('Error type:', typeof error)
-//   }
-// }
+function askAddClub(clubID){
+  if(calendarMode == true){
+    addFollowClub(clubID)
+  }
+  else if (calendarMode == false){
+    addClub(clubID)
+  }
+}
+
+async function removeClub() {
+  let removedclubid = props.club.id
+  let studentid = studentUserID.value
+  try {
+    const res = await supabase.rpc('dropfollowingclub', { removedclubid, studentid })
+
+    if (!res.ok) throw new Error('Failed to remove Club from Calendar')
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  }
+}
+
+async function addClub(clubid) {
+  let studentid = studentUserID.value
+  try {
+    const res = await supabase.rpc('addfollowingclub', { clubid, studentid })
+
+    // const res = await fetch(`/api/student/${studentid.value}/following/${removedclubid.value}`, {
+    //   method: 'DELETE',
+    // })
+
+    if (!res.ok) throw new Error('Failed to add Club to Calendar')
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  }
+}
+
 
 function askDeleteClub(clubName) {
   dialogConfig.value = {
@@ -133,12 +174,19 @@ function askDeleteClub(clubName) {
     cancelBtn: 'Cancel',
     danger: false,
   }
-  showConfirm.value = true
+  showConfirmRemove.value = true
 }
 
 function handleConfirmed() {
+  console.log("Clubs: ", demoUserClubs)
   console.log('removing club:', props.club.id)
-  // removeClub()
+  if(calendarMode == false){
+    removeClub() 
+  } 
+  else if (calendarMode == true){
+    dropFollowingClub(props.club.id)
+  }
+  console.log("Clubs: ", demoUserClubs)
 }
 
 function openClubProfile(clubID) {
@@ -148,6 +196,11 @@ function openClubProfile(clubID) {
 function closeClubProfile() {
   openClubID.value = null
 }
+
+onMounted(() => {
+  dataSelection(calendarMode)
+})
+
 </script>
 
 <style scoped>

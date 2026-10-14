@@ -26,8 +26,8 @@
       </RouterLink>
     </div>
 
-    <div class="hero desktopView">
-      <section id="sideBar" class="bLeft">
+    <div class="hero ">
+      <section id="sideBar" class="bLeft desktopView">
         <RouterLink variant="primary" class="menuEntry" to="/admin">
           <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
           Dashboard
@@ -50,20 +50,57 @@
         </RouterLink>
       </section>
 
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
+      <section id="settings" class="bCenterAdmin">
+        <!-- Account Settings -->
+        <div id="PageTitle" class="pageHeader">
+          <h1 class="title">Account Settings</h1>
+          <hr class="fgHR" />
+        </div>
+        <div class="fieldButtonContainer" id="changeEmail">
+          <FormField
+            v-model="changeEmail"
+            label="Account Email"
+            placeholder="club@domain.com"
+            variant="halfWidth"
+          >
+          </FormField>
+        </div>
+        <div class="buttonLabelContainer" id="resetPassword">
+          <p class="fieldLabel">Send Password Reset Email</p>
+          <BaseButton>Reset Password</BaseButton>
+        </div>
+        <div class="buttonLabelContainer" id="signOut">
+          <p class="fieldLabel">Sign Out of Your Account</p>
+          <RouterLink to="/">
+            <BaseButton @click="signOut">Sign Out</BaseButton>
+          </RouterLink>
+        </div>
+
+        <!-- Preferences -->
+        <div id="PageTitle" class="pageHeader">
+          <h1 class="title">Prefernces</h1>
+          <hr class="fgHR" />
+        </div>
+        <div id="themeContainer" class="buttonLabelContainer">
+          <label class="fieldLabel">App Theme</label>
+          <form>
+            <label class="fieldLabel">
+              <input type="radio" name="theme" value="light" class="checkboxCustom" @click="setLightMode"> Light Mode
+            </label>
+            <label class="fieldLabel">
+              <input type="radio" name="theme" value="dark" class="checkboxCustom" checked @click="setDarkMode"> Dark Mode
+            </label>
+          </form>
+        </div>
+        <div class="buttonContainer" id="timeFormat">
+          <p class="fieldLabel">Preferred Time Format</p>
+          <DropDown v-model="timeFormat" :options="timeOptions"></DropDown>
+        </div>
       </section>
 
-      <section id="analyitcsBar" class="bRight">
+      <section id="analyitcsBar" class="bRightAdmin">
         <!-- Empty -->
       </section>
-    </div>
-
-    <div class="hero mobileView">
-      <section id="eventsList" class="bCenter">
-        <h1>main body</h1>
-      </section>
-      
     </div>
 
     <FooterBar></FooterBar>
@@ -72,10 +109,14 @@
 
 
 <script setup>
-// import BaseButton from '@/components/BaseButton.vue'
+import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
+import FormField from '@/components/FormField.vue'
+import DropDown from '@/components/DropDown.vue'
 import { useClubData } from '@/composables/useClubData'
+import { supabase } from '../../backend/supabase'
+import { setDarkMode, setLightMode } from '@/composables/miscFunctions'
 
 const { clubDetails } = useClubData()
 
@@ -91,6 +132,14 @@ const onHeaderMenuClick = (event) =>{
         document.getElementById('navBackdrop').classList.add('show');
     }
 }
+const timeOptions = ['AM/PM', '24-Hour']
+
+async function signOut(){
+  const { error } = await supabase.auth.signOut({ scope: 'local' })
+  console.error(error)
+}
+
+
 </script>
 
 <style scoped>

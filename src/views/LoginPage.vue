@@ -153,7 +153,7 @@ async function handleLogin() {
   }
 }
 
-// Swap between steps
+// Swap between steps based on the current step
 function panelSwap() {
   let newValue
   if (currentStep.value == 1) {
@@ -214,9 +214,4 @@ function panelSwap() {
   align-items: center;
 }
 
-.checkText {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
-}
 </style>

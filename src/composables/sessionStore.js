@@ -19,12 +19,22 @@ function clearDemoSession() {
 
 export function demoSessionData(){
 
-    return {
-        demoUserClubs,
-        demoUserDetails,
-        demoUserFilters,
-        isDemoSession,
-        startDemoSession,
-        clearDemoSession
-    }
+  function dropFollowingClub(clubID){
+    const updatedDemoClubs = demoUserClubs.value.filter(club => club !== clubID)
+    demoUserClubs.value = updatedDemoClubs
+  }
+  function addFollowClub(clubID){
+    demoUserClubs.value.push(clubID)
+  }
+
+  return {
+      demoUserClubs,
+      demoUserDetails,
+      demoUserFilters,
+      isDemoSession,
+      startDemoSession,
+      clearDemoSession,
+      dropFollowingClub,
+      addFollowClub
+  }
 }

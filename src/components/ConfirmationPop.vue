@@ -81,5 +81,8 @@ function handleCancel() {
   .dialogButtonContainer {
     flex-direction: column;
   }
+  .dialogContainer{
+    max-width: 80%;
+  }
 }
 </style>
