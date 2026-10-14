@@ -13,11 +13,16 @@
     "format": "prettier --write --experimental-cli src/"
   },
   "dependencies": {
+    "@coreui/coreui": "^5.9.1",
+    "@coreui/vue": "^5.10.1",
+    "@primeuix/themes": "^3.0.1",
     "@supabase/supabase-js": "^2.111.0",
+    "bootstrap": "^5.3.8",
     "dotenv": "^17.4.2",
     "make": "^0.0.0",
     "oh-vue-icons": "^1.0.0-rc3",
     "pg": "^8.22.0",
+    "primevue": "^5.0.2",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"
   },
