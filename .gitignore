@@ -40,6 +40,7 @@ __screenshots__/
 
 # Backend
 *.env
+.env.local
 /node_modules/
 src/assets/eventImages/✨🏸AMSSocialBadminton🏸✨_14_Mar_2026.jpg
 src/assets/eventImages/🏐🏸Sportsathon2026🏸🏐_09_May_2026.jpg
