@@ -2,7 +2,11 @@
   <li>
     <div class="clubRow" @click="emit('toggle')" :class="{ open: isOpen }">
       <div class="clubLogoName">
-        <img class="clubLogo" :src="club.logoURL" :style="{ borderColor: club.hexCode }" />
+        <img
+          class="clubLogo"
+          :src="`/images/clubLogos/${club.logoURL}`"
+          :style="{ borderColor: club.hexCode }"
+        />
         <span class="clubName">{{ club.name }}</span>
       </div>
       <v-icon
@@ -79,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted} from 'vue'
+import { ref, onMounted } from 'vue'
 // import { supabase } from '../../backend/supabase'
 import ConfirmationPop from './ConfirmationPop.vue'
 import ClubProfilePop from './ClubProfilePop.vue'
@@ -116,22 +120,20 @@ const emit = defineEmits(['toggle', 'selectOption'])
 
 const calendarMode = isDemoSession.value
 
-function dataSelection(mode){
-  if(mode.value == null){
-    console.log("loading")
-  }
-  else if(mode.value == false){
+function dataSelection(mode) {
+  if (mode.value == null) {
+    console.log('loading')
+  } else if (mode.value == false) {
     studentUserID.value = profile.value.id
     // removeClub()
     // addClub()
   }
 }
 
-function askAddClub(clubID){
-  if(calendarMode == true){
+function askAddClub(clubID) {
+  if (calendarMode == true) {
     addFollowClub(clubID)
-  }
-  else if (calendarMode == false){
+  } else if (calendarMode == false) {
     addClub(clubID)
   }
 }
@@ -165,7 +167,6 @@ async function addClub(clubid) {
   }
 }
 
-
 function askDeleteClub(clubName) {
   dialogConfig.value = {
     title: 'Remove club?',
@@ -178,15 +179,14 @@ function askDeleteClub(clubName) {
 }
 
 function handleConfirmed() {
-  console.log("Clubs: ", demoUserClubs)
+  console.log('Clubs: ', demoUserClubs)
   console.log('removing club:', props.club.id)
-  if(calendarMode == false){
-    removeClub() 
-  } 
-  else if (calendarMode == true){
+  if (calendarMode == false) {
+    removeClub()
+  } else if (calendarMode == true) {
     dropFollowingClub(props.club.id)
   }
-  console.log("Clubs: ", demoUserClubs)
+  console.log('Clubs: ', demoUserClubs)
 }
 
 function openClubProfile(clubID) {
@@ -200,7 +200,6 @@ function closeClubProfile() {
 onMounted(() => {
   dataSelection(calendarMode)
 })
-
 </script>
 
 <style scoped>

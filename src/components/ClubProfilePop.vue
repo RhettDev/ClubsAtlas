@@ -3,17 +3,27 @@
     <div v-if="modelValue" class="overlay" @click.self="close">
       <div id="popContainer" class="popUpContainer clubWidth mobileContainer">
         <div v-if="clubBanner" class="bannerContainer">
-          <img :src="clubBanner" alt="Club Banner" />
+          <img :src="`/images/clubBanners/${clubBanner}`" alt="Club Banner" />
         </div>
         <!-- <div id="clubDetails" class="clubDetails"></div> -->
         <div id="topRow" class="contentRow spaced vertCentered">
           <div id="titleClubName" class="contentRow vertCentered">
             <div v-if="clubLogo" class="clubLogoName">
-              <img class="clubLogo" :src="clubLogo" :style="{ borderColor: clubHexCode }" />
+              <img
+                class="clubLogo"
+                :src="`/images/clubLogos/${clubLogo}`"
+                :style="{ borderColor: clubHexCode }"
+              />
             </div>
             <h2>{{ clubName }}</h2>
           </div>
-          <v-icon class="pointer" name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
+          <v-icon
+            class="pointer"
+            name="pr-times"
+            fill="var(--color-text-1)"
+            scale="1.5"
+            @click="close"
+          ></v-icon>
         </div>
 
         <p id="description" class="descriptionContainer">
@@ -32,35 +42,75 @@
           <p v-if="loadingSocials">Loading social links...</p>
           <div v-else id="linksContainer" class="logoContainer">
             <!-- TidyHQ -->
-            <a v-if="clubsSocials.tidyhq" :href="clubsSocials.tidyhq" target="_blank" rel="noopener noreferrer">
+            <a
+              v-if="clubsSocials.tidyhq"
+              :href="clubsSocials.tidyhq"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <img src="..\assets\logos\tidyHQLogo.png" class="colourInvert" />
             </a>
             <!-- Facebook -->
-            <a v-if="clubsSocials.facebook" :href="clubsSocials.facebook" target="_blank" rel="noopener noreferrer">
+            <a
+              v-if="clubsSocials.facebook"
+              :href="clubsSocials.facebook"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <v-icon name="pr-facebook" fill="var(--color-text-1)" scale="1.5"></v-icon>
             </a>
             <!-- Instagram -->
-            <a v-if="clubsSocials.instagram" :href="clubsSocials.instagram" target="_blank" rel="noopener noreferrer">
-              <v-icon  name="pr-instagram" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            <a
+              v-if="clubsSocials.instagram"
+              :href="clubsSocials.instagram"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <v-icon name="pr-instagram" fill="var(--color-text-1)" scale="1.5"></v-icon>
             </a>
             <!-- Linkedin -->
-            <a v-if="clubsSocials.linkedin" :href="clubsSocials.linkedin" target="_blank" rel="noopener noreferrer">
+            <a
+              v-if="clubsSocials.linkedin"
+              :href="clubsSocials.linkedin"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <v-icon name="pr-linkedin" fill="var(--color-text-1)" scale="1.5"></v-icon>
             </a>
             <!-- LinkTree -->
-            <a v-if="clubsSocials.linktree" :href="clubsSocials.linktree" target="_blank" rel="noopener noreferrer">
+            <a
+              v-if="clubsSocials.linktree"
+              :href="clubsSocials.linktree"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <v-icon name="pr-link" fill="var(--color-text-1)" scale="1.5"></v-icon>
             </a>
             <!-- Website -->
-            <a v-if="clubsSocials.website" :href="clubsSocials.website" target="_blank" rel="noopener noreferrer">
+            <a
+              v-if="clubsSocials.website"
+              :href="clubsSocials.website"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <v-icon name="pr-globe" fill="var(--color-text-1)" scale="1.5"></v-icon>
             </a>
             <!-- Discord -->
-            <a v-if="clubsSocials.discord" :href="clubsSocials.discord" target="_blank" rel="noopener noreferrer">
+            <a
+              v-if="clubsSocials.discord"
+              :href="clubsSocials.discord"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <v-icon name="pr-discord" fill="var(--color-text-1)" scale="1.5"></v-icon>
             </a>
             <!-- Email -->
-            <a v-if="clubsSocials.email"  :href="clubsSocials.email" target="_blank" rel="noopener noreferrer">
+            <a
+              v-if="clubsSocials.email"
+              :href="clubsSocials.email"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5"></v-icon>
             </a>
           </div>
@@ -123,7 +173,6 @@ async function getClubTags() {
     loadingTags.value = false
   }
 }
-
 
 async function getClubSocials() {
   try {

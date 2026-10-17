@@ -2,11 +2,22 @@
   <section class="header clubHeader">
     <div class="clubLogoName">
       <div class="mobileText menuButton">
-        <v-icon class="menuButton" name="pr-bars" fill="var(--color-text-1)" scale="1.6" @click="$emit('click')"/>
+        <v-icon
+          class="menuButton"
+          name="pr-bars"
+          fill="var(--color-text-1)"
+          scale="1.6"
+          @click="$emit('click')"
+        />
       </div>
-      <img class="clubLogo" :src="club.logoURL" :style="{borderColor: club.hexCode}" alt="clubLogo" />
-      <h2 class="desktopText">{{club.name}}</h2>
-      <h2 class="mobileText">{{club.acronym}}</h2>
+      <img
+        class="clubLogo"
+        :src="`/images/clubLogos/${club.logoURL}`"
+        :style="{ borderColor: club.hexCode }"
+        alt="clubLogo"
+      />
+      <h2 class="desktopText">{{ club.name }}</h2>
+      <h2 class="mobileText">{{ club.acronym }}</h2>
       <!-- <slot name="clubName" class="clubLogoText"></slot> -->
     </div>
     <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
@@ -14,7 +25,6 @@
 </template>
 
 <script setup>
-
 defineEmits(['click'])
 
 const props = defineProps({

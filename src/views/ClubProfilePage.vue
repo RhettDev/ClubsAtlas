@@ -5,47 +5,52 @@
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
     <div id="navDropDown" class="dropDownMenu">
       <RouterLink variant="primary" class="menuEntry" to="/admin">
-        <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.2"/>
+        <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.2" />
         Dashboard
       </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/new-event" >
-        <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.2"/>
+      <RouterLink variant="primary" class="menuEntry" to="/admin/new-event">
+        <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.2" />
         Upload New Event
       </RouterLink>
-      <RouterLink variant="primary" class="menuEntry active" to="/admin/update-home" @click="onHeaderMenuClick">
-        <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.2"/>
+      <RouterLink
+        variant="primary"
+        class="menuEntry active"
+        to="/admin/update-home"
+        @click="onHeaderMenuClick"
+      >
+        <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.2" />
         Update Club Profile
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm">
-        <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.2"/>
+        <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.2" />
         General Meetings
       </RouterLink>
       <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-        <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.2"/>
+        <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.2" />
         Settings
       </RouterLink>
     </div>
 
-    <div class="hero ">
+    <div class="hero">
       <section id="sideBar" class="bLeft desktopView">
         <RouterLink variant="primary" class="menuEntry" to="/admin">
-          <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
+          <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5" />
           Dashboard
         </RouterLink>
         <RouterLink variant="primary" class="menuEntry" to="/admin/new-event">
-          <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.5"/>
+          <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.5" />
           Upload New Event
         </RouterLink>
         <RouterLink variant="primary" class="menuEntry active" to="/admin/update-home">
-          <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.5"/>
+          <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.5" />
           Update Club Profile
         </RouterLink>
         <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm">
-          <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.5"/>
+          <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.5" />
           General Meetings
         </RouterLink>
         <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-          <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.5"/>
+          <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.5" />
           Settings
         </RouterLink>
       </section>
@@ -53,13 +58,13 @@
       <section id="eventsList" class="bCenterAdmin">
         <div id="PageTitle" class="pageHeader">
           <h1 class="title">Update Club Profile</h1>
-          <hr class="fgHR">
+          <hr class="fgHR" />
         </div>
         <div id="inputFields" class="fieldsContainer">
           <!-- Club Banner Preview -->
           <div id="bannerField" class="bannerLabelContainer">
             <label class="fieldLabel">Current Club Banner</label>
-            <img :src="clubDetails.bannerURL">
+            <img :src="`/images/clubBanners/${clubDetails.bannerURL}`" />
           </div>
           <!-- Club Banner Browse -->
           <div id="bannerField" class="buttonLabelContainer">
@@ -70,7 +75,7 @@
           <!-- Club Logo Preview-->
           <div id="bannerField" class="logoLabelContainer">
             <label class="fieldLabel">Upload Club Logo</label>
-            <img :src="clubDetails.logoURL">
+            <img :src="`/images/clubLogos/${clubDetails.logoURL}`" />
           </div>
           <!-- Club Logo Browse -->
           <div id="bannerField" class="buttonLabelContainer">
@@ -85,7 +90,8 @@
             label="Club Acroynum"
             placeholder="Desired acronym for public view"
             width="halfWidth"
-            :model-value="clubDetails.acronym">
+            :model-value="clubDetails.acronym"
+          >
           </FormField>
           <!-- Club Colour -->
           <FormField
@@ -93,19 +99,19 @@
             label="Club Colour"
             placeholder="Hex code for the clubs signature colour"
             width="halfWidth"
-            :model-value="clubDetails.hexCode">
+            :model-value="clubDetails.hexCode"
+          >
           </FormField>
-          <!-- Club Description -->    
+          <!-- Club Description -->
           <div class="fieldContainer">
-            <label class="fieldLabel">
-              Club Description
-            </label>
-            <textarea 
+            <label class="fieldLabel"> Club Description </label>
+            <textarea
               class="formField"
               id="descriptionField"
-              v-model="description" 
-              rows="4" 
-              placeholder="Description of the club, its events and who the club is aimed towards!">
+              v-model="description"
+              rows="4"
+              placeholder="Description of the club, its events and who the club is aimed towards!"
+            >
             </textarea>
           </div>
           <!-- Club Contact Email -->
@@ -114,7 +120,8 @@
             label="ContactEmail"
             placeholder="club@domain.com"
             width="halfWidth"
-            :model-value="clubSocials.email">
+            :model-value="clubSocials.email"
+          >
           </FormField>
           <!-- Socials Row 1 -->
           <div class="twoColContainer">
@@ -124,7 +131,8 @@
               label="Facebook"
               placeholder="Link to Club Facebook"
               width="halfWidth"
-              :model-value="clubSocials.facebook">
+              :model-value="clubSocials.facebook"
+            >
             </FormField>
             <!-- Instagram (IG) -->
             <FormField
@@ -132,7 +140,8 @@
               label="Instagram"
               placeholder="Link to Club Instagram"
               width="halfWidth"
-              :model-value="clubSocials.instagram">
+              :model-value="clubSocials.instagram"
+            >
             </FormField>
           </div>
           <!-- Socials Row 2 -->
@@ -143,7 +152,8 @@
               label="LinkedIn"
               placeholder="Link to Club LinkedIn"
               width="halfWidth"
-              :model-value="clubSocials.linkedin">
+              :model-value="clubSocials.linkedin"
+            >
             </FormField>
             <!-- LinkTree (LT) -->
             <FormField
@@ -151,7 +161,8 @@
               label="LinkTree"
               placeholder="Link to Club LinkTree"
               width="halfWidth"
-              :model-value="clubSocials.linktree">
+              :model-value="clubSocials.linktree"
+            >
             </FormField>
           </div>
           <!-- Socials Row 3 -->
@@ -162,7 +173,8 @@
               label="Website"
               placeholder="Link to Club Website"
               width="halfWidth"
-              :model-value="clubSocials.website">
+              :model-value="clubSocials.website"
+            >
             </FormField>
             <!-- Discord (DC) -->
             <FormField
@@ -170,7 +182,8 @@
               label="Discord"
               placeholder="Link to Club Discord"
               width="halfWidth"
-              :model-value="clubSocials.discord">
+              :model-value="clubSocials.discord"
+            >
             </FormField>
           </div>
           <!-- Tags -->
@@ -179,7 +192,7 @@
             <BaseButton>Public View</BaseButton>
           </div>
         </div>
-        <hr class="fgHR">
+        <hr class="fgHR" />
         <div id="saveCancelButtons" class="buttonRow">
           <RouterLink to="/admin">
             <BaseButton>Save</BaseButton>
@@ -198,7 +211,6 @@
   </main>
 </template>
 
-
 <script setup>
 // import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
@@ -212,19 +224,19 @@ const { clubDetails, clubSocials } = useClubData()
 
 console.log(clubSocials.value)
 
-const onHeaderMenuClick = (event) =>{
+const onHeaderMenuClick = (event) => {
   console.log(event)
-  let navDD = document.getElementById("navDropDown");
-    if (navDD.style.display === "flex"){ // Check if menu is open, then close it 
-        navDD.style.display = "none";
-        document.getElementById('navBackdrop').classList.remove('show');
-    }
-    else { // Open the menu 
-        navDD.style.display = "flex";
-        document.getElementById('navBackdrop').classList.add('show');
-    }
+  let navDD = document.getElementById('navDropDown')
+  if (navDD.style.display === 'flex') {
+    // Check if menu is open, then close it
+    navDD.style.display = 'none'
+    document.getElementById('navBackdrop').classList.remove('show')
+  } else {
+    // Open the menu
+    navDD.style.display = 'flex'
+    document.getElementById('navBackdrop').classList.add('show')
+  }
 }
-
 </script>
 
 <style scoped>
@@ -238,12 +250,12 @@ const onHeaderMenuClick = (event) =>{
   flex: 1;
 }
 
-.body{
+.body {
   display: flex;
   width: 100%;
 }
 
-.bLeft{
+.bLeft {
   display: flex;
   flex-direction: column;
   flex: 0.7;
@@ -266,7 +278,7 @@ const onHeaderMenuClick = (event) =>{
   box-shadow: 2px 0px var(--color-background-2);
 }
 
-.menuEntry{
+.menuEntry {
   display: flex;
   padding: 4px 0;
   gap: 10px;
@@ -286,8 +298,7 @@ const onHeaderMenuClick = (event) =>{
   border-bottom: 2px solid var(--color-brandText);
 }
 
-
-.mobileView{
+.mobileView {
   display: none;
 }
 
@@ -312,29 +323,38 @@ const onHeaderMenuClick = (event) =>{
 }
 
 @media screen and (max-width: 688px) {
-  .desktopView { display: none; }
-  .mobileView { display: block; }
-  .hero {flex-direction: column;}
-  .twoColContainer{ flex-direction: column; align-items: start;}
+  .desktopView {
+    display: none;
+  }
+  .mobileView {
+    display: block;
+  }
+  .hero {
+    flex-direction: column;
+  }
+  .twoColContainer {
+    flex-direction: column;
+    align-items: start;
+  }
 }
 
 .backdrop {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 1;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
 }
-.backdrop.show { display: block; }
+.backdrop.show {
+  display: block;
+}
 
-.fieldContainer{
+.fieldContainer {
   display: flex;
   flex-direction: column;
   text-align: left;
 }
-
-
 </style>
