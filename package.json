@@ -23,7 +23,6 @@
     "make": "^0.0.0",
     "oh-vue-icons": "^1.0.0-rc3",
     "pg": "^8.22.0",
-    "primevue": "^5.0.2",
     "uvicorn": "^0.0.1-security",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"
