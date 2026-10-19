@@ -3,7 +3,7 @@
     <div v-if="modelValue" class="overlay" @click.self="close">
       <div id="container" class="popUpContainer eventWidth mobileContainer">
         <div v-if="eventImage" class="eventImageContainer">
-          <img :src="eventImage" alt="Event image" />
+          <img :src="`/images/eventImages/${eventImage}`" alt="Event image" />
         </div>
         <div id="eventDetails" class="eventDetails">
           <div id="topRow" class="contentRow spaced">
