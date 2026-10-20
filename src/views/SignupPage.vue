@@ -156,7 +156,7 @@
                   <div class="clubLogoName">
                     <img
                       class="clubLogo"
-                      :src="item.logoURL"
+                      :src="`/images/clubLogos/${item.logoURL}`"
                       :style="{ borderColor: item.hexCode }"
                     />
                     <span class="clubName">{{ item.name }}</span>
