@@ -19,15 +19,15 @@
             <!-- User Details -->
             <div class="fieldContainer"> <!-- User Name-->
               <v-icon name="pr-user" fill="var(--color-text-1)" scale="1.5" />
-              <input v-model="firstName" type="text" class="formField" placeholder="First Name" />
+              <input v-model="firstName" type="text" class="formField" placeholder="First Name*" />
             </div>
             <div class="fieldContainer"> <!-- User Email-->
               <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" />
-              <input v-model="email" type="email" class="formField" placeholder="Email Address" />
+              <input v-model="email" type="email" class="formField" placeholder="Email Address*" />
             </div>
             <div class="fieldContainer"> <!-- Password-->
               <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
-              <input v-model="password" type="password" class="formField" placeholder="Password" />
+              <input v-model="password" type="password" class="formField" placeholder="Password*" />
             </div>
             <div class="fieldContainer"> <!-- Reneter Password to Confirm-->
               <v-icon name="pr-lock" fill="var(--color-text-1)" scale="1.5" />
@@ -35,7 +35,7 @@
                 v-model="passwordConfirm"
                 type="password"
                 class="formField"
-                placeholder="Confirm Password"
+                placeholder="Confirm Password*"
               />
             </div>
             <div class="fieldContainer"> <!-- User Degree-->

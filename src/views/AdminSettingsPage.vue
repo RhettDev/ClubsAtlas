@@ -96,6 +96,11 @@
           <p class="fieldLabel">Preferred Time Format</p>
           <DropDown v-model="timeFormat" :options="timeOptions"></DropDown>
         </div> -->
+        <hr class="fg" />
+        <div class="buttonRow vertCentered">
+          <BaseButton @click="saveCheck = true">Save</BaseButton>
+          <p v-if="saveCheck" id="saveMessage">Being a demo, your edits are not actually saved</p> 
+        </div>
       </section>
 
       <section id="analyitcsBar" class="bRightAdmin">
@@ -121,6 +126,7 @@ import { ref } from 'vue'
 
 const { clubDetails } = useClubData()
 const selectedTheme = ref(document.documentElement.dataset.theme || 'dark')
+const saveCheck = ref(false)
 
 const onHeaderMenuClick = (event) =>{
   console.log(event)

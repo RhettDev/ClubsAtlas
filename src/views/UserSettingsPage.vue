@@ -67,6 +67,12 @@
           <DropDown v-model="timeFormat" :options="timeOptions"></DropDown>
         </div> -->
 
+        <hr class="fg" />
+        <div class="buttonRow vertCentered">
+          <BaseButton @click="saveCheck = true">Save</BaseButton>
+          <p v-if="saveCheck" id="saveMessage">Being a demo, your edits are not actually saved</p> 
+        </div>
+
       </section>
       <section id="emptyRight" class="bRight">
         <!-- Empty -->
@@ -89,6 +95,7 @@ import { ref } from 'vue'
 
 // const timeOptions = ['AM/PM', '24-Hour']
 const selectedTheme = ref(document.documentElement.dataset.theme || 'dark')
+const saveCheck = ref(false)
 
 async function signOut(){
   const { error } = await supabase.auth.signOut({ scope: 'local' })
