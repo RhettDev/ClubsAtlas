@@ -108,7 +108,7 @@
             <textarea
               class="formField"
               id="descriptionField"
-              v-model="description"
+              v-model="clubDetails.description"
               rows="4"
               placeholder="Description of the club, its events and who the club is aimed towards!"
             >
@@ -189,8 +189,18 @@
           <!-- Tags -->
           <div id="previewEventContainer" class="buttonLabelContainer">
             <label class="fieldLabel">Preview Club Profile</label>
-            <BaseButton>Public View</BaseButton>
+            <BaseButton @click="openProfileCard">Public View</BaseButton>
           </div>
+          <ClubProfilePop
+            :model-value="openCheck"
+            @update:model-value="closeProfileCard"
+            :clubID="clubDetails.id"
+            :clubName="clubDetails.name"
+            :clubLogo="clubDetails.logoURL"
+            :clubBanner="clubDetails.bannerURL"
+            :clubDescription="clubDetails.description"
+            :clubHexCode="clubDetails.hexCode"
+          />
         </div>
         <hr class="fgHR" />
         <div id="saveCancelButtons" class="buttonRow">
@@ -217,10 +227,12 @@ import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
 import FormField from '@/components/FormField.vue'
 import BaseButton from '@/components/BaseButton.vue'
+import ClubProfilePop from '@/components/ClubProfilePop.vue'
 import { useClubData } from '@/composables/useClubData'
+import { ref } from 'vue'
 
 const { clubDetails, clubSocials } = useClubData()
-// const load
+const openCheck = ref(false)
 
 console.log(clubSocials.value)
 
@@ -237,6 +249,17 @@ const onHeaderMenuClick = (event) => {
     document.getElementById('navBackdrop').classList.add('show')
   }
 }
+
+
+function openProfileCard() {
+  // getEventTags(eventID)
+  openCheck.value = true
+}
+
+function closeProfileCard() {
+  openCheck.value = false
+}
+
 </script>
 
 <style scoped>
