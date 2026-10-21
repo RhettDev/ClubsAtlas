@@ -89,7 +89,7 @@
             </div>
             <!-- Validation message if exactly three are not selected -->
             <div id="validateMessage" v-if="validiateErrors" class="validationError">
-              {{ validiateErrors.interests }}
+              <p>{{ validiateErrors.interests }}</p>
             </div>
             <hr class="fgHR" />
             <div class="formTitleWide">
@@ -127,7 +127,7 @@
               </button>
             <!-- Validation message if exactly one is not selected -->
               <div id="validateMessage" v-if="validiateErrors" class="validationError">
-                {{ validiateErrors.clubType }}
+                <p>{{ validiateErrors.clubType }}</p>
               </div>
             </div>
             <hr class="fgHR" />
@@ -171,7 +171,7 @@
             </p>
             <!-- Validation message if minimum one is not selected -->
             <div id="validateMessage" v-if="validiateErrors" class="validationError">
-              {{ validiateErrors.selectedClubs }}
+              <p>{{ validiateErrors.selectedClubs }}</p>
             </div>
             <hr class="fgHR" />
           </div>
