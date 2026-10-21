@@ -49,6 +49,7 @@
           :clubBanner="club.bannerURL"
           :clubDescription="club.description"
           :clubHexCode="club.hexCode"
+          :followingStatus="visibleOptions.toggleGM === false"
         />
       </div>
       <div

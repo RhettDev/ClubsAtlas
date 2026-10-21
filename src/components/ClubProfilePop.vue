@@ -35,9 +35,18 @@
           </div>
         </div>
         <div id="bottomRow" class="contentRow spaced">
-          <div id="addToClub" class="contentRow vertCentered" @click="addClub(clubID)">
-            <p>Add Club to Profile</p>
-            <v-icon name="pr-plus" fill="var(--color-text-1)" scale="1.5"></v-icon>
+          <div v-if="followingStatus == true">
+            <div id="addToClub" class="contentRow vertCentered pointer" @click="askAddClub(clubID)">
+              <p>Add Club to Profile</p>
+              <v-icon name="pr-plus" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </div>
+          </div>
+
+          <div v-else-if="followingStatus == false">
+            <div id="removeClub" class="contentRow vertCentered pointer" @click="askRemoveClub(clubID)">
+              <p>Remove Club from Profile</p>
+              <v-icon name="pr-trash" fill="var(--color-text-1)" scale="1.5"></v-icon>
+            </div>
           </div>
           <p v-if="loadingSocials">Loading social links...</p>
           <div v-else id="linksContainer" class="logoContainer">
@@ -124,13 +133,19 @@
 import { onMounted, ref } from 'vue'
 import { formatDescription } from '@/composables/miscFunctions'
 import { supabase } from '../../backend/supabase'
+import { demoSessionData } from '@/composables/sessionStore';
+import { useAuth } from '@/composables/useAuth';
 
 const loadingSocials = ref(true)
 const loadingTags = ref(true)
 const errorMessage = ref(null)
 const clubTags = ref([])
 const clubsSocials = ref([])
+const { isDemoSession, addFollowClub, dropFollowingClub } = demoSessionData()
+const { profile } = useAuth()
 // const clubid = ref(null)
+const calendarMode = isDemoSession.value
+
 
 const props = defineProps({
   modelValue: { type: Boolean, default: false },
@@ -140,6 +155,7 @@ const props = defineProps({
   clubBanner: { type: String, default: 'Error! Missing Club Name Data.' },
   clubDescription: { type: String, default: 'Error! Missing Club Name Data.' },
   clubHexCode: { type: String, default: '#000000.' },
+  followingStatus: { type: Boolean, default: false},
   addToFollowing: { type: String, default: 'Add to Calendar.' },
   removeFromFollowing: { type: String, default: 'Remove from Calendar.' },
   danger: { type: Boolean, default: false },
@@ -149,10 +165,6 @@ const emit = defineEmits(['update:modelValue'])
 
 function close() {
   emit('update:modelValue', false)
-}
-
-function addClub(clubID) {
-  console.log('Adding Club ', clubID, 'to your profile')
 }
 
 async function getClubTags() {
@@ -191,6 +203,39 @@ async function getClubSocials() {
     loadingSocials.value = false
   }
 }
+
+function askAddClub(clubID) {
+  if (calendarMode == true) {
+    addFollowClub(clubID)
+  } else if (calendarMode == false) {
+    addClub(clubID)
+  }
+}
+
+function askRemoveClub(clubID) {
+  if (calendarMode == true) {
+    dropFollowingClub(clubID)
+  } else if (calendarMode == false) {
+    console.log("Removing club ",clubID, " from calendar")
+  }
+}
+
+async function addClub(clubid) {
+  let studentid = profile.value.id
+  try {
+    const res = await supabase.rpc('addfollowingclub', { clubid, studentid })
+
+    // const res = await fetch(`/api/student/${studentid.value}/following/${removedclubid.value}`, {
+    //   method: 'DELETE',
+    // })
+
+    if (!res.ok) throw new Error('Failed to add Club to Calendar')
+  } catch (error) {
+    console.error('Error fetching data:', error)
+    console.log('Error type:', typeof error)
+  }
+}
+
 
 onMounted(() => {
   getClubSocials()

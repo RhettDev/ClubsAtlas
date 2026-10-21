@@ -92,10 +92,10 @@
             </label>
           </form>
         </div>
-        <div class="buttonContainer" id="timeFormat">
+        <!-- <div class="buttonContainer" id="timeFormat">
           <p class="fieldLabel">Preferred Time Format</p>
           <DropDown v-model="timeFormat" :options="timeOptions"></DropDown>
-        </div>
+        </div> -->
       </section>
 
       <section id="analyitcsBar" class="bRightAdmin">
@@ -113,7 +113,7 @@ import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
 import FormField from '@/components/FormField.vue'
-import DropDown from '@/components/DropDown.vue'
+// import DropDown from '@/components/DropDown.vue'
 import { useClubData } from '@/composables/useClubData'
 import { supabase } from '../../backend/supabase'
 import { setDarkMode, setLightMode } from '@/composables/miscFunctions'
@@ -134,7 +134,7 @@ const onHeaderMenuClick = (event) =>{
         document.getElementById('navBackdrop').classList.add('show');
     }
 }
-const timeOptions = ['AM/PM', '24-Hour']
+// const timeOptions = ['AM/PM', '24-Hour']
 
 async function signOut(){
   const { error } = await supabase.auth.signOut({ scope: 'local' })

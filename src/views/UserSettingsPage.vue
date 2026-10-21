@@ -62,10 +62,10 @@
             </label>
           </form>
         </div>
-        <div class="buttonContainer" id="timeFormat">
+        <!-- <div class="buttonContainer" id="timeFormat">
           <p class="fieldLabel">Preferred Time Format</p>
           <DropDown v-model="timeFormat" :options="timeOptions"></DropDown>
-        </div>
+        </div> -->
 
       </section>
       <section id="emptyRight" class="bRight">
@@ -80,14 +80,14 @@
 import FooterBar from '@/components/FooterBar.vue'
 import FormField from '@/components/FormField.vue'
 import BaseButton from '@/components/BaseButton.vue'
-import DropDown from '@/components/DropDown.vue'
+// import DropDown from '@/components/DropDown.vue'
 import HeaderGeneric from '@/components/HeaderGeneric.vue'
 import { RouterLink } from 'vue-router'
 import { supabase } from '../../backend/supabase'
 import { setDarkMode, setLightMode } from '@/composables/miscFunctions'
 import { ref } from 'vue'
 
-const timeOptions = ['AM/PM', '24-Hour']
+// const timeOptions = ['AM/PM', '24-Hour']
 const selectedTheme = ref(document.documentElement.dataset.theme || 'dark')
 
 async function signOut(){
