@@ -55,10 +55,10 @@
           <label class="fieldLabel">App Theme</label>
           <form>
             <label class="fieldLabel">
-              <input type="radio" name="theme" value="light" class="checkboxCustom" @click="setLightMode"> Light Mode
+              <input type="radio" name="theme" value="light" class="checkboxCustom" v-model="selectedTheme" @change="setLightMode"> Light Mode
             </label>
             <label class="fieldLabel">
-              <input type="radio" name="theme" value="dark" class="checkboxCustom" checked @click="setDarkMode"> Dark Mode
+              <input type="radio" name="theme" value="dark" class="checkboxCustom" v-model="selectedTheme" @change="setDarkMode"> Dark Mode
             </label>
           </form>
         </div>
@@ -85,8 +85,10 @@ import HeaderGeneric from '@/components/HeaderGeneric.vue'
 import { RouterLink } from 'vue-router'
 import { supabase } from '../../backend/supabase'
 import { setDarkMode, setLightMode } from '@/composables/miscFunctions'
+import { ref } from 'vue'
 
 const timeOptions = ['AM/PM', '24-Hour']
+const selectedTheme = ref(document.documentElement.dataset.theme || 'dark')
 
 async function signOut(){
   const { error } = await supabase.auth.signOut({ scope: 'local' })

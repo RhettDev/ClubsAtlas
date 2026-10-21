@@ -85,10 +85,10 @@
           <label class="fieldLabel">App Theme</label>
           <form>
             <label class="fieldLabel">
-              <input type="radio" name="theme" value="light" class="checkboxCustom" @click="setLightMode"> Light Mode
+              <input type="radio" name="theme" value="light" class="checkboxCustom" v-model="selectedTheme" @change="setLightMode"> Light Mode
             </label>
             <label class="fieldLabel">
-              <input type="radio" name="theme" value="dark" class="checkboxCustom" checked @click="setDarkMode"> Dark Mode
+              <input type="radio" name="theme" value="dark" class="checkboxCustom" v-model="selectedTheme" @change="setDarkMode"> Dark Mode
             </label>
           </form>
         </div>
@@ -117,8 +117,10 @@ import DropDown from '@/components/DropDown.vue'
 import { useClubData } from '@/composables/useClubData'
 import { supabase } from '../../backend/supabase'
 import { setDarkMode, setLightMode } from '@/composables/miscFunctions'
+import { ref } from 'vue'
 
 const { clubDetails } = useClubData()
+const selectedTheme = ref(document.documentElement.dataset.theme || 'dark')
 
 const onHeaderMenuClick = (event) =>{
   console.log(event)

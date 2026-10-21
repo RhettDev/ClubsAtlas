@@ -19,7 +19,7 @@
     </div>
 
     <div v-if="isOpen" class="dropdownMenu">
-      <div v-if="visibleOptions.clubDisplay" class="dropdownOption" id="clubDisplay">
+      <!-- <div v-if="visibleOptions.clubDisplay" class="dropdownOption" id="clubDisplay">
         <p>Toggle Club Display</p>
         <input
           type="checkbox"
@@ -27,7 +27,7 @@
           v-model="toggleDisplayCheck"
           class="checkboxCustom"
         />
-      </div>
+      </div> -->
       <div v-if="visibleOptions.toggleGM" class="dropdownOption" id="toggleGM">
         <p>Toggle General Meeting</p>
         <input type="checkbox" id="generalMeeting" v-model="gmCheck" class="checkboxCustom" />
@@ -107,7 +107,7 @@ const props = defineProps({
   },
 })
 
-const toggleDisplayCheck = ref(true)
+// const toggleDisplayCheck = ref(true)
 const gmCheck = ref(false)
 const showConfirmRemove = ref(false)
 const dialogConfig = ref({ title: '', message: '', danger: false })
