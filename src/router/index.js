@@ -1,3 +1,7 @@
+// File Name: index.js
+// Author: Rhett Bauchop - 20722517
+// Purpose: Handles Routing between all pages, setting the path of the URL to Vue view.
+
 import { createRouter, createWebHistory } from 'vue-router'
 import LandingPage from '../views/LandingPage.vue'
 import LoginPage from '../views/LoginPage.vue'

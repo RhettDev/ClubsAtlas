@@ -1,80 +1,55 @@
+<!-- 
+  File Name: GeneralMeetingPage.vue
+  Author: Rhett Bauchop - 20722517
+  Page URL:  clubsatlas.app/admin/new-event
+  Purpose: This file holds all HTML, CSS and Javascript for outlining the clubs general meeting,
+  no data in or out of this page is implemented due to lack of time.
+-->
+
+<!-- HTML -->
 <template>
   <main id="adminMain">
+    <!-- v--if to ensure club details have loaded before header is rendered. Holds Mobile Admin navigation-->
     <HeaderClubs v-if="clubDetails" @click="onHeaderMenuClick" :club="clubDetails" />
-    <!-- Mobiel Naviation -->
-    <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
-    <div id="navDropDown" class="dropDownMenu">
-      <RouterLink variant="primary" class="menuEntry" to="/admin">
-        <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.2"/>
-        Dashboard
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/new-event" >
-        <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.2"/>
-        Upload New Event
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
-        <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.2"/>
-        Update Club Profile
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry active" to="/admin/update-gm" @click="onHeaderMenuClick">
-        <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.2"/>
-        General Meetings
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-        <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.2"/>
-        Settings
-      </RouterLink>
-    </div>
 
+    <!-- Desktop Navigation -->
     <div class="hero ">
       <section id="sideBar" class="bLeft desktopView">
-        <RouterLink variant="primary" class="menuEntry" to="/admin">
-          <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
-          Dashboard
-        </RouterLink>
-        <RouterLink variant="primary" class="menuEntry" to="/admin/new-event">
-          <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.5"/>
-          Upload New Event
-        </RouterLink>
-        <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
-          <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.5"/>
-          Update Club Profile
-        </RouterLink>
-        <RouterLink variant="primary" class="menuEntry active" to="/admin/update-gm">
-          <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.5"/>
-          General Meetings
-        </RouterLink>
-        <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-          <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.5"/>
-          Settings
-        </RouterLink>
+        <AdminNavigation />
       </section>
 
+      <!-- Body: List of General Meeting input fields -->
       <section id="eventsList" class="bCenterAdmin">
         <div id="PageTitle" class="pageHeader">
           <h1 class="title">General Meeting Details</h1>
           <hr class="fgHR">
         </div>
+        <!-- Check for if the meetings are visible to students -->
         <div class="checkText">
           <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
           <p>Make General Meetings Viewable</p>
         </div>
         <hr class="fgHR">
         <div id="inputFields" class="fieldsContainer">
+          <!-- Meeting Location -->
+          <!-- Half widths were chosen to not overload the page, only need no much space. -->
           <FormField
-            v-model="eventLocation"
+            v-model="location"
             label="Location"
             placeholder="Where will the meeting be held?"
             width="halfWidth">
           </FormField>
+          <!-- Meeting Start Date -->
           <div id="eventDate" class="dateTimeContainer">
             <FormField
-              v-model="eventDate"
+              v-model="startDate"
               label="Starting Date"
               placeholder="Date"
               width="quartWidth">
             </FormField>
           </div>
+          <!-- Meeting Frequency -->
+          <!-- Radio Buttons used for simplicity -->
           <div id="frequencyContainer" class="buttonLabelContainer">
             <label class="fieldLabel">Frequency?</label>
             <div class="checkText">
@@ -90,26 +65,32 @@
               <p>Monthly</p>
             </div>
           </div>
+          <!-- Meeting Time -->
+          <!-- Quarter widths were chosen to allow two field in one row and mimic half width -->
           <div id="eventStartEnd" class="dateTimeContainer">
             <FormField
-              v-model="eventStartTime"
+              v-model="startTime"
               label="Meeting Time"
               placeholder="Start"
               width="quartWidth">
             </FormField>
+            <!-- Uses label from above -->
             <FormField
-              v-model="eventEndTime"
+              v-model="endTime"
               label=""
               placeholder="End"
               width="quartWidth">
             </FormField>
           </div>
+          <!-- Meeting Description -->
+          <!-- This description uses FormField as any entered description is expected to be short -->
           <FormField
-            v-model="paragraph"
+            v-model="description"
             label="Meeting Description"
             placeholder="Description of the meeting and details members will need. Include times, links and location!"
             width="fullWidth">
           </FormField>
+          <!-- Meeting Link -->
           <FormField
             v-model="link"
             label="Associated Link"
@@ -119,18 +100,42 @@
           <!-- Preview -->
           <div id="previewEventContainer" class="buttonLabelContainer">
             <label class="fieldLabel">Preview Meeting Event</label>
-            <BaseButton>Preview</BaseButton>
+            <BaseButton @click="openEventCard">Preview</BaseButton>
           </div>
+          <EventCardPop
+            :model-value="openCheck"
+            @update:model-value="closeEventCard"
+            :eventTitle="clubDetails.title + `General Meeting`"
+            :eventDate="``"
+            :eventStart="startTime"
+            :eventEnd="endTime"
+            :eventDescription="description"
+            :eventLink="link"
+          />
         </div>
         <hr class="fgHR">
         <div id="saveCancelButtons" class="buttonRow">
-          <BaseButton>Publish</BaseButton>
-          <BaseButton>Save</BaseButton>
-          <BaseButton variant="secondary">Cancel</BaseButton>
+          <!-- Demo does not save any content, but does performs discard confirmation for simulation -->
+          <RouterLink to="/admin">
+            <BaseButton>Publish</BaseButton>
+          </RouterLink>
+          <RouterLink to="/admin">
+            <BaseButton>Save</BaseButton>
+          </RouterLink>
+          <BaseButton variant="secondary" @click="askLeavePage">Cancel</BaseButton>
+          <ConfirmationPop
+            v-model="showConfirm"
+            :title="dialogConfig.title"
+            :message="dialogConfig.message"
+            :confirmBtn="dialogConfig.confirmBtn"
+            :cancelBtn="dialogConfig.cancelBtn"
+            :danger="dialogConfig.danger"
+            @confirm="handleConfirmed"
+          />
         </div>
       </section>
 
-      <section id="analyitcsBar" class="bRightAdmin">
+      <section class="bRightAdmin desktopView">
         <!-- Empty -->
       </section>
     </div>
@@ -140,113 +145,53 @@
   </main>
 </template>
 
-
+<!-- JAVASCRIPT -->
 <script setup>
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
 import FormField from '@/components/FormField.vue'
+import EventCardPop from '@/components/EventCardPop.vue'
+import AdminNavigation from '@/components/AdminNavigation.vue'
+import ConfirmationPop from '@/components/ConfirmationPop.vue'
 import { useClubData } from '@/composables/useClubData'
-
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 const { clubDetails } = useClubData()
+const openCheck = ref(false)
+const startDate = ref(null)
+const startTime = ref(null)
+const endTime = ref(null)
+const location = ref(null)
+const description = ref(null)
+const link = ref(null)
+const dialogConfig = ref({ title: '', message: '', danger: false })
+const showConfirm = ref(false)
+const router = useRouter()
 
-const onHeaderMenuClick = (event) =>{
-  console.log(event)
-  let navDD = document.getElementById("navDropDown");
-    if (navDD.style.display === "flex"){ // Check if menu is open, then close it 
-        navDD.style.display = "none";
-        document.getElementById('navBackdrop').classList.remove('show');
-    }
-    else { // Open the menu 
-        navDD.style.display = "flex";
-        document.getElementById('navBackdrop').classList.add('show');
-    }
+// Handle Meeting Preview 
+function openEventCard() {
+  // getEventTags(eventID)
+  openCheck.value = true
+  console.log("test")
+}
+function closeEventCard() {
+  openCheck.value = false
 }
 
+// Handle Confirmation pop up
+function askLeavePage() {
+  dialogConfig.value = {
+    title: 'Discard Your Changes?',
+    message: 'Leaving this page will discard any changes you have made.',
+    confirmBtn: 'Discard Changes',
+    cancelBtn: 'Stay on Page',
+    danger: true,
+  }
+  showConfirm.value = true
+}
+function handleConfirmed() {
+  router.push('/admin')
+}
 </script>
-
-<style scoped>
-.hero {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-  /* align-items: start; */
-  flex: 1;
-}
-
-.body{
-  display: flex;
-  width: 100%;
-}
-
-.bLeft{
-  display: flex;
-  flex-direction: column;
-  flex: 0.7;
-  box-shadow: 2px 0px var(--color-background-2);
-  padding: 16px;
-  gap: 4px;
-}
-
-.bLeft a.active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-
-.menuEntry{
-  display: flex;
-  padding: 4px 0;
-  gap: 10px;
-  color: var(--color-text-2);
-  font-size: 1.3rem;
-  text-align: right;
-  justify-content: space-between;
-}
-
-.menuEntry a.active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-.menuEntry:hover {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-
-.mobileView{
-  display: none;
-}
-
-.dropDownMenu {
-  display: none;
-  position: fixed;
-  background-color: var(--color-background-2);
-  border-radius: 16px;
-  padding: 10px 20px;
-  z-index: 90;
-  top: 8%;
-  left: 1%;
-  flex-direction: column;
-  gap: 16px;
-  font-size: large;
-  overflow: auto;
-}
-
-.dropDownMenu a.active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-@media screen and (max-width: 688px) {
-  .desktopView { display: none; }
-  .mobileView { display: block; }
-  .hero {flex-direction: column;}
-}
-
-
-</style>

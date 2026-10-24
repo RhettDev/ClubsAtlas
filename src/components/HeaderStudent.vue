@@ -1,13 +1,23 @@
+<!-- 
+  File Name: HeaderStudent.vue
+  Author: Rhett Bauchop - 20722517
+  Purpose: Header for students, containing calendar controls and link to user settings page
+  Use Cases: Calendar
+-->
+
+<!-- HTML -->
 <template>
   <section class="header studentHeader">
     <div id="left" class="headerLeft">
       <div class="mobileView">
-        <v-icon class="menuButton" name="pr-bars" fill="var(--color-text-1)" scale="1.6" @click="$emit('click', $event)"/>
+        <!-- Menu icon with emit, Calendar uses to open drop down -->
+        <v-icon id="barsMenu" class="pointer" name="pr-bars" fill="var(--color-text-1)" scale="1.6" @click="$emit('click', $event)"/>
       </div>
 
       <div class="desktopView">
         <BaseButton @click="goToToday">Today</BaseButton>
       </div>
+      <!-- ShiftPeriod calls calendar -->
       <v-icon class="chevControl" name="pr-chevron-left" fill="var(--color-text-1)" scale="1.5" @click="shiftPeriod(-1)"/>
       <v-icon class="chevControl" name="pr-chevron-right" fill="var(--color-text-1)" scale="1.5" @click="shiftPeriod(1)"/>
       <span class="displayLabel">{{ displayLabel }}</span>
@@ -15,10 +25,6 @@
     </div>
 
     <div id="right" class="headerRight">
-      <!-- <div id="formatContainerTEMP" class="desktopView">
-        <BaseButton>Month</BaseButton>
-        <BaseButton>Week</BaseButton>
-      </div> -->
       <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
       <RouterLink to="/settings" class="desktopView">
         <v-icon name="pr-user" fill="var(--color-text-1)" scale="2" />
@@ -27,15 +33,16 @@
   </section>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
 import BaseButton from './BaseButton.vue'
 import { calendar } from '@/composables/calender'
 const { displayLabel, goToToday, shiftPeriod } = calendar()
 
-
 defineEmits(['click'])
 </script>
 
+<!-- CSS -->
 <style scope>
 .header {
   display: flex;
@@ -44,9 +51,9 @@ defineEmits(['click'])
   align-items: center;
   box-shadow: 2px 2px 1px var(--color-shadow);
   background-color: var(--color-background-1);
-  position: sticky;
+  position: sticky; /* Ensures header stays at the top of the page, but since page cannot scroll not an issue */
   top: 0;
-  z-index: 100;
+  z-index: 100; /* Ensures header is at the front of the render */
   color: var(--color-text-1);
 }
 .header.studentHeader {
@@ -75,10 +82,6 @@ defineEmits(['click'])
   color: var(--color-text-1);
 }
 
-.menuButton {
-  cursor: pointer;
-}
-
 .displayLabel{
   color: var(--color-text-1);
   /* padding: 16px; */
@@ -93,18 +96,4 @@ defineEmits(['click'])
 .chevControl:active{
   transform: scale(0.9);
 }
-
-.desktopView {
-  display: none;
-}
-
-@media screen and (min-width: 688px) {
-  .desktopView {
-    display: block;
-  }
-  .mobileView {
-    display: none;
-  }
-}
-
 </style>

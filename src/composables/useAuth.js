@@ -1,3 +1,8 @@
+// File Name: useAuth.js
+// Author: Rhett Bauchop - 20722517
+// Purpose: Conducts authentication process, fetching the user and checking the login details
+
+
 import { ref, computed } from 'vue'
 import { supabase } from '../../backend/supabase'
 
@@ -18,6 +23,7 @@ async function fetchProfile(authUserId) {
 
   if (studentError) throw studentError
 
+  // Set user type, ensuring calendar is routed
   if (student) {
     profile.value = student
     userType.value = 'student'
@@ -32,6 +38,7 @@ async function fetchProfile(authUserId) {
 
   if (clubError) throw clubError
 
+  // Set user type, ensuring admin page is routed
   if (club) {
     profile.value = club
     userType.value = 'club'
@@ -39,6 +46,7 @@ async function fetchProfile(authUserId) {
   }
 }
 
+// Checks change in autheticated status, if authentication times out
 supabase.auth.onAuthStateChange(async (_event, session) => {
   authUser.value = session?.user ?? null
   if (authUser.value) {

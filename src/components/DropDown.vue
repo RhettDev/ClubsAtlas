@@ -1,3 +1,11 @@
+<!-- 
+  File Name: DropDown.vue
+  Author: Rhett Bauchop - 20722517
+  Purpose: General component for a DropDown menu, opening upwards to avoid dealing with collision with bottom of the screen
+  Use Cases: SignupPage, 
+-->
+
+<!-- HTML -->
 <template>
   <div class="dropdown" ref="dropDownRef" @click="isOpen = true">
     <div class="dropdownSelected">
@@ -24,6 +32,7 @@
   </div>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 
@@ -43,14 +52,20 @@ const isOpen = ref(false)
 const dropDownRef = ref(null)
 const selectedOption = ref(props.modelValue)
 
+// Allow clicks outside designated drop down menu to close menu
 const outsideClick = (element) => {
   if (!dropDownRef.value.contains(element.target)) {
     isOpen.value = false
   }
 }
 
+// Actively mappedSelected, based on selected option
 const mappedSelected = computed(() => {
-  return selectedOption.value?.name || selectedOption.value || 'None Selected'
+  // return regardless of the data type of selectedOption.value
+  // - an object with name property
+  // - a plain string
+  // - null
+  return selectedOption.value?.name || selectedOption.value || 'None Selected' 
 })
 
 const toggleOption = (option) => {
@@ -67,6 +82,7 @@ onUnmounted(() => {
 })
 </script>
 
+<!-- CSS -->
 <style scope>
 .dropdown {
   display: flex;
@@ -113,7 +129,6 @@ onUnmounted(() => {
   width: 100%;
   gap: 8px;
   padding: 4px 0;
-  /* position: absolute; */
 }
 
 .option:hover {

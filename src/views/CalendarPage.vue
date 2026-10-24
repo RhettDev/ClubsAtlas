@@ -1,11 +1,22 @@
+<!-- 
+  File Name: CalendarPage.vue
+  Author: Rhett Bauchop - 20722517
+  Page URL:  clubsatlas.app/calendar
+  Purpose: This file holds HTML, CSS and Javascript for rendering the students calendar..
+-->
+
+<!-- HTML -->
 <template>
-  <main id="adminMain" class="body calendarMain">
+  <main id="Calendar" class="body calendarMain">
     <HeaderStudent @click="onHeaderMenuClick"></HeaderStudent>
+
     <!-- Mobile Naviation -->
     <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
     <div id="navDropDown" class="dropDownMenu">
+      <!-- Menu split into three panels rather than three different pages. -->
+      <!-- First Panel (Defualt): list of clubs the student follows -->
       <div id="yourClubs" v-if="currentClubsMenu === 1" key="yourClubs" class="dropDownClubsMenu">
-        <h3 class="menuEntry">Today</h3>
+        <h3 class="menuEntry pointer" @click="handleMobileToday">Today</h3>
         <hr class="bgHR" />
         <h3 class="menuEntry">Your Clubs</h3>
         <div id="clubsData" class="clubsContainer">
@@ -21,9 +32,11 @@
               :isOpen="openClubId === club.id"
               @toggle="toggleDropdown(club.id)"
             />
+            <!-- Equal comparison to ensure the correct club is opening, wont open if not  -->
           </ul>
         </div>
       </div>
+      <!-- Second Panel: four random clubs for the user to look at -->
       <div
         id="suggestedClubs"
         v-if="currentClubsMenu === 2"
@@ -55,6 +68,7 @@
           </ul>
         </div>
       </div>
+      <!-- Third Panel: Search bar for all clubs -->
       <div id="clubSearch" v-if="currentClubsMenu === 3" key="clubSearch" class="dropDownClubsMenu">
         <h3 class="menuEntry">Club Search</h3>
         <hr class="bgHR" />
@@ -88,27 +102,79 @@
         </div>
       </div>
 
+      <!-- Navigation list -->
       <hr class="bgHR" />
-      <a class="menuEntry" :class="{ active: currentClubsMenu == 1 }" @click="currentClubsMenu = 1"
+      <a class="menuEntry pointer" :class="{ active: currentClubsMenu == 1 }" @click="currentClubsMenu = 1"
         >Your Clubs</a
       >
-      <a class="menuEntry" :class="{ active: currentClubsMenu == 2 }" @click="currentClubsMenu = 2"
+      <a class="menuEntry pointer" :class="{ active: currentClubsMenu == 2 }" @click="currentClubsMenu = 2"
         >Suggested Clubs</a
       >
-      <a class="menuEntry" :class="{ active: currentClubsMenu == 3 }" @click="currentClubsMenu = 3"
+      <a class="menuEntry pointer" :class="{ active: currentClubsMenu == 3 }" @click="currentClubsMenu = 3"
         >Club Search</a
       >
       <hr class="bgHR" />
       <RouterLink variant="primary" class="menuEntry" to="/settings"> Settings </RouterLink>
     </div>
 
-    <!-- Desktop Navigation -->
-    <div class="hero desktopView">
+    <!-- Mobile View -->
+    <div class="mobileView hero">
+      <section id="mobileCalendarBody" class="bCenter">
+        <div class="dayGrid">
+          <!-- Mobile uses dayLetterMS to only have the first letter of each day, monday to sunday, as the column label -->
+          <div v-for="day in dayLetterMS" :key="day" class="dayLabels">
+            {{ day }}
+          </div>
+        </div>
+        <div class="calendarGrid">
+          <!-- Get days for Current Month -->
+          <div
+            v-for="day in days"
+            :key="day.date"
+            class="calendarDay"
+            :class="{
+              isToday: isToday(day),
+              altMonthDay: !day.isCurrentMonth,
+            }"
+          >
+            {{ day.date.getDate() }}
+            <div
+              v-for="event in eventsForDate(day.date)"
+              :key="event.id || `${event.date}-${event.title}`"
+              class="eventCard mobileCard"
+              :style="{backgroundColor: event.clubHex}"
+              @click="openEventCard(event.id)"
+            > <!-- Mobile only has club acroynym and colour for event card, reduce size whilst keeping club recognisable-->
+              {{ event.acronym }}
+              <EventCardPop
+                :model-value="openEventId === event.id"
+                @update:model-value="closeEventCard"
+                :clubName="event.clubName"
+                :eventID="event.id"
+                :eventTitle="event.eventTitle"
+                :eventDate="event.eventDate"
+                :eventLocation="event.eventLocation"
+                :eventStart="event.startsAt"
+                :eventEnd="event.endsAt"
+                :eventDescription="event.eventDescription"
+                :eventImage="event.imageURL"
+                :eventLink="event.ticketLink"
+                :eventTags="eventTags"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Desktop View and Navigation -->
+    <div class="desktopView hero">
       <!-- Desktop View -->
-      <section id="calendarBody" class="bCenter">
+      <section id="desktopCalendarBody" class="bCenter">
         <div class="dayGrid">
           <!-- Day Headers -->
-          <div v-for="day in dayAcronymsMS" :key="day" class="dayLabels">
+          <!-- Desktop uses three letter abbreviateions of each day, monday to sunday, as the column label -->
+          <div v-for="day in dayAbbrMS" :key="day" class="dayLabels">
             {{ day }}
           </div>
         </div>
@@ -130,9 +196,10 @@
               :style="{backgroundColor: event.clubHex}"
               @click="openEventCard(event.id)"
             >
+              <!-- Event Card with time, club acronym, event title and colour -->
               {{ convertTo12Hour(event.startsAt) }}
               {{ event.acronym }}
-              <p>&nbsp;-&nbsp;</p>
+              <p>&nbsp;-&nbsp;</p> <!-- $nbsp sets whitespace between acronym and event title-->
               {{ event.eventTitle }}
               <EventCardPop
                 :model-value="openEventId === event.id"
@@ -153,7 +220,9 @@
         </div>
       </section>
 
+      <!-- Desktop Side Panel and Navigation -->
       <section id="currentClubsMenu" class="bRight">
+        <!-- First Side Panel: List of Following Clubs -->
         <div id="yourClubs" v-if="currentClubsMenu === 1" key="yourClubs">
           <h2 class="pageSubHeader">Your Clubs</h2>
           <hr class="bgHR" />
@@ -170,9 +239,11 @@
                 :isOpen="openClubId === club.id"
                 @toggle="toggleDropdown(club.id)"
               />
+              <!-- No visibility options for dropdown options as default are tuned for following clubs -->
             </ul>
           </div>
         </div>
+        <!-- Second Side Panel: Four Suggested Clubs -->
         <div id="suggestedClubs" v-else-if="currentClubsMenu === 2" key="suggestedClubs">
           <h2 class="pageSubHeader">Suggested Clubs</h2>
           <hr class="bgHR" />
@@ -196,9 +267,11 @@
                 }"
                 @toggle="toggleDropdown(club.id)"
               />
+              <!-- Visibility options for dropdown options are set for non following clubs -->
             </ul>
           </div>
         </div>
+        <!-- Third Side Panel: Search Bar for Clubs -->
         <div id="clubSearch" v-else-if="currentClubsMenu === 3" key="clubSearch">
           <h2 class="pageSubHeader">Club Search</h2>
           <hr class="bgHR" />
@@ -231,77 +304,27 @@
             </div>
           </div>
         </div>
+        <!-- Side Panel Navigation -->
         <div id="calendarMenu" class="calendarMenuContainer">
           <hr class="bgHR" />
           <a
-            class="menuEntry"
+            class="menuEntry pointer"
             :class="{ active: currentClubsMenu == 1 }"
             @click="currentClubsMenu = 1"
             >Your Clubs</a
           >
           <a
-            class="menuEntry"
+            class="menuEntry pointer"
             :class="{ active: currentClubsMenu == 2 }"
             @click="currentClubsMenu = 2"
             >Suggested Clubs</a
           >
           <a
-            class="menuEntry"
+            class="menuEntry pointer"
             :class="{ active: currentClubsMenu == 3 }"
             @click="currentClubsMenu = 3"
             >Club Search</a
           >
-          <!-- <RouterLink class="menuEntry" to="showcase"> Weekly Showcase </RouterLink> -->
-        </div>
-      </section>
-    </div>
-
-    <!-- Mobile View -->
-    <div class="hero mobileView">
-      <section id="calendarContainer" class="bCenter">
-        <div class="dayGrid">
-          <div v-for="day in dayLetterMS" :key="day" class="dayLabels">
-            {{ day }}
-          </div>
-        </div>
-        <div class="calendarGrid">
-          <!-- Get days for Current Month -->
-          <div
-            v-for="day in days"
-            :key="day.date"
-            class="calendarDay"
-            :class="{
-              isToday: isToday(day),
-              altMonthDay: !day.isCurrentMonth,
-            }"
-          >
-            {{ day.date.getDate() }}
-            <div
-              v-for="event in eventsForDate(day.date)"
-              :key="event.id || `${event.date}-${event.title}`"
-              class="eventCard mobileCard"
-              :style="{backgroundColor: event.clubHex}"
-              @click="openEventCard(event.id)"
-            >
-              <!-- {{ convertTo12Hour(event.startsAt) }} -->
-              {{ event.acronym }}
-              <EventCardPop
-                :model-value="openEventId === event.id"
-                @update:model-value="closeEventCard"
-                :clubName="event.clubName"
-                :eventID="event.id"
-                :eventTitle="event.eventTitle"
-                :eventDate="event.eventDate"
-                :eventLocation="event.eventLocation"
-                :eventStart="event.startsAt"
-                :eventEnd="event.endsAt"
-                :eventDescription="event.eventDescription"
-                :eventImage="event.imageURL"
-                :eventLink="event.ticketLink"
-                :eventTags="eventTags"
-              />
-            </div>
-          </div>
         </div>
       </section>
     </div>
@@ -310,41 +333,49 @@
   </main>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
-// import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderStudent from '@/components/HeaderStudent.vue'
 import ClubListEntry from '@/components/ClubListEntry.vue'
+import EventCardPop from '@/components/EventCardPop.vue'
 import { calendar } from '@/composables/calender'
 import { convertTo12Hour } from '@/composables/miscFunctions'
 import { ref, onMounted, computed, watch } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
 import { demoSessionData } from '@/composables/sessionStore'
-import EventCardPop from '@/components/EventCardPop.vue'
 
-const usersClubs = ref([])
-// const studentUser = ref([])
 const loadingClubs = ref(true)
 const loadingEvents = ref(true)
-const errorMessage = ref(null)
-const { isLoggedIn, loading: authLoading, profile } = useAuth()
-const studentUserID = ref(null)
-const clubsID = ref(1)
 const loadingTags = ref(true)
-const currentClubsMenu = ref(1)
+
+const errorMessage = ref(null)
+const studentUserID = ref(null)
 const openClubId = ref(null)
+const openEventId = ref(null)
+
+const clubsID = ref(1)
+const currentClubsMenu = ref(1)
+// Side Bar Allocation
+// Your Clubs: 1 (Default)
+// Suggested Clubs: 2
+// Club Search: 3
+
+const usersClubs = ref([])
 const suggestedClubs = ref([])
 const allClubs = ref([])
 const events = ref([])
-const clubSearch = ref('')
-const openEventId = ref(null)
-const { isDemoSession, demoUserClubs } = demoSessionData()
 const authClubIDs = ref([])
 const eventTags = ref([])
 
-const { days } = calendar()
+const clubSearch = ref('')
 
+const { isDemoSession, demoUserClubs } = demoSessionData()
+const { isLoggedIn, loading: authLoading, profile } = useAuth()
+const { days, goToToday } = calendar()
+
+// Set the method of using the calendar, create a distinction between a authenticated user and a demo user
 const calendarMode = computed(() => {
   if (authLoading.value) return 'loading'
   if (isLoggedIn.value) return 'authenticated'
@@ -352,6 +383,7 @@ const calendarMode = computed(() => {
   return 'none'
 })
 
+// Based on the method decided, run the corresponding startup functions
 function dataSelection(mode){
   if(mode.value == 'loading'){
     console.log("loading")
@@ -367,23 +399,22 @@ function dataSelection(mode){
   }
 }
 
+// Update the calendar whenever a change is made to the list of clubs, whether that is adding or removing a club
 watch(
   demoUserClubs,
   async () => {
     if (calendarMode.value !== 'demo') return
     await Promise.all([getDemoClubs(), getDemoClubEvents()])
   },
-  { deep: true },
+  { deep: true }, // Watch nested changes in demoUserClubs, 
 )
 
-// Side Bar Allocation
-// Your Clubs: 1 (Default)
-// Suggested Clubs: 2
-// Club Search: 3
-
+// Set the club dropdown based on it's ID
 function toggleDropdown(id) {
   openClubId.value = openClubId.value === id ? null : id
 }
+
+// Supabase Functions retrieving data
 
 // AUTH: Get all club data for clubs a student user is following, requires user ID
 async function getUsersClubs() {
@@ -406,9 +437,9 @@ async function getUsersClubs() {
   }
 }
 
+// Map the club IDs from an Auth users Following Clubs list in the database to the local list of clubs
 function captureIDs() {
   authClubIDs.value = usersClubs.value.map((club) => club.id)
-  console.log(authClubIDs.value)
 }
 
 // AUTH: Get the event data for every club a user is following
@@ -416,7 +447,7 @@ async function getFollowingClubsEvent() {
   try {
     loadingEvents.value = true
 
-    let studentid = studentUserID.value
+    let studentid = studentUserID.value // Supabase functions only take lowercase variables, so studentUserID.value is redeclared
     let { data, error } = await supabase.rpc('getfollowingclubsevents', { studentid })
 
     if (error) throw error
@@ -436,6 +467,8 @@ async function getDemoClubs() {
   try {
     loadingClubs.value = true
 
+    // Duplicate demoUserClubs, ensuring it has data
+    // ?? [] sets the duplicate array to null if demoUserClubs is null
     let recommendedids = [...(demoUserClubs.value ?? [])]
     if (recommendedids.length === 0) {
       usersClubs.value = []
@@ -461,6 +494,8 @@ async function getDemoClubEvents() {
   try {
     loadingEvents.value = true
 
+    // Duplicate demoUserClubs, ensuring it has data, using the clubs to get all of their events
+    // ?? [] sets the duplicate array to null if demoUserClubs is null
     let recommendedids = [...(demoUserClubs.value ?? [])]
     if (recommendedids.length === 0) {
       events.value = []
@@ -556,6 +591,7 @@ async function getEventTags(eventid) {
   }
 }
 
+// Function that run as soon as they are loaded into the DOM
 onMounted(() => {
   getSuggestedClubs()
   getClubTags(clubsID)
@@ -563,12 +599,15 @@ onMounted(() => {
   dataSelection(calendarMode)
 })
 
+// Array of clubs that is activley filtered based clubSearch
+// Const ensures list if updated as the user types, rather than a function to run once they click search
 const searchedClubs = computed(() => {
   return allClubs.value.filter((club) => {
     return club.name.toLowerCase().includes(clubSearch.value.toLowerCase())
   })
 })
 
+// Switch the status of the mobile menu when clicked.
 const onHeaderMenuClick = () => {
   let navDD = document.getElementById('navDropDown')
   if (navDD.style.display === 'flex') {
@@ -582,6 +621,7 @@ const onHeaderMenuClick = () => {
   }
 }
 
+// Format a date to match with event date data format
 function dateKey(date) {
   const parsedDate = new Date(date)
 
@@ -591,14 +631,14 @@ function dateKey(date) {
 
   return `${year}-${month}-${day}`
 }
-
+// Match event dates for a specific date, to ensure the event card is loaded.
 function eventsForDate(date) {
   const calendarDate = dateKey(date)
   return events.value.filter((event) => dateKey(event.eventDate) === calendarDate)
 }
 
-// const currentDate = ref(new Date())
-const dayAcronymsMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monday Start
+// Alternate versions of day structure was planned to be a user option
+const dayAbbrMS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'] // Monday Start
 // const dayAcronymsSS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] // Sunday Start
 const dayLetterMS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Monday Start
 // const dayLetterSS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'] // Sunday Start
@@ -613,16 +653,23 @@ const isToday = (day) => {
   )
 }
 
+// Handle Event card popup
 function openEventCard(eventID) {
   getEventTags(eventID)
   openEventId.value = eventID
 }
-
 function closeEventCard() {
   openEventId.value = null
 }
+
+// Handle the Today Shortcut when in the mobile menu
+function handleMobileToday(){
+  goToToday()
+  onHeaderMenuClick()
+}
 </script>
 
+<!-- CSS -->
 <style scoped>
 .calendarWapper {
   max-width: 100%;
@@ -668,90 +715,12 @@ function closeEventCard() {
   border-bottom: 2px solid var(--color-brandText);
 }
 
-.menuEntry {
-  display: flex;
-  padding: 4px 0;
-  gap: 10px;
-  color: var(--color-text-2);
-  font-size: 1.3rem;
-  text-align: right;
-  justify-content: space-between;
-}
-
-.menuEntry:active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-.menuEntry:hover {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-.mobileView {
-  display: none;
-}
-
-.dropDownMenu {
-  display: none;
-  position: fixed;
-  background-color: var(--color-background-2);
-  border-radius: 16px;
-  padding: 10px 20px;
-  z-index: 90;
-  top: 6%;
-  left: 1%;
-  flex-direction: column;
-  gap: 16px;
-  font-size: large;
-  width: 90%;
-  height: calc(100vh - 20% - 20px);
-  overflow-y: auto;
-}
-
-.dropDownMenu a.active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-@media screen and (max-width: 688px) {
-  .desktopView {
-    display: none;
-  }
-  .mobileView {
-    display: flex;
-  }
-  .hero {
-    flex-direction: column;
-  }
-}
-
 .clubTypeList {
   display: flex;
   flex-direction: column;
   /* max-width: 500px; */
   gap: 8px;
   justify-content: center;
-}
-
-.clubTag {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 8px;
-  border-radius: 16px;
-  border: 2px solid var(--ca-brand-blue-1);
-  background: var(--color-background-1);
-  color: var(--color-text-1);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.clubName {
-  display: flex;
-  align-items: center;
 }
 
 .calendarGrid {
@@ -802,10 +771,6 @@ function closeEventCard() {
 .isToday {
   border: 2px solid var(--color-brandText);
   border-radius: 8px;
-}
-
-.clubDropDown {
-  display: none;
 }
 
 .searchContainer {

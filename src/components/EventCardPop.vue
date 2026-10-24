@@ -1,35 +1,44 @@
+<!-- 
+  File Name: EventCardPop.vue
+  Author: Rhett Bauchop - 20722517
+  Purpose: General component for a DropDown menu, opening upwards to avoid dealing with collision with bottom of the screen
+  Use Cases: CalendarPage, AdminPage, EventUploadPage, 
+-->
+
+<!-- HTML -->
 <template>
-  <Teleport to="body">
+  <Teleport to="body"> <!-- Teleport used to jump element to center front-->
     <div v-if="modelValue" class="overlay" @click.self="close">
       <div id="container" class="popUpContainer eventWidth mobileContainer">
-        <div v-if="eventImage" class="eventImageContainer">
+        <!-- Event Image -->
+        <div v-if="eventImage" class="eventImageContainer"> <!-- V-IF for images due to load times -->
           <img :src="`/images/eventImages/${eventImage}`" alt="Event image" />
         </div>
         <div id="eventDetails" class="eventDetails">
           <div id="topRow" class="contentRow spaced">
-            <div v-if="!clubName" id="title" class="contentRow">
+            <div v-if="!clubName" id="title" class="contentRow"> <!-- Event Title for Mobile -->
               <h2>{{ eventTitle }}</h2>
             </div>
-            <div v-else id="titleClubName" class="contentRow">
+            <div v-else id="titleClubName" class="contentRow"> <!-- Event Title and Club Name for Desktop -->
               <h2>{{ eventTitle }} - {{ clubName }}</h2>
             </div>
             <v-icon class="pointer" name="pr-times" fill="var(--color-text-1)" scale="1.5" @click="close"></v-icon>
           </div>
-          <div id="dateTimeRow" class="contentRow">
+          <div id="dateTimeRow" class="contentRow"> <!-- Event Date and Time-->
             <div>
               {{ convertToFullDate(eventDate) }} {{ convertTo12Hour(eventStart) }} -
               {{ convertTo12Hour(eventEnd) }}
             </div>
           </div>
-          <div id="location" v-if="hasValue(eventLocation)">
+          <div id="location" v-if="hasValue(eventLocation)"> <!-- Event Location, optional but encouraged field-->
             <p>{{ eventLocation }}</p>
           </div>
           <div id="tags" class="contentRow"></div>
         </div>
-        <p id="description" class="descriptionContainer">
+        <p id="description" class="descriptionContainer"> <!-- Event Description -->
           {{ formatDescription(eventDescription) }}
         </p>
-        <div id="tagsContainer" class="tagContainer">
+        <div id="tagsContainer" class="tagContainer"> <!-- Event Tags -->
           <div v-for="tag in eventTags" :key="tag" :class="tag.tagSlug" id="tagItem" class="tag">
             {{ tag.tagName }}
           </div>
@@ -44,6 +53,7 @@
   </Teleport>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
 import BaseButton from './BaseButton.vue'
 import {
@@ -52,7 +62,6 @@ import {
   hasValue,
   formatDescription,
 } from '@/composables/miscFunctions'
-// import { ref } from 'vue'
 
 defineProps({
   modelValue: { type: Boolean, default: false },
@@ -70,15 +79,15 @@ defineProps({
   danger: { type: Boolean, default: false },
 })
 
+// Allow parent caller to perform actions
 const emit = defineEmits(['update:modelValue', 'confirm', 'cancel'])
-// const eventTags = ref([])
-
 function close() {
   emit('update:modelValue', false)
 }
 
 </script>
 
+<!-- CSS -->
 <style scope>
 .eventWidth {
   width: 40%;

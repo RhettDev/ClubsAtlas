@@ -1,12 +1,21 @@
-<template>
+<!-- 
+  File Name: UserSettingsPage.vue
+  Author: Rhett Bauchop - 20722517
+  Page URL:  clubsatlas.app/calendar/settings
+  Purpose: This file holds HTML, CSS and Javascript for rendering the students calendar..
+-->
+
+<!-- HTML -->
+ <template>
   <main id="userSettings" class="body">
     <HeaderGeneric></HeaderGeneric>
-    <div class="hero desktopView">
+
+    <div class="hero">
       <section id="emptyLeft" class="bLeft">
         <div>
           <RouterLink to="/calendar" class="contentRow vertCentered">
-            <v-icon name="pr-chevron-left" fill="var(--color-text-1)" scale="2" />
-            <h2>Back</h2>
+            <v-icon name="pr-chevron-left" fill="var(--color-text-1)" scale="1.5" />
+            <h2 class="desktopView">Back</h2>
           </RouterLink>
         </div>
       </section>
@@ -25,6 +34,7 @@
             variant="halfWidth"
           >
           </FormField>
+          <!-- Half widths were chosen to not overload the page, only need no much space. -->
         </div>
         <div class="fieldButtonContainer" id="changeEmail">
           <FormField
@@ -54,6 +64,7 @@
         <div id="themeContainer" class="buttonLabelContainer">
           <label class="fieldLabel">App Theme</label>
           <form>
+            <!-- Radio buttons for simplicity of a custom component -->
             <label class="fieldLabel">
               <input type="radio" name="theme" value="light" class="checkboxCustom" v-model="selectedTheme" @change="setLightMode"> Light Mode
             </label>
@@ -62,72 +73,48 @@
             </label>
           </form>
         </div>
-        <!-- <div class="buttonContainer" id="timeFormat">
-          <p class="fieldLabel">Preferred Time Format</p>
-          <DropDown v-model="timeFormat" :options="timeOptions"></DropDown>
-        </div> -->
 
         <hr class="fg" />
+        <!-- Explains this is a demo and no data is being saved -->
         <div class="buttonRow vertCentered">
           <BaseButton @click="saveCheck = true">Save</BaseButton>
           <p v-if="saveCheck" id="saveMessage">Being a demo, your edits are not actually saved</p> 
         </div>
 
       </section>
-      <section id="emptyRight" class="bRight">
-        <!-- Empty -->
+      <section id="emptyRight" class="bRightAdmin desktopView">
+        <!-- Empty section resembling the Admin layout-->
       </section>
     </div>
   </main>
   <FooterBar></FooterBar>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
 import FooterBar from '@/components/FooterBar.vue'
 import FormField from '@/components/FormField.vue'
 import BaseButton from '@/components/BaseButton.vue'
-// import DropDown from '@/components/DropDown.vue'
 import HeaderGeneric from '@/components/HeaderGeneric.vue'
+
 import { RouterLink } from 'vue-router'
 import { supabase } from '../../backend/supabase'
 import { setDarkMode, setLightMode } from '@/composables/miscFunctions'
 import { ref } from 'vue'
+import { demoSessionData, clearDemoSession } from '@/composables/sessionStore'
 
-// const timeOptions = ['AM/PM', '24-Hour']
 const selectedTheme = ref(document.documentElement.dataset.theme || 'dark')
 const saveCheck = ref(false)
+const { isDemoSession } = demoSessionData
 
+// Signout of Auth account or clear demo session data
 async function signOut(){
-  const { error } = await supabase.auth.signOut({ scope: 'local' })
-  console.error(error)
+  if(isDemoSession){
+    clearDemoSession()
+  }
+  else{
+    const { error } = await supabase.auth.signOut({ scope: 'local' })
+    console.error(error)
+  }
 }
-
-
 </script>
-
-<style scope>
-.hero {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-  /* align-items: start; */
-  flex: 1;
-}
-
-.body {
-  display: flex;
-  width: 100%;
-}
-
-.bLeft {
-  flex: 0.5;
-  box-shadow: 2px 0px var(--color-background-2);
-}
-
-.bRight {
-  flex: 0.5;
-  box-shadow: -2px 0px var(--color-background-2);
-}
-</style>

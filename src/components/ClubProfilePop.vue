@@ -1,13 +1,23 @@
+<!-- 
+  File Name: clubProfilePop.vue
+  Author: Rhett Bauchop - 20722517
+  Purpose: Club Listing with dropdown menu
+  Use Cases: ClubListEntry, ClubProfilePage
+-->
+
+<!-- HTML -->
 <template>
-  <Teleport to="body">
-    <div v-if="modelValue" class="overlay" @click.self="close">
+  <Teleport to="body"> <!-- Teleport used to jump element to center front-->
+    <div v-if="modelValue" class="overlay" @click.self="close"> <!-- Model value is boolean based on matching ID's on call-->
       <div id="popContainer" class="popUpContainer clubWidth mobileContainer">
+        <!-- V-IF for images due to load times -->
+        <!-- Club Banner -->
         <div v-if="clubBanner" class="bannerContainer">
           <img :src="`/images/clubBanners/${clubBanner}`" alt="Club Banner" />
         </div>
-        <!-- <div id="clubDetails" class="clubDetails"></div> -->
         <div id="topRow" class="contentRow spaced vertCentered">
           <div id="titleClubName" class="contentRow vertCentered">
+            <!-- Club Logo and Name with colour border -->
             <div v-if="clubLogo" class="clubLogoName">
               <img
                 class="clubLogo"
@@ -17,6 +27,7 @@
             </div>
             <h2>{{ clubName }}</h2>
           </div>
+          <!-- Close -->
           <v-icon
             class="pointer"
             name="pr-times"
@@ -26,22 +37,24 @@
           ></v-icon>
         </div>
 
+        <!-- Description -->
         <p id="description" class="descriptionContainer">
           {{ formatDescription(clubDescription) }}
         </p>
+        <!-- Club Tags: only set for select clubs -->
         <div id="tagsContainer" class="tagContainer">
           <div v-for="tag in clubTags" :key="tag" :class="tag.tagSlug" id="tagItem" class="tag">
             {{ tag.tagName }}
           </div>
         </div>
         <div id="bottomRow" class="contentRow spaced">
+          <!-- Add or Remove Button for the club -->
           <div v-if="followingStatus == true">
             <div id="addToClub" class="contentRow vertCentered pointer" @click="askAddClub(clubID)">
               <p>Add Club to Profile</p>
               <v-icon name="pr-plus" fill="var(--color-text-1)" scale="1.5"></v-icon>
             </div>
           </div>
-
           <div v-else-if="followingStatus == false">
             <div id="removeClub" class="contentRow vertCentered pointer" @click="askRemoveClub(clubID)">
               <p>Remove Club from Profile</p>
@@ -50,6 +63,8 @@
           </div>
           <p v-if="loadingSocials">Loading social links...</p>
           <div v-else id="linksContainer" class="logoContainer">
+            <!-- Links are conditional as different clubs use different links -->
+            <!-- Only select clubs have had their social links provided -->
             <!-- TidyHQ -->
             <a
               v-if="clubsSocials.tidyhq"
@@ -129,6 +144,7 @@
   </Teleport>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
 import { onMounted, ref } from 'vue'
 import { formatDescription } from '@/composables/miscFunctions'
@@ -143,7 +159,6 @@ const clubTags = ref([])
 const clubsSocials = ref([])
 const { isDemoSession, addFollowClub, dropFollowingClub } = demoSessionData()
 const { profile } = useAuth()
-// const clubid = ref(null)
 const calendarMode = isDemoSession.value
 
 
@@ -167,6 +182,7 @@ function close() {
   emit('update:modelValue', false)
 }
 
+// Supabase function to get all tags for the selected club
 async function getClubTags() {
   try {
     loadingTags.value = true
@@ -186,6 +202,7 @@ async function getClubTags() {
   }
 }
 
+// Supabase function to get all the social media links
 async function getClubSocials() {
   try {
     loadingSocials.value = true
@@ -204,6 +221,7 @@ async function getClubSocials() {
   }
 }
 
+// Dictate which functions are used to add a club to following list based on if the user is authenticated or a demo user
 function askAddClub(clubID) {
   if (calendarMode == true) {
     addFollowClub(clubID)
@@ -212,6 +230,7 @@ function askAddClub(clubID) {
   }
 }
 
+// Dictate which functions are used to remove a club from following list based on if the user is authenticated or a demo user
 function askRemoveClub(clubID) {
   if (calendarMode == true) {
     dropFollowingClub(clubID)
@@ -220,14 +239,11 @@ function askRemoveClub(clubID) {
   }
 }
 
+// AUTH: Add clubID to the followingClubs array in student user row
 async function addClub(clubid) {
   let studentid = profile.value.id
   try {
     const res = await supabase.rpc('addfollowingclub', { clubid, studentid })
-
-    // const res = await fetch(`/api/student/${studentid.value}/following/${removedclubid.value}`, {
-    //   method: 'DELETE',
-    // })
 
     if (!res.ok) throw new Error('Failed to add Club to Calendar')
   } catch (error) {
@@ -236,13 +252,15 @@ async function addClub(clubid) {
   }
 }
 
-
+// Get clubs data as soon as file is loaded into DOM
 onMounted(() => {
   getClubSocials()
   getClubTags()
 })
+
 </script>
 
+<!-- CSS -->
 <style scope>
 .clubWidth {
   width: 60%;

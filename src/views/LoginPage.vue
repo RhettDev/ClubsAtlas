@@ -1,11 +1,19 @@
-<!-- HTML Structure -->
+<!-- 
+  File Name: LoginPage.vue
+  Author: Rhett Bauchop - 20722517
+  Page URL:  clubsatlas.app/login
+  Purpose: Login page handling authentication calls, with simulated password reset method
+-->
+
+<!-- HTML -->
 <template>
-  <main class="auth-page">
+  <main id="Login">
     <HeaderBar></HeaderBar>
-    <div class="hero">
-      <!-- Step 1 holds email and password input fields -->
-      <div v-if="currentStep === 1" key="login" class="form"> 
+    <div class="centerHero">
+      <!-- Panel 1 holds email and password input fields -->
+      <div v-if="currentPanel === 1" key="login" class="form"> 
         <div class="formTitle">
+          <!-- Span with Brandtext is to set accent colour for highlighted words -->
           <h2>Welcome <span class="brandText">Back</span></h2>
           <p>Log in to see your clubs and upcoming events</p>
         </div>
@@ -13,7 +21,13 @@
 
         <!-- Email Input -->
         <div class="fieldContainer">
+          <!-- Icon from Oh Vue Icons, 
+            Name designates icon, pr is the icon family, envolpe is the icon name
+            var(--color-text-1) is basic white/black dependent on theme
+            scale is set slightly higher to match text size 
+          -->
           <v-icon name="pr-envelope" fill="var(--color-text-1)" scale="1.5" /> 
+          <!-- Made before FormField, Does not match but this implementation matches design -->
           <input
             v-model="email"
             type="email"
@@ -36,12 +50,11 @@
         </div>
 
         <div class="formSubtitle">
-          <div class="checkText">
-            <!-- <ToggleButton variant="primary" @click="onClick()"></ToggleButton> -->
+          <div class="checkText"> <!-- Simulated remember me function to keep balance of design and hold place for future implementation-->
             <input type="checkbox" id="checkbox" v-model="checked" class="checkboxCustom" />
             <p>Remember Me</p>
           </div>
-          <a class="brandText linkText" @click="panelSwap">Forgot Password?</a>
+          <a class="brandText pointer" @click="panelSwap">Forgot Password?</a>
         </div>
 
         <BaseButton @click="handleLogin">Log In</BaseButton>
@@ -53,12 +66,12 @@
 
         <div class="formTitle formSubtitle">
           <p>Don't have an account?</p>
-          <RouterLink class="brandText linkText" to="/signup">Sign up here!</RouterLink>
+          <RouterLink class="brandText pointer" to="/signup">Sign up here!</RouterLink>
         </div>
       </div>
 
       <!-- Step 2 holds email input for Password Forget Process. Actual process not implemented just field -->
-      <div v-else-if="currentStep === 2" key="forgot" class="form">
+      <div v-else-if="currentPanel === 2" key="forgot" class="form">
         <div class="formTitle">
           <h2><span class="brandText">Forgot</span> your password</h2>
           <p>Enter the email address your account is tied to for a password reset link</p>
@@ -75,7 +88,7 @@
       </div>
 
       <!-- Step 3 Holds Password rest fields for forgotton password demo  -->
-      <div v-else-if="currentStep === 3" key="reset" class="form">
+      <div v-else-if="currentPanel === 3" key="reset" class="form">
         <div class="formTitle">
           <h2>Enter your new <span class="brandText">password</span></h2>
           <p>Enter account email to send reset password link</p>
@@ -106,6 +119,7 @@
   </main>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
 // Imports
 import BaseButton from '@/components/BaseButton.vue'
@@ -117,10 +131,10 @@ import { useRouter } from 'vue-router'
 import { demoSessionData } from '@/composables/sessionStore'
 
 // Variables
-const email = ref('') // ref() makes a value reactive
+const email = ref('') 
 const password = ref('')
 const router = useRouter()
-const currentStep = ref(1)
+const currentPanel = ref(1)
 const checked = ref(false)
 
 const errorMsg = ref('')
@@ -153,32 +167,22 @@ async function handleLogin() {
   }
 }
 
-// Swap between steps based on the current step
+// Swap between panels based on the current panel
 function panelSwap() {
   let newValue
-  if (currentStep.value == 1) {
+  if (currentPanel.value == 1) {
     newValue = 2
-  } else if (currentStep.value == 2) {
+  } else if (currentPanel.value == 2) {
     newValue = 3
-  } else if (currentStep.value == 3) {
+  } else if (currentPanel.value == 3) {
     newValue = 1
   }
-  currentStep.value = newValue
+  currentPanel.value = newValue
 }
 </script>
 
-<!-- CSS Classes -->
+<!-- CSS  -->
 <style scoped>
-.hero {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  flex: 1;
-}
-
 .form {
   display: inline-flex;
   flex-direction: column;
@@ -199,14 +203,6 @@ function panelSwap() {
   display: flex;
   justify-content: space-between;
 }
-
-.brandText {
-  color: var(--color-brandText);
-}
-.linkText {
-  cursor: pointer;
-}
-
 .fieldContainer {
   display: flex;
   flex-direction: row;

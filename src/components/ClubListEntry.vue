@@ -1,3 +1,11 @@
+<!-- 
+  File Name: ClubListEntry.vue
+  Author: Rhett Bauchop - 20722517
+  Purpose: Club Listing with dropdown menu
+  Use Cases: CalendarPage
+
+-->
+<!-- HTML -->
 <template>
   <li>
     <div class="clubRow" @click="emit('toggle')" :class="{ open: isOpen }">
@@ -19,6 +27,7 @@
     </div>
 
     <div v-if="isOpen" class="dropdownMenu">
+      <!-- Toggle for club visibility is commented out as feature is not implemented. -->
       <!-- <div v-if="visibleOptions.clubDisplay" class="dropdownOption" id="clubDisplay">
         <p>Toggle Club Display</p>
         <input
@@ -83,19 +92,20 @@
   </li>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
-import { ref, onMounted } from 'vue'
-// import { supabase } from '../../backend/supabase'
 import ConfirmationPop from './ConfirmationPop.vue'
 import ClubProfilePop from './ClubProfilePop.vue'
+import { ref, onMounted } from 'vue'
 import { supabase } from '../../backend/supabase.js'
 import { demoSessionData } from '@/composables/sessionStore.js'
 import { useAuth } from '@/composables/useAuth.js'
 
+
 const props = defineProps({
   club: { type: Object, required: true },
   isOpen: { type: Boolean, default: false },
-  visibleOptions: {
+  visibleOptions: { // Options for which dropdown options are avaialble
     type: Object,
     default: () => ({
       clubDisplay: true,
@@ -104,11 +114,10 @@ const props = defineProps({
       addClub: false,
       deleteClub: true,
       tags: false,
-    }),
+    }), 
   },
 })
 
-// const toggleDisplayCheck = ref(true)
 const gmCheck = ref(false)
 const showConfirmRemove = ref(false)
 const dialogConfig = ref({ title: '', message: '', danger: false })
@@ -119,18 +128,19 @@ const { profile } = useAuth()
 
 const emit = defineEmits(['toggle', 'selectOption'])
 
+// Set if in authenticated mode or demo mode
 const calendarMode = isDemoSession.value
 
+// Set userID if in authenticated mode
 function dataSelection(mode) {
   if (mode.value == null) {
     console.log('loading')
   } else if (mode.value == false) {
     studentUserID.value = profile.value.id
-    // removeClub()
-    // addClub()
   }
 }
 
+// add club to following list based on calendar mode
 function askAddClub(clubID) {
   if (calendarMode == true) {
     addFollowClub(clubID)
@@ -139,6 +149,20 @@ function askAddClub(clubID) {
   }
 }
 
+// Confirmation handler for removing a followed club based on calendar mode
+function handleConfirmed() {
+  console.log('Clubs: ', demoUserClubs)
+  console.log('removing club:', props.club.id)
+  if (calendarMode == false) {
+    removeClub() 
+  } else if (calendarMode == true) {
+    dropFollowingClub(props.club.id)
+  }
+  console.log('Clubs: ', demoUserClubs)
+}
+
+// AUTH: Remove a club from the followingClubs list of a authenticated user
+// Currently the removale feature is not working, due to database issues, AUTH ONLY
 async function removeClub() {
   let removedclubid = props.club.id
   let studentid = studentUserID.value
@@ -152,15 +176,12 @@ async function removeClub() {
   }
 }
 
+// AUTH: Add a club to the followingClubs List of a authenticated user
+// Currently adding new clubs is not working, due to database issues, AUTH ONLY
 async function addClub(clubid) {
   let studentid = studentUserID.value
   try {
     const res = await supabase.rpc('addfollowingclub', { clubid, studentid })
-
-    // const res = await fetch(`/api/student/${studentid.value}/following/${removedclubid.value}`, {
-    //   method: 'DELETE',
-    // })
-
     if (!res.ok) throw new Error('Failed to add Club to Calendar')
   } catch (error) {
     console.error('Error fetching data:', error)
@@ -168,6 +189,7 @@ async function addClub(clubid) {
   }
 }
 
+// DEMO: Call confirmation popup for removing a followed club
 function askDeleteClub(clubName) {
   dialogConfig.value = {
     title: 'Remove club?',
@@ -179,30 +201,21 @@ function askDeleteClub(clubName) {
   showConfirmRemove.value = true
 }
 
-function handleConfirmed() {
-  console.log('Clubs: ', demoUserClubs)
-  console.log('removing club:', props.club.id)
-  if (calendarMode == false) {
-    removeClub()
-  } else if (calendarMode == true) {
-    dropFollowingClub(props.club.id)
-  }
-  console.log('Clubs: ', demoUserClubs)
-}
-
+// Handle club profile popuop
 function openClubProfile(clubID) {
   openClubID.value = clubID
 }
-
 function closeClubProfile() {
   openClubID.value = null
 }
 
+// Run dataSelection as soon as the file is loaded into DOM
 onMounted(() => {
   dataSelection(calendarMode)
 })
 </script>
 
+<!-- CSS -->
 <style scoped>
 .clubRow {
   display: flex;

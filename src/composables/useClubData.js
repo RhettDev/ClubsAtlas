@@ -1,3 +1,8 @@
+// File Name: useClubData.js
+// Author: Rhett Bauchop - 20722517
+// Purpose: Storage for loaded club data for clubs admin, accessed by all admin pages and headerClubs.
+// Clubs version of sessionStore
+
 import { ref, watch } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from './useAuth'
@@ -13,7 +18,7 @@ let loadedClubSocialsId = null
 let clubDetailsRequest = null
 let clubSocialsRequest = null
 
-
+// Initial load for all details about the authenticated club
 async function loadClubDetails(clubId) {
   if (!clubId || loadedClubDetailsId === clubId) return clubDetails.value
   if (clubDetailsRequest?.clubId === clubId) return clubDetailsRequest.promise
@@ -43,6 +48,7 @@ async function loadClubDetails(clubId) {
   return promise
 }
 
+// Initial load of all the social media links matching the authenticated club
 async function loadClubSocials(clubId) {
   if (!clubId || loadedClubSocialsId === clubId) return clubSocials.value
   if (clubSocialsRequest?.clubId === clubId) return clubSocialsRequest.promise
@@ -76,6 +82,7 @@ async function loadClubSocials(clubId) {
 export function useClubData() {
   const { profile } = useAuth()
 
+  // actively update if changes happen to the loged in club account
   watch(
     () => profile.value?.clubID,
     (clubId) => {

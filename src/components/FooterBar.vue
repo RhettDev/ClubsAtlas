@@ -1,3 +1,11 @@
+<!-- 
+  File Name: FooterBar.vue
+  Author: Rhett Bauchop - 20722517
+  Purpose: Generic footer with link to the github
+  Use Cases: All Page Views, 
+-->
+
+<!-- HTML -->
 <template>
   <section class="footer">
     <div class="footerCopy fRight">
@@ -7,6 +15,7 @@
   </section>
 </template>
 
+<!-- CSS -->
 <style scoped>
 .footer {
   display: flex;
@@ -40,13 +49,8 @@
   align-items: center;
 }
 
-.fLeft,
 .fRight {
   flex: 1;
-}
-
-.fCenter {
-  flex: 2;
 }
 
 @media screen and (max-width: 688px) {

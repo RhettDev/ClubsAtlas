@@ -1,3 +1,11 @@
+<!-- 
+  File Name: confirmationPop.vue
+  Author: Rhett Bauchop - 20722517
+  Purpose: General component for a connfirmation message, with two options
+  Use Cases: ClubListEntry, ClubProfilePage
+-->
+
+<!-- HTML -->
 <template>
   <Teleport to="body">
     <div v-if="modelValue" class="overlay" @click.self="handleCancel">
@@ -15,6 +23,7 @@
   </Teleport>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
 import BaseButton from './BaseButton.vue'
 
@@ -27,29 +36,20 @@ defineProps({
   danger: { type: Boolean, default: false },
 })
 
+// Send button processing to caller
 const emit = defineEmits(['update:modelValue', 'confirm', 'cancel'])
-
 function handleConfirm() {
   emit('confirm')
   emit('update:modelValue', false)
 }
-
 function handleCancel() {
   emit('cancel')
   emit('update:modelValue', false)
 }
 </script>
 
+<!-- CSS -->
 <style scope>
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
 
 .dialogContainer {
   background: var(--color-background-2);

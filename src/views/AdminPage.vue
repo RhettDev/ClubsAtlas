@@ -1,61 +1,24 @@
+<!-- 
+  File Name: AdminPage.vue
+  Author: Rhett Bauchop - 20722517
+  Page URL:  clubsatlas.app/admin
+  Purpose: This file holds all HTML, CSS and Javascript for the clubs admin dashboard, 
+  listing all past events and providing navigation to the four other admin pages
+
+-->
+<!-- HTML -->
 <template>
   <main id="adminMain">
-    <HeaderClubs
-      v-if="clubDetails"
-      @click="onHeaderMenuClick"
-      :club="clubDetails"
-    ></HeaderClubs>
-    <!-- Mobiel Naviation -->
-    <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
-    <div id="navDropDown" class="dropDownMenu">
-      <RouterLink variant="primary" class="menuEntry active" to="/admin" @click="onHeaderMenuClick">
-        <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.2"/>
-        Dashboard
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/new-event" >
-        <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.2"/>
-        Upload New Event
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
-        <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.2"/>
-        Update Club Profile
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm">
-        <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.2"/>
-        General Meetings
-      </RouterLink>
-      <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-        <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.2"/>
-        Settings
-      </RouterLink>
-    </div>
+    <!-- v--if to ensure club details have loaded before header is rendered. Holds Mobile Admin navigation -->
+    <HeaderClubs v-if="clubDetails" @click="onHeaderMenuClick" :club="clubDetails" />
 
     <!-- Desktop Navigation -->
     <div class="hero ">
       <section id="sideBar" class="bLeft desktopView">
-        <RouterLink variant="primary" class="menuEntry active" to="/admin">
-          <v-icon name="pr-bars" fill="var(--color-text-1)" scale="1.5"/>
-          Dashboard
-        </RouterLink>
-        <RouterLink variant="primary" class="menuEntry" to="/admin/new-event">
-          <v-icon name="pr-upload" fill="var(--color-text-1)" scale="1.5"/>
-          Upload New Event
-        </RouterLink>
-        <RouterLink variant="primary" class="menuEntry" to="/admin/update-home">
-          <v-icon name="pr-home" fill="var(--color-text-1)" scale="1.5"/>
-          Update Club Profile
-        </RouterLink>
-        <RouterLink variant="primary" class="menuEntry" to="/admin/update-gm">
-          <v-icon name="pr-users" fill="var(--color-text-1)" scale="1.5"/>
-          General Meetings
-        </RouterLink>
-        <RouterLink variant="primary" class="menuEntry" to="/admin/settings">
-          <v-icon name="pr-cog" fill="var(--color-text-1)" scale="1.5"/>
-          Settings
-        </RouterLink>
+        <AdminNavigation />
       </section>
 
-      <!-- Desktop View -->
+      <!-- Body: list of past events -->
       <section id="eventsList" class="bCenterAdmin">
         <div id="PageTitle" class="pageHeader">
           <h1 class="title">Past Events</h1>
@@ -67,11 +30,12 @@
         >
           <div id="adminEventCard" class="adminEventContainer">
             <div id="eventName" class="contentRow spaced vertCentered">
-              <h2 style="font-weight: normal">{{ event.eventTitle }}</h2>
+              <h2 style="font-weight: normal">{{ event.eventTitle }}</h2> <!-- Single style class given as it is the only use case of a unbolded heading 2-->
               <BaseButton @click="openEventCard(event.id)" >View Details</BaseButton>
             </div>
+            <!-- model-value checks the correct event is selected, indicating open status in the component -->
             <EventCardPop
-                :model-value="openEventId === event.id"
+                :model-value="openEventId === event.id" 
                 @update:model-value="closeEventCard"
                 :eventID="event.id"
                 :eventTitle="event.eventTitle"
@@ -86,71 +50,73 @@
               />
             <div id="eventContent" class="eventDetails">
               <div id="dateTimeRow" class="contentRow">
-                <div>{{ convertToFullDate(event.eventDate) }} {{ convertTo12Hour(event.startsAt) }} - {{ convertTo12Hour(event.endsAt) }}</div>
+                <div>{{ convertToFullDate(event.eventDate) }} {{ convertTo12Hour(event.startsAt) }} - {{ convertTo12Hour(event.endsAt) }}</div> <!--Normalisation fucntions-->
               </div>
-              <div id="location" v-if="hasValue(event.eventLocation)">
+              <div id="location" v-if="hasValue(event.eventLocation)"> <!-- Some events will only have their location in the description-->
                 <p>{{ event.eventLocation }}</p>
               </div>
             </div>
-            <p id="description" class="eventDescriptionContainer desktopView">{{ shortenDescription(event.eventDescription) }}</p>
-            <div id="publishedNote" class="textHR">
-              <p class="brandText">Published</p>
+            <p id="description" class="eventDescriptionContainer desktopView">{{ shortenDescription(event.eventDescription) }}</p> <!-- Shorter description to save space -->
+            <div id="publishedNote" class="textHR"> 
+              <p class="brandText">Published</p> <!-- NOTE: every event is published as the ability to save and keep events unpublished is a missing feature-->
               <hr class="fgHR">
             </div>
           </div>
         </div>
       </section>
 
-      <section id="analyitcsBar" class="bRightAdmin">
+      <section id="analyitcsBar" class="bRightAdmin desktopView">
+        <!-- Previously planned analytics side bar holding member attendence, Kept to center events -->
       </section>
     </div>
     <FooterBar></FooterBar>
   </main>
 </template>
 
-
+<!-- JAVASCRIPT -->
 <script setup>
-// import BaseButton from '@/components/BaseButton.vue'
+// Imports
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderClubs from '@/components/HeaderClubs.vue'
+import BaseButton from '@/components/BaseButton.vue'
+import EventCardPop from '@/components/EventCardPop.vue'
 import { computed, onMounted, ref } from 'vue'
 import { supabase } from '../../backend/supabase'
 import { useAuth } from '@/composables/useAuth'
-import { errorMessages } from 'vue/compiler-sfc'
-import BaseButton from '@/components/BaseButton.vue'
 import { useClubData } from '@/composables/useClubData'
 import { convertTo12Hour, convertToFullDate, hasValue, shortenDescription } from '@/composables/miscFunctions'
-import EventCardPop from '@/components/EventCardPop.vue'
+import AdminNavigation from '@/components/AdminNavigation.vue'
+
+// Variable Declarations
 const { profile } = useAuth()
 const loadingEvents = ref(true)
-
 const clubTempID = ref(profile.value.clubID)
 const clubEvents = ref([])
 const { clubDetails } = useClubData()
 const loadingTags = ref(true)
-const errorMessage = ref(null)
 const eventTags = ref([])
 const openEventId = ref(null)
 
+// Events were not uploaded in date order, 
 const sortedClubEvents = computed(() =>
-  [...clubEvents.value].sort(
+  [...clubEvents.value].sort( // [...variable] used to create a copy, for array maniuplation
     (firstEvent, secondEvent) =>
-      new Date(secondEvent.eventDate) - new Date(firstEvent.eventDate),
+      new Date(secondEvent.eventDate) - new Date(firstEvent.eventDate), // Second event is the latest event, sorting for most recent event
   ),
 )
 
+// Supabase function call getting all the events for a specific club, being the authenticated one
 async function getClubEvents(){
   try {
     loadingEvents.value = true
 
-    let clubid = clubTempID.value
+    let clubid = clubTempID.value // Supabase functions only take lowercase variables, so clubTempID.value is redeclared
     let { data, error } = await supabase.rpc('getspecificclubsevents', { clubid })
 
     if (error) throw error
 
     clubEvents.value = data
   } catch (error) {
-    errorMessages.value = error.message
     console.error('Error fetching data:', error)
     console.log('Error type:', typeof error)
   } finally {
@@ -158,6 +124,7 @@ async function getClubEvents(){
   }
 }
 
+// Supabase function call getting the tags for a specific event
 async function getEventTags(eventid) {
   try {
     loadingTags.value = true
@@ -168,7 +135,6 @@ async function getEventTags(eventid) {
 
     eventTags.value = data
   } catch (error) {
-    errorMessage.value = error.message
     console.error('Error fetching data:', error)
     console.log('Error type:', typeof error)
   } finally {
@@ -176,133 +142,26 @@ async function getEventTags(eventid) {
   }
 }
 
+// Function to open the event card from specific button
 function openEventCard(eventID) {
   getEventTags(eventID)
   openEventId.value = eventID
 }
 
+// Function to close any event card
 function closeEventCard() {
   openEventId.value = null
 }
 
-// events.id,
-// events."clubID",
-// events."eventTitle",
-// events."eventDescription",
-// events."eventLocation",
-// events."eventDate",
-// events."startsAt",
-// events."endsAt",
-// events."imageURL",
-// events."isGeneralMeeting",
-// events."ticketLink"
-
+// Once view is loaded into DOM, function will run only once
 onMounted(() => {
   getClubEvents()
 })
 
-const onHeaderMenuClick = () =>{
-  let navDD = document.getElementById("navDropDown");
-    if (navDD.style.display === "flex"){ // Check if menu is open, then close it 
-        navDD.style.display = "none";
-        document.getElementById('navBackdrop').classList.remove('show');
-    }
-    else { // Open the menu 
-        navDD.style.display = "flex";
-        document.getElementById('navBackdrop').classList.add('show');
-    }
-}
 </script>
 
+<!-- CSS -->
 <style scoped>
-.hero {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  text-align: center;
-  /* align-items: start; */
-  flex: 1;
-}
-
-.body{
-  display: flex;
-  width: 100%;
-}
-
-.bLeft{
-  display: flex;
-  flex-direction: column;
-  flex: 0.7;
-  box-shadow: 2px 0px var(--color-background-2);
-  padding: 16px;
-  gap: 4px;
-}
-
-.bLeft a.active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-.bRight {
-  flex: 1;
-}
-
-.bCenter {
-  flex: 2;
-  box-shadow: 2px 0px var(--color-background-2);
-}
-
-.menuEntry{
-  display: flex;
-  padding: 4px 0;
-  gap: 10px;
-  color: var(--color-text-2);
-  font-size: 1.3rem;
-  text-align: right;
-  justify-content: space-between;
-}
-
-.menuEntry a.active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-.menuEntry:hover {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-.mobileView{
-  display: none;
-}
-
-.dropDownMenu {
-  display: none;
-  position: fixed;
-  background-color: var(--color-background-2);
-  border-radius: 16px;
-  padding: 10px 20px;
-  z-index: 90;
-  top: 8%;
-  left: 1%;
-  flex-direction: column;
-  gap: 16px;
-  font-size: large;
-  overflow: auto;
-}
-
-.dropDownMenu a.active {
-  color: var(--color-brandText);
-  border-bottom: 2px solid var(--color-brandText);
-}
-
-@media screen and (max-width: 688px) {
-  .desktopView { display: none; }
-  .mobileView { display: block; }
-  .hero {flex-direction: column;}
-}
-
 .adminEventContainer{
   display: flex;
   flex-direction: column;
@@ -321,6 +180,7 @@ const onHeaderMenuClick = () =>{
   color: var(--color-text-2)
 }
 
+/* Colour change from default <p> only for the one location*/
 #location p{
   color: var(--color-text-2)
 }

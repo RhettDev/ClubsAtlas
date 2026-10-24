@@ -1,3 +1,11 @@
+<!-- 
+  File Name: FormField.vue
+  Author: Rhett Bauchop - 20722517
+  Purpose: General component for a DropDown menu, opening upwards to avoid dealing with collision with bottom of the screen
+  Use Cases: EventUploadPage, ClubProfilePage, GeneralMeetingPage, UserSettings, AdminSettings 
+-->
+
+<!-- HTML -->
 <template>
   <div 
     :class="[
@@ -5,9 +13,10 @@
       `fieldContainer--${width}`,
       `fieldContainer--${height}`
       ]">
-    <label v-if="showLabel" class="fieldLabel">
+    <label v-if="showLabel" class="fieldLabel"> <!-- Show optional label-->
       {{ label }}
     </label>
+    <!-- Input Field with full control for parent -->
     <input 
       :type="type"
       :placeholder="placeholder"
@@ -18,6 +27,7 @@
   </div>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
 defineProps({
   width: {
@@ -25,6 +35,8 @@ defineProps({
     default: 'halfWidth',
     validator: (v) => ['halfWidth', 'fullWidth', 'mobile'].includes(v),
   },
+  // Planned height prop, designed for Description type inputs where more text is required than one line.
+  // Currently using <textarea> for description
   height: {
     type: String,
     default: 'halfWidth',
@@ -42,8 +54,8 @@ defineEmits(['update:modelValue'])
 
 </script>
 
+<!-- CSS -->
 <style scoped>
-
 .fieldContainer{
   display: flex;
   flex-direction: column;
