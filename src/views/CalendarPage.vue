@@ -805,4 +805,9 @@ function handleMobileToday(){
 .mobileCard{
   justify-content: center;
 }
+
+.dropDownMenu{
+  top: 6%;
+  height: calc(100vh - 20%);
+}
 </style>
