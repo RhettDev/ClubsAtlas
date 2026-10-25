@@ -99,6 +99,21 @@
   }
 }
 
+@media (prefers-color-scheme: light) {
+  :root {
+  --color-background-1: var(--ca-bg-light-1);
+  --color-background-2: var(--ca-bg-light-2);
+  --color-shadow: var(--ca-brand-grey-3);
+
+  --color-heading: var(--ca-text-light-1);
+  --color-text-1: var(--ca-text-light-1);
+  --color-text-2: var(--ca-text-light-2);
+  --color-brandText: var(--ca-text-blue-light);
+  --color-brandText-2: var(--ca-text-blue-dark);
+  --color-text-invert: var(--ca-text-dark-1);
+  }
+}
+
 @font-face {
   font-family: AtkinsonHyperLegible;
   src: url(../fonts/AtkinsonHyperlegible/AtkinsonHyperlegible-Regular.ttf);
