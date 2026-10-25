@@ -10,18 +10,20 @@ const demoUserFilters = ref(null)
 
 const isDemoSession = ref(false)
 
-function startDemoSession() {
-  isDemoSession.value = true
-}
-
-function clearDemoSession() {
-  isDemoSession.value = false
-  demoUserClubs.value = null
-  demoUserDetails.value = null
-  demoUserFilters.value = null
-}
 
 export function demoSessionData(){
+
+  function startDemoSession() {
+    isDemoSession.value = true
+  }
+
+  function clearDemoSession() {
+    isDemoSession.value = false
+    demoUserClubs.value = null
+    demoUserDetails.value = null
+    demoUserFilters.value = null
+  }
+
 
   // Filter out the club whose id is the one being dropped.
   function dropFollowingClub(clubID){

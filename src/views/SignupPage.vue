@@ -1,7 +1,15 @@
-<template>
-  <main class="auth-page">
+<!-- 
+  File Name: SignupPage.vue
+  Author: Rhett Bauchop - 20722517
+  Page URL:  clubsatlas.app/signup
+  Purpose: Sign up page handling user interest selection and producing clubs for the demo
+-->
+
+<!-- HTML -->
+ <template>
+  <main id="signup">
     <HeaderBar></HeaderBar>
-    <div class="hero">
+    <div class="centerHero">
       <!-- Step Panels -->
       <div class="stepView">
         <Transition>
@@ -198,19 +206,19 @@
   </main>
 </template>
 
+<!-- JAVASCRIPT -->
 <script setup>
-// Imports --------------------------------------------------
+// Imports 
 import BaseButton from '@/components/BaseButton.vue'
 import FooterBar from '@/components/FooterBar.vue'
 import HeaderBar from '@/components/HeaderGeneric.vue'
 import DropDown from '@/components/DropDown.vue'
 import { clubRecommendations } from '@/composables/clubRecommend.js'
 import { demoSessionData } from '@/composables/sessionStore'
-
 import { computed, onMounted, ref } from 'vue'
 import { RouterLink } from 'vue-router'
 
-// Variables --------------------------------------------------
+// Variables 
 const currentStep = ref(1)
 const totalSteps = 4
 const maxInterests = 3
@@ -260,7 +268,8 @@ onMounted(async () => {
   await getClubsFilter()
 })
 
-// Data --------------------------------------------------
+// Data 
+// User interets on step 2
 const interests = [
   { id: 'Music', icon: 'ri-music-line', label: 'Music' },
   { id: 'Games', icon: 'ri-gamepad-line', label: 'Games' },
@@ -275,6 +284,7 @@ const interests = [
   { id: 'Workshops', icon: 'ri-account-pin-box-line', label: 'Workshops' },
 ]
 
+// Club types on step 3
 const clubType = [
   { id: 'PartyVibes', icon: 'pr-sun', label: 'Party Vibes' },
   { id: 'ChillSocialising', icon: 'pr-palette', label: 'Chill Socialising' },
@@ -282,6 +292,7 @@ const clubType = [
   { id: 'SocialStudy', icon: 'pr-users', label: 'Social Study' },
 ]
 
+// Degree option on step 1
 const optionsDegree = ref([
   'Engineering',
   'Computing',
@@ -294,6 +305,7 @@ const optionsDegree = ref([
   'Education',
   'Allied Health',
 ])
+// Faith and nationality options both on step 2
 const optionsFaith = ref(['Not Interested', 'Christianity', 'Muslim', 'Hindu', 'Sikh'])
 const optionsNation = ref([
   'Not Interested',
@@ -312,7 +324,7 @@ const optionsNation = ref([
   'Vietnamese',
 ])
 
-// Functions --------------------------------------------------
+// Functions 
 
 // Function to push data to sessionStore, maintaining demo user data
 function syncData() {
@@ -389,36 +401,25 @@ function validate(step) {
   return Object.keys(e).length === 0
 }
 
+// Handle Stepping
 async function next() {
   if (currentStep.value === 2 && selectedInterests.value.length > maxInterests) return
   if (!validate(currentStep.value)) return
   if (currentStep.value === 3) await findClubs(signupFilters)
   currentStep.value = currentStep.value + 1
 }
-
 function prev() {
   currentStep.value--
 }
 
 function handleSignup() {
-  console.log('Signing up:', firstName.value, email.value, selectedDegree.value)
   syncData()
   startDemoSession()
-  // useRouter.push('/')
 }
 </script>
 
+<!-- CSS -->
 <style scoped>
-.hero {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  flex: 1;
-}
-
 .form {
   display: inline-flex;
   flex-direction: column;
@@ -445,25 +446,11 @@ function handleSignup() {
   justify-content: space-between;
 }
 
-.brandText {
-  color: var(--color-brandText);
-}
-
-.routerText {
-  color: var(--color-text-1);
-}
-
 .fieldContainer {
   display: flex;
   flex-direction: row;
   gap: 16px;
   align-items: center;
-}
-
-.checkText {
-  display: flex;
-  flex-direction: row;
-  gap: 8px;
 }
 
 .stepView {

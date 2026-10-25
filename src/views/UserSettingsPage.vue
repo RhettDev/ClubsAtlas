@@ -101,11 +101,11 @@ import { RouterLink } from 'vue-router'
 import { supabase } from '../../backend/supabase'
 import { setDarkMode, setLightMode } from '@/composables/miscFunctions'
 import { ref } from 'vue'
-import { demoSessionData, clearDemoSession } from '@/composables/sessionStore'
+import { demoSessionData } from '@/composables/sessionStore'
 
 const selectedTheme = ref(document.documentElement.dataset.theme || 'dark')
 const saveCheck = ref(false)
-const { isDemoSession } = demoSessionData
+const { isDemoSession, clearDemoSession } = demoSessionData
 
 // Signout of Auth account or clear demo session data
 async function signOut(){
