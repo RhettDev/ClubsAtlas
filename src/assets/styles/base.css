@@ -380,6 +380,7 @@ bcenter.header.clubHeader {
   gap: 16px;
   font-size: large;
   overflow: auto;
+  width: 95%;
 }
 
 .dropDownMenu a.active {

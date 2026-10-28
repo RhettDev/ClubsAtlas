@@ -31,7 +31,7 @@
     <img class="logo" src="../assets/logos/clubsAtlasLogo.svg" alt="ClubsAtlas Logo" />
   </section>
   <div class="backdrop" id="navBackdrop" @click="onHeaderMenuClick"></div>
-    <div id="navDropDown" class="dropDownMenu mobileView">
+    <div id="navDropDownClubs" class="dropDownMenu mobileView">
       <!-- Navigation links for Mobile -->
       <AdminNavigation></AdminNavigation> 
     </div>
@@ -46,9 +46,22 @@ defineProps({
 })
 
 // Manage visibility of the mobile menu
-const onHeaderMenuClick = (event) =>{
-  console.log(event)
-  let navDD = document.getElementById("navDropDown");
+// const onHeaderMenuClick = (event) =>{
+//   console.log(event)
+//   let navDD = document.getElementById("navDropDownClubs");
+//     if (navDD.style.display === "flex"){ // Check if menu is open, then close it 
+//       navDD.style.display = "none";
+//       document.getElementById('navBackdrop').classList.remove('show');
+//     }
+//     else { // Open the menu 
+//       navDD.style.display = "flex";
+//       document.getElementById('navBackdrop').classList.add('show');
+//     }
+// }
+
+function onHeaderMenuClick() {
+  // console.log(event)
+  let navDD = document.getElementById("navDropDownClubs");
     if (navDD.style.display === "flex"){ // Check if menu is open, then close it 
       navDD.style.display = "none";
       document.getElementById('navBackdrop').classList.remove('show');
@@ -102,5 +115,9 @@ const onHeaderMenuClick = (event) =>{
   .mobileText {
     display: none;
   }
+}
+
+#navDropDownClubs{
+  width: fit-content;
 }
 </style>
