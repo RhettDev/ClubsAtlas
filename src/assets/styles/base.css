@@ -444,6 +444,15 @@ bcenter.header.clubHeader {
   width: 40%;
 }
 
+
+
+.twoColContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  width: 100%;
+}
+
 @media screen and (max-width: 688px) {
   .dateTimeContainer{
     width: 90%;
@@ -451,14 +460,6 @@ bcenter.header.clubHeader {
   .twoColContainer{
     flex-direction: column;
   }
-}
-
-.twoColContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: end;
-  gap: 16px;
-  width: 100%;
 }
 
 .fieldLabel{
